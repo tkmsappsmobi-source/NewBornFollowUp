@@ -1,0 +1,47 @@
+export async function requestPermission() {
+  if (!('Notification' in window)) return false
+  const result = await Notification.requestPermission()
+  return result === 'granted'
+}
+
+export function isGranted() {
+  return 'Notification' in window && Notification.permission === 'granted'
+}
+
+export function fireNotification(title, body) {
+  if (!isGranted()) return
+  new Notification(title, { body, icon: '/NewBornFollowUp/icons/icon-192.png' })
+}
+
+export function startReminderScheduler(getState, dispatch, showToast) {
+  const interval = setInterval(() => {
+    const { reminders } = getState()
+    const now = new Date()
+
+    reminders.forEach(r => {
+      if (!r.enabled) return
+
+      let shouldFire = false
+
+      if (r.type === 'once' && r.datetime) {
+        const target = new Date(r.datetime)
+        const alreadyFired = r.lastFired && new Date(r.lastFired) >= target
+        shouldFire = !alreadyFired && now >= target
+      }
+
+      if (r.type === 'recurring' && r.intervalMinutes) {
+        const last = r.lastFired ? new Date(r.lastFired) : null
+        const msSinceLast = last ? now - last : Infinity
+        shouldFire = msSinceLast >= r.intervalMinutes * 60 * 1000
+      }
+
+      if (shouldFire) {
+        dispatch({ type: 'FIRE_REMINDER', id: r.id })
+        showToast(`🔔 ${r.label}`)
+        fireNotification('מעקב תינוק', r.label)
+      }
+    })
+  }, 30_000)
+
+  return () => clearInterval(interval)
+}
