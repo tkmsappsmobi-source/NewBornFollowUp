@@ -96,10 +96,10 @@ export default function HomeScreen({ showToast, setTab }) {
   })
 
   return (
-    <div dir="rtl" className="font-['Heebo'] w-full max-w-[390px] mx-auto h-screen flex flex-col bg-[#F5F2FC] relative overflow-hidden">
+    <div dir="rtl" className="font-['Heebo'] w-full h-screen flex flex-col bg-[#F5F2FC] relative overflow-hidden">
       {/* Status Bar */}
-      <div className="shrink-0 h-11 bg-[#240E6A] flex items-center justify-between px-5">
-        <span className="text-white text-[13px] font-semibold">{currentTime}</span>
+      <div className="shrink-0 h-11 bg-[#240E6A] flex items-center justify-between px-4 sm:px-6 md:px-8">
+        <span className="text-white text-[12px] sm:text-[13px] font-semibold">{currentTime}</span>
         <div className="flex gap-1.5 items-center">
           {/* Signal, WiFi, Battery icons */}
           <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
@@ -119,7 +119,7 @@ export default function HomeScreen({ showToast, setTab }) {
       <div className="shrink-0 relative z-[2]">
         {/* Gradient Background */}
         <div
-          className="h-[152px] px-[18px] pt-3 relative overflow-hidden"
+          className="h-[120px] sm:h-[140px] md:h-[160px] px-4 sm:px-6 md:px-8 pt-2 sm:pt-3 relative overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, #240E6A 0%, #3D1A8C 25%, #5830C8 75%, #7040E0 100%)',
           }}
@@ -143,14 +143,14 @@ export default function HomeScreen({ showToast, setTab }) {
             <path d="M30 20C20 20 15 25 15 32C15 33.1 15.9 34 17 34H80C81.1 34 82 33.1 82 32C82 28 80 24 75 22C73.5 20 71 18 67 18C63 18 59 21 55 21C50 21 44 17 38 17C35.5 17 33 18 31 20" stroke="white" strokeWidth="1.2" fill="none" opacity="0.5" />
           </svg>
 
-          <h1 className="m-0 pt-3 text-white text-[36px] font-black text-right tracking-tight leading-tight">
+          <h1 className="m-0 pt-2 sm:pt-3 text-white text-[28px] sm:text-[32px] md:text-[36px] font-black text-right tracking-tight leading-tight">
             שלום {babyName},
           </h1>
         </div>
 
         {/* Moon - positioned absolutely, overlaps content */}
-        <div className="absolute left-[-2px] bottom-[-26px] w-[116px] h-[126px] z-[5] pointer-events-none">
-          <svg width="116" height="126" viewBox="0 0 116 126" fill="none">
+        <div className="absolute left-[-2px] bottom-[-20px] sm:bottom-[-24px] w-[90px] sm:w-[110px] md:w-[116px] h-[100px] sm:h-[120px] md:h-[126px] z-[5] pointer-events-none">
+          <svg width="100%" height="100%" viewBox="0 0 116 126" fill="none" preserveAspectRatio="xMidYMid meet">
             <defs>
               <mask id="crescent">
                 <rect width="116" height="126" fill="white" />
@@ -180,18 +180,18 @@ export default function HomeScreen({ showToast, setTab }) {
       </div>
 
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-[#F5F2FC] px-[14px] pt-[30px] pb-[100px]">
-        {/* Action Grid - 2 columns × 4 rows */}
-        <div className="grid grid-cols-2 gap-[10px] mb-3">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-[#F5F2FC] px-3 sm:px-4 md:px-6 pt-[24px] sm:pt-[28px] md:pt-[32px] pb-[100px] md:pb-[110px] max-w-7xl mx-auto w-full">
+        {/* Action Grid - 2 columns mobile, 3+ on tablet, 4 on desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-5">
           {ACTION_BUTTONS.map(action => (
             <button
               key={action.id}
               onClick={() => handleAction(action.id)}
-              className="bg-white rounded-[18px] p-[15px_14px] flex items-center justify-between min-h-[86px] cursor-pointer transition-all duration-150 hover:shadow-[0_5px_20px_rgba(70,25,150,0.15)] hover:-translate-y-0.5 active:scale-[0.97]"
+              className="bg-white rounded-[14px] sm:rounded-[16px] md:rounded-[18px] p-2 sm:p-3 md:p-[15px_14px] flex flex-col sm:flex-col md:flex-row items-center justify-between min-h-[70px] sm:min-h-[78px] md:min-h-[86px] cursor-pointer transition-all duration-150 hover:shadow-[0_5px_20px_rgba(70,25,150,0.15)] hover:-translate-y-0.5 active:scale-[0.97] gap-1.5 md:gap-2"
             >
-              <span className="text-[17px] font-semibold text-[#1A0F3C] leading-tight">{action.label}</span>
+              <span className="text-[13px] sm:text-[15px] md:text-[17px] font-semibold text-[#1A0F3C] leading-tight text-center md:text-right">{action.label}</span>
               <div
-                className="w-[58px] h-[58px] rounded-full flex items-center justify-center text-[28px] shrink-0 leading-none"
+                className="w-[48px] h-[48px] sm:w-[52px] sm:h-[52px] md:w-[58px] md:h-[58px] rounded-full flex items-center justify-center text-[22px] sm:text-[26px] md:text-[28px] shrink-0 leading-none"
                 style={{ backgroundColor: action.bg }}
               >
                 {action.emoji}
@@ -203,24 +203,24 @@ export default function HomeScreen({ showToast, setTab }) {
         {/* Summary Card - "היום בקצרה" */}
         {todayLogs.length > 0 && (
           <div
-            className="bg-white rounded-[18px] p-[15px_14px] flex items-center gap-2 mb-3"
+            className="bg-white rounded-[14px] sm:rounded-[16px] md:rounded-[18px] p-3 sm:p-4 md:p-[15px_14px] flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5"
             style={{ direction: 'ltr' }}
           >
             {/* Teddy bear - LEFT */}
-            <div className="text-[56px] leading-none shrink-0">🧸</div>
+            <div className="text-[40px] sm:text-[48px] md:text-[56px] leading-none shrink-0">🧸</div>
 
             {/* Text - CENTER */}
-            <div className="flex-1 text-right pr-0.5" dir="rtl">
-              <p className="text-[15px] font-bold text-[#5B21B6] mb-1">היום בקצרה ✨</p>
-              <p className="text-[12.5px] text-[#72728A] leading-relaxed mb-0.5">
+            <div className="flex-1 text-right pr-1 sm:pr-2 md:pr-0.5" dir="rtl">
+              <p className="text-[13px] sm:text-[14px] md:text-[15px] font-bold text-[#5B21B6] mb-0.5 sm:mb-1">היום בקצרה ✨</p>
+              <p className="text-[11px] sm:text-[12px] md:text-[12.5px] text-[#72728A] leading-relaxed mb-0.5">
                 {todaySummaryText || 'עדיין אין פעילויות היום'}
               </p>
-              <p className="text-[12.5px] text-[#5B21B6] font-semibold">כל הכבוד! ממשיכים כך 💜</p>
+              <p className="text-[11px] sm:text-[12px] md:text-[12.5px] text-[#5B21B6] font-semibold">כל הכבוד! ממשיכים כך 💜</p>
             </div>
 
             {/* Calendar icon - RIGHT */}
-            <div className="w-[52px] h-[52px] rounded-[12px] bg-[#EDE5FF] flex items-center justify-center shrink-0">
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+            <div className="w-[40px] h-[40px] sm:w-[44px] sm:h-[44px] md:w-[52px] md:h-[52px] rounded-[8px] sm:rounded-[10px] md:rounded-[12px] bg-[#EDE5FF] flex items-center justify-center shrink-0">
+              <svg width="20" height="20" className="sm:w-[24px] sm:h-[24px] md:w-[30px] md:h-[30px]" viewBox="0 0 30 30" fill="none">
                 <rect x="2" y="4" width="26" height="23" rx="3.5" stroke="#7B3FDB" strokeWidth="2" fill="rgba(123,63,219,0.07)" />
                 <rect x="2" y="4" width="26" height="8" rx="3.5" fill="rgba(123,63,219,0.18)" />
                 <path d="M8 2v5.5M22 2v5.5" stroke="#7B3FDB" strokeWidth="2" strokeLinecap="round" />
@@ -233,35 +233,35 @@ export default function HomeScreen({ showToast, setTab }) {
         {/* CTA Button - רישום ידני */}
         <button
           onClick={() => setManualOpen(true)}
-          className="w-full rounded-[18px] py-[17px] px-5 text-white text-[18px] font-bold flex items-center justify-center gap-2.5 mb-3 border-none cursor-pointer transition-all active:scale-[0.98]"
+          className="w-full rounded-[14px] sm:rounded-[16px] md:rounded-[18px] py-3 sm:py-[15px] md:py-[17px] px-4 sm:px-5 md:px-5 text-white text-[15px] sm:text-[16px] md:text-[18px] font-bold flex items-center justify-center gap-2 sm:gap-2.5 mb-4 sm:mb-5 border-none cursor-pointer transition-all active:scale-[0.98]"
           style={{
             background: 'linear-gradient(135deg, #4A1FA0 0%, #6A33D4 100%)',
             boxShadow: '0 6px 20px rgba(74,31,160,0.32)',
           }}
         >
           רישום ידני
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <svg width="16" height="16" className="sm:w-[18px] sm:h-[18px] md:w-[20px] md:h-[20px]" viewBox="0 0 20 20" fill="none">
             <path d="M14.7 2.3a2.1 2.1 0 013 3L6.2 16.8 2 18l1.2-4.2z" fill="white" stroke="white" strokeWidth="0.4" strokeLinejoin="round" />
           </svg>
         </button>
 
         {/* Recent Activities */}
         {recentLogs.length > 0 && (
-          <div className="bg-white rounded-[18px] pt-4 px-[14px] pb-1.5">
-            <h3 className="text-[15px] font-bold text-[#5B21B6] text-right mb-2.5">פעולות אחרונות</h3>
+          <div className="bg-white rounded-[14px] sm:rounded-[16px] md:rounded-[18px] pt-3 sm:pt-4 md:pt-4 px-3 sm:px-4 md:px-[14px] pb-1.5">
+            <h3 className="text-[13px] sm:text-[14px] md:text-[15px] font-bold text-[#5B21B6] text-right mb-2">פעולות אחרונות</h3>
 
             {recentLogs.map((log, i) => (
               <div
                 key={log.id}
-                className={`flex items-center justify-between py-2.5 ${i < recentLogs.length - 1 ? 'border-b border-[#F0EDF8]' : ''}`}
+                className={`flex items-center justify-between py-2 sm:py-2.5 md:py-2.5 ${i < recentLogs.length - 1 ? 'border-b border-[#F0EDF8]' : ''}`}
               >
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[13.5px] font-medium text-[#2D1B5C]">
+                <div className="flex items-center gap-1 sm:gap-1.5 md:gap-1.5">
+                  <span className="text-[11px] sm:text-[12px] md:text-[13.5px] font-medium text-[#2D1B5C]">
                     {catMap[log.categoryId]?.label || 'Unknown'}
                   </span>
-                  <span className="text-[20px] leading-none">{catMap[log.categoryId]?.emoji}</span>
+                  <span className="text-[16px] sm:text-[18px] md:text-[20px] leading-none">{catMap[log.categoryId]?.emoji}</span>
                 </div>
-                <span className="text-[13px] font-medium text-[#9898B0]">
+                <span className="text-[11px] sm:text-[12px] md:text-[13px] font-medium text-[#9898B0]">
                   {formatTime(new Date(log.timestamp))}
                 </span>
               </div>
@@ -272,7 +272,7 @@ export default function HomeScreen({ showToast, setTab }) {
 
       {/* Bottom Navigation */}
       <nav
-        className="absolute bottom-0 left-0 right-0 bg-white pt-2 pb-[22px] flex justify-around items-start z-[20]"
+        className="absolute bottom-0 left-0 right-0 bg-white pt-2 sm:pt-2.5 pb-4 sm:pb-5 md:pb-[22px] flex justify-around items-start z-[20]"
         style={{ direction: 'ltr' }}
       >
         {NAV_ITEMS.map(item => (
@@ -301,7 +301,7 @@ export default function HomeScreen({ showToast, setTab }) {
               item.id === 'alerts' ? <BellIcon /> :
               <SettingsIcon />
             )}
-            <span className={`text-[10px] font-${item.id === 'home' ? 'bold' : 'medium'} text-${item.id === 'home' ? '[#6B35D6]' : '[#9090B0]'}`}>
+            <span className={`text-[8px] sm:text-[9px] md:text-[10px] font-${item.id === 'home' ? 'bold' : 'medium'} text-${item.id === 'home' ? '[#6B35D6]' : '[#9090B0]'}`}>
               {item.label}
             </span>
           </button>
