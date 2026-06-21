@@ -46,41 +46,27 @@ export default function App() {
     <div className="flex flex-col h-dvh bg-gray-50" dir="rtl">
       <ToastContainer toasts={toasts} dismiss={dismiss} />
 
-      {/* Header */}
+      {/* Header - hidden on home */}
+      {tab !== 'home' && (
       <header
-        className={`text-white px-4 py-4 flex items-center justify-center shrink-0 safe-top relative overflow-hidden ${
-          tab === 'home'
-            ? 'bg-gradient-to-r from-[#2d1b69] to-[#6b3fa0]'
-            : 'bg-[#6b3fa0]'
-        }`}
+        className="text-white px-4 py-4 flex items-center justify-center shrink-0 safe-top relative overflow-hidden bg-[#6b3fa0]"
       >
-        {tab === 'home' && (
-          <svg
-            className="absolute inset-0 w-full h-full opacity-30"
-            viewBox="0 0 400 120"
-            preserveAspectRatio="none"
-          >
-            <circle cx="80" cy="40" r="25" fill="#ffd700" opacity="0.8" />
-            <circle cx="100" cy="35" r="3" fill="#fff" />
-            <circle cx="110" cy="50" r="4" fill="#fff" />
-            <circle cx="75" cy="55" r="2" fill="#fff" />
-            <path d="M 60 75 Q 70 70 80 75" stroke="#fff" strokeWidth="2" fill="none" opacity="0.6" />
-            <path d="M 120 85 Q 135 75 150 85" stroke="#fff" strokeWidth="2" fill="none" opacity="0.6" />
-          </svg>
-        )}
         <h1 className="text-lg font-bold relative z-10">{tabTitles[tab]}</h1>
       </header>
+      )}
+
 
       {/* Screen content */}
       <main className="flex-1 overflow-hidden flex flex-col">
-        {tab === 'home' && <HomeScreen showToast={showToast} />}
+        {tab === 'home' && <HomeScreen showToast={showToast} setTab={setTab} />}
         {tab === 'history' && <HistoryScreen showToast={showToast} />}
         {tab === 'stats' && <StatsScreen />}
         {tab === 'reminders' && <RemindersScreen showToast={showToast} />}
         {tab === 'settings' && <SettingsScreen showToast={showToast} />}
       </main>
 
-      {/* Bottom navigation */}
+      {/* Bottom navigation - hidden on home */}
+      {tab !== 'home' && (
       <nav className="bg-white border-t border-gray-200 flex shrink-0 safe-bottom">
         {TABS.map(t => {
           const isActive = tab === t.id
@@ -130,6 +116,7 @@ export default function App() {
           )
         })}
       </nav>
+      )}
     </div>
   )
 }
