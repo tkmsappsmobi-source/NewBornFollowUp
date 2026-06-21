@@ -14,6 +14,7 @@ export const DEFAULT_STATE = {
   categories: DEFAULT_CATEGORIES,
   logs: [],
   reminders: [],
+  weightLogs: [],
   feedingQuickAmounts: DEFAULT_FEEDING_AMOUNTS,
   settings: { notificationsEnabled: false },
 }

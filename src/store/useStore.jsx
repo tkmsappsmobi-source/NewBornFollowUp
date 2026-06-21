@@ -99,6 +99,20 @@ function reducer(state, action) {
     case 'SET_NOTIFICATIONS_ENABLED':
       return { ...state, settings: { ...state.settings, notificationsEnabled: action.enabled } }
 
+    case 'ADD_WEIGHT': {
+      const weight = {
+        id: crypto.randomUUID(),
+        weight: action.weight,
+        unit: 'kg',
+        note: action.note ?? '',
+        timestamp: action.timestamp || new Date().toISOString(),
+      }
+      return { ...state, weightLogs: [weight, ...state.weightLogs] }
+    }
+
+    case 'DELETE_WEIGHT':
+      return { ...state, weightLogs: state.weightLogs.filter(w => w.id !== action.id) }
+
     case 'CLEAR_ALL':
       return { ...DEFAULT_STATE }
 

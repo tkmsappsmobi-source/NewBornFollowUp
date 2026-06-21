@@ -5,6 +5,7 @@ import { startReminderScheduler } from './lib/notifications'
 import HomeScreen from './screens/HomeScreen'
 import HistoryScreen from './screens/HistoryScreen'
 import StatsScreen from './screens/StatsScreen'
+import WeightScreen from './screens/WeightScreen'
 import RemindersScreen from './screens/RemindersScreen'
 import SettingsScreen from './screens/SettingsScreen'
 
@@ -12,6 +13,7 @@ const TABS = [
   { id: 'home', label: 'בית', emoji: '🏠' },
   { id: 'history', label: 'לוג', emoji: '📋' },
   { id: 'stats', label: 'סטטיסטיקה', emoji: '📊' },
+  { id: 'weight', label: 'גדילה', emoji: '📏' },
   { id: 'reminders', label: 'תזכורות', emoji: '🔔' },
   { id: 'settings', label: 'הגדרות', emoji: '⚙️' },
 ]
@@ -38,6 +40,7 @@ export default function App() {
     home: `שלום ${babyName},`,
     history: 'היסטוריה',
     stats: 'סטטיסטיקות',
+    weight: 'מעקב גדילה',
     reminders: 'תזכורות',
     settings: 'הגדרות',
   }
@@ -47,9 +50,8 @@ export default function App() {
       <ToastContainer toasts={toasts} dismiss={dismiss} />
 
       {/* Header */}
-      <header className="bg-indigo-600 text-white px-4 py-3 flex items-center justify-between shrink-0 safe-top">
+      <header className="bg-indigo-600 text-white px-4 py-3 flex items-center justify-center shrink-0 safe-top">
         <h1 className="text-base font-bold">{tabTitles[tab]}</h1>
-        <span className="text-2xl">🍼</span>
       </header>
 
       {/* Screen content */}
@@ -57,6 +59,7 @@ export default function App() {
         {tab === 'home' && <HomeScreen showToast={showToast} />}
         {tab === 'history' && <HistoryScreen showToast={showToast} />}
         {tab === 'stats' && <StatsScreen />}
+        {tab === 'weight' && <WeightScreen showToast={showToast} />}
         {tab === 'reminders' && <RemindersScreen showToast={showToast} />}
         {tab === 'settings' && <SettingsScreen showToast={showToast} />}
       </main>
