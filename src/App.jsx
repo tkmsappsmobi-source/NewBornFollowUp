@@ -7,7 +7,6 @@ import HistoryScreen from './screens/HistoryScreen'
 import StatsScreen from './screens/StatsScreen'
 import RemindersScreen from './screens/RemindersScreen'
 import SettingsScreen from './screens/SettingsScreen'
-import babyAvatar from '../public/baby-avatar.svg'
 
 const TABS = [
   { id: 'home', label: 'בית', emoji: '🏠' },
@@ -36,7 +35,7 @@ export default function App() {
   const babyName = state.babyName || 'מיכאל'
 
   const tabTitles = {
-    home: `שלום, ${babyName} 👶`,
+    home: `שלום ${babyName},`,
     history: 'היסטוריה',
     stats: 'סטטיסטיקות',
     reminders: 'תזכורות',
@@ -50,7 +49,7 @@ export default function App() {
       {/* Header */}
       <header className="bg-indigo-600 text-white px-4 py-3 flex items-center justify-between shrink-0 safe-top">
         <h1 className="text-base font-bold">{tabTitles[tab]}</h1>
-        <img src={babyAvatar} alt="baby" className="w-8 h-8" />
+        <span className="text-2xl">🍼</span>
       </header>
 
       {/* Screen content */}
