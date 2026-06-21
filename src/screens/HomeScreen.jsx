@@ -3,10 +3,12 @@ import { useStore } from '../store/useStore'
 import CategoryButton from '../components/CategoryButton'
 import FeedingAmountSheet from '../components/FeedingAmountSheet'
 import ManualLogForm from '../components/ManualLogForm'
+import WeightInputSheet from '../components/WeightInputSheet'
 
 export default function HomeScreen({ showToast }) {
   const { state, dispatch } = useStore()
   const [feedingOpen, setFeedingOpen] = useState(false)
+  const [weightOpen, setWeightOpen] = useState(false)
   const [manualOpen, setManualOpen] = useState(false)
 
   const enabled = state.categories.filter(c => c.enabled)
@@ -14,10 +16,18 @@ export default function HomeScreen({ showToast }) {
   const handleCategory = (cat) => {
     if (cat.type === 'feeding') {
       setFeedingOpen(true)
+    } else if (cat.type === 'weight') {
+      setWeightOpen(true)
     } else {
       dispatch({ type: 'ADD_LOG', categoryId: cat.id })
       showToast(`${cat.emoji} ${cat.label} נרשם`)
     }
+  }
+
+  const handleWeightConfirm = (weight, note) => {
+    setWeightOpen(false)
+    dispatch({ type: 'ADD_WEIGHT', weight, note })
+    showToast(`📏 משקל ${weight} ק״ג נשמר`)
   }
 
   const handleFeedingConfirm = (ml) => {
@@ -59,6 +69,13 @@ export default function HomeScreen({ showToast }) {
           quickAmounts={state.feedingQuickAmounts}
           onConfirm={handleFeedingConfirm}
           onClose={() => setFeedingOpen(false)}
+        />
+      )}
+
+      {weightOpen && (
+        <WeightInputSheet
+          onConfirm={handleWeightConfirm}
+          onClose={() => setWeightOpen(false)}
         />
       )}
 
