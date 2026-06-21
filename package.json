@@ -2,10 +2,13 @@
   "name": "newborn-followup",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
+  "main": "electron/main.js",
   "scripts": {
     "dev": "vite",
+    "electron": "electron .",
+    "dev:electron": "concurrently \"npm run dev\" \"sleep 2 && cross-env VITE_DEV_SERVER_URL=http://localhost:5176 npm run electron\"",
     "build": "vite build",
+    "build:electron": "npm run build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -15,8 +18,13 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.11",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^42.4.1",
+    "electron-builder": "^26.15.3",
     "tailwindcss": "^4.1.11",
     "vite": "^6.0.7",
-    "vite-plugin-pwa": "^0.21.1"
+    "vite-plugin-pwa": "^0.21.1",
+    "wait-on": "^7.2.0"
   }
 }

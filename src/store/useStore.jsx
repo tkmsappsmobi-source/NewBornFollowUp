@@ -1,22 +1,36 @@
 import { createContext, useContext, useReducer, useEffect, useCallback } from 'react'
 import { DEFAULT_STATE } from './defaults'
 
-const STORAGE_KEY = 'nbf_state'
+// @ts-ignore
+const isElectron = typeof window !== 'undefined' && !!window.electronAPI
 
 function load() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return DEFAULT_STATE
-    const saved = JSON.parse(raw)
-    // merge defaults for new keys
-    return { ...DEFAULT_STATE, ...saved }
-  } catch {
-    return DEFAULT_STATE
+  // If not in Electron, try to load from localStorage
+  if (!isElectron) {
+    try {
+      const saved = localStorage.getItem('nbf_state')
+      if (saved) {
+        return { ...DEFAULT_STATE, ...JSON.parse(saved) }
+      }
+    } catch (e) {
+      console.error('Error loading from localStorage:', e)
+    }
   }
+  return DEFAULT_STATE
 }
 
-function save(state) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)) } catch {}
+async function save(state) {
+  try {
+    if (isElectron) {
+      // Electron mode — save to JSON file
+      await window.electronAPI.writeState(state)
+    } else {
+      // Web mode — save to localStorage
+      localStorage.setItem('nbf_state', JSON.stringify(state))
+    }
+  } catch (error) {
+    console.error('Error saving state:', error)
+  }
 }
 
 function reducer(state, action) {
@@ -116,6 +130,9 @@ function reducer(state, action) {
     case 'CLEAR_ALL':
       return { ...DEFAULT_STATE }
 
+    case 'LOAD_STATE':
+      return action.payload
+
     default:
       return state
   }
@@ -126,7 +143,29 @@ const StoreContext = createContext(null)
 export function StoreProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, null, load)
 
-  useEffect(() => { save(state) }, [state])
+  // Load from file on mount
+  useEffect(() => {
+    async function loadState() {
+      try {
+        // @ts-ignore
+        const saved = await window.electronAPI?.readState?.()
+        if (saved) {
+          // Merge with defaults for new keys
+          const merged = { ...DEFAULT_STATE, ...saved }
+          dispatch({ type: 'LOAD_STATE', payload: merged })
+        }
+      } catch (error) {
+        console.error('Error loading state:', error)
+      }
+    }
+
+    loadState()
+  }, [])
+
+  // Save to file on change
+  useEffect(() => {
+    save(state)
+  }, [state])
 
   return (
     <StoreContext.Provider value={{ state, dispatch }}>
