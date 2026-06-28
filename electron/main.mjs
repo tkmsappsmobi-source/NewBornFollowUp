@@ -1,9 +1,11 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
-const path = require('path')
-const fs = require('fs')
-const os = require('os')
+import { app, BrowserWindow, ipcMain } from 'electron'
+import path from 'path'
+import fs from 'fs'
+import os from 'os'
+import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(require.main.filename)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 const DATA_DIR = path.join(os.homedir(), '.newbornfollowup')
 const STATE_FILE = path.join(DATA_DIR, 'state.json')
 
@@ -20,7 +22,7 @@ function createWindow() {
     width: 500,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: false,
       contextIsolation: true,
     },

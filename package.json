@@ -2,7 +2,7 @@
   "name": "newborn-followup",
   "private": true,
   "version": "1.0.0",
-  "main": "electron/main.js",
+  "main": "electron/main.mjs",
   "scripts": {
     "dev": "vite",
     "electron": "electron .",

@@ -1,15 +1,14 @@
 import { useState } from 'react'
 
-const DURATION = 4000
+const DURATION = 2500
 
 export function useToast() {
   const [toasts, setToasts] = useState([])
 
-  const showToast = (message) => {
+  const showToast = (message, type = 'success') => {
     const id = Date.now()
-    setToasts(prev => [...prev, { id, message, closing: false }])
+    setToasts(prev => [...prev, { id, message, type, closing: false }])
     setTimeout(() => {
-      // mark as closing to trigger fade-out
       setToasts(prev => prev.map(t => t.id === id ? { ...t, closing: true } : t))
       setTimeout(() => {
         setToasts(prev => prev.filter(t => t.id !== id))
@@ -26,51 +25,70 @@ export function useToast() {
 }
 
 export function ToastContainer({ toasts, dismiss }) {
+  if (toasts.length === 0) return null
+
+  const latest = toasts[toasts.length - 1]
+
   return (
     <>
       <style>{`
-        @keyframes popIn {
-          0%   { opacity: 0; transform: translateY(-24px) scale(0.92); }
-          60%  { transform: translateY(4px) scale(1.02); }
-          100% { opacity: 1; transform: translateY(0) scale(1); }
+        @keyframes popupIn {
+          0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+          60%  { transform: translate(-50%, -50%) scale(1.06); }
+          100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         }
-        @keyframes popOut {
-          0%   { opacity: 1; transform: scale(1); }
-          100% { opacity: 0; transform: scale(0.88); }
+        @keyframes popupOut {
+          0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
         }
-        .toast-in  { animation: popIn  0.32s cubic-bezier(.34,1.56,.64,1) forwards; }
-        .toast-out { animation: popOut 0.32s ease forwards; }
+        .popup-in  { animation: popupIn  0.35s cubic-bezier(.34,1.56,.64,1) forwards; }
+        .popup-out { animation: popupOut 0.35s ease forwards; }
       `}</style>
 
-      <div className="fixed top-5 right-0 left-0 flex flex-col items-center gap-3 z-50 px-5 pointer-events-none">
-        {toasts.map(t => (
-          <div
-            key={t.id}
-            className={`pointer-events-auto w-full max-w-sm bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden ${t.closing ? 'toast-out' : 'toast-in'}`}
-          >
-            {/* progress bar */}
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 ${latest.closing ? 'opacity-0' : 'opacity-100'}`}
+        style={{ background: 'rgba(0,0,0,0.25)' }}
+      />
+
+      {/* Popup */}
+      <div
+        key={latest.id}
+        className={`fixed z-50 pointer-events-auto ${latest.closing ? 'popup-out' : 'popup-in'}`}
+        style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+        onClick={() => dismiss(latest.id)}
+      >
+        <div className="bg-white rounded-3xl shadow-2xl px-8 py-7 flex flex-col items-center gap-3 min-w-[220px] max-w-[300px] text-center"
+          dir="rtl"
+        >
+          {/* Icon */}
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center text-4xl ${
+            latest.type === 'error' ? 'bg-red-100' : 'bg-[#EDE5FF]'
+          }`}>
+            {latest.type === 'error' ? '❌' : extractEmoji(latest.message)}
+          </div>
+
+          {/* Message */}
+          <p className="text-[16px] font-bold text-[#1A0F3C] leading-snug">
+            {stripEmoji(latest.message)}
+          </p>
+
+          {latest.type !== 'error' && (
+            <p className="text-[12px] text-[#9090B0]">נרשם בהצלחה ✓</p>
+          )}
+
+          {/* Progress bar */}
+          <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden mt-1">
             <div
-              className="h-1 bg-indigo-500 rounded-full"
+              className={`h-full rounded-full ${latest.type === 'error' ? 'bg-red-400' : 'bg-[#7B3FDB]'}`}
               style={{
-                width: t.closing ? '0%' : '100%',
-                transition: t.closing ? 'none' : `width ${DURATION - 350}ms linear`,
+                width: latest.closing ? '0%' : '100%',
+                transition: latest.closing ? 'none' : `width ${DURATION - 350}ms linear`,
                 transitionDelay: '50ms',
               }}
             />
-
-            <div className="flex items-center gap-3 px-4 py-3">
-              <span className="text-2xl shrink-0">{extractEmoji(t.message)}</span>
-              <span className="flex-1 text-sm font-medium text-gray-800">{stripEmoji(t.message)}</span>
-              <button
-                onClick={() => dismiss(t.id)}
-                className="text-gray-300 hover:text-gray-500 text-lg leading-none shrink-0"
-                aria-label="סגור"
-              >
-                ×
-              </button>
-            </div>
           </div>
-        ))}
+        </div>
       </div>
     </>
   )

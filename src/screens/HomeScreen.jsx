@@ -181,6 +181,35 @@ export default function HomeScreen({ showToast, setTab }) {
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden bg-[#F5F2FC] px-3 sm:px-4 md:px-6 pt-[24px] sm:pt-[28px] md:pt-[32px] pb-[100px] md:pb-[110px] max-w-7xl mx-auto w-full">
+        {/* Daily Summary Cards - stats grid */}
+        {todayLogs.length > 0 && (
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
+            {[...new Map(todayLogs.map(log => {
+              const cat = catMap[log.categoryId]
+              const key = log.categoryId
+              return [key, { ...log, category: cat }]
+            })).values()].slice(0, 3).map((log, idx) => {
+              const cat = log.category
+              const count = todayLogs.filter(l => l.categoryId === log.categoryId).length
+              return (
+                <div
+                  key={log.categoryId}
+                  className="bg-white rounded-[12px] sm:rounded-[14px] p-2.5 sm:p-3 flex flex-col items-center text-center"
+                >
+                  <div
+                    className="w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] rounded-full flex items-center justify-center text-[18px] sm:text-[20px] mb-1.5 shrink-0"
+                    style={{ backgroundColor: cat?.label === 'חיתול' || cat?.id === 'pee' ? '#C6E2FF' : cat?.label === 'קקי' || cat?.id === 'poop' ? '#ECCFC0' : '#E4D6FF' }}
+                  >
+                    {cat?.emoji}
+                  </div>
+                  <p className="text-[16px] sm:text-[18px] font-bold text-[#1A0F3C]">{count}</p>
+                  <p className="text-[10px] sm:text-[11px] text-[#72728A] font-medium">{cat?.label}</p>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
         {/* Action Grid - 2 columns mobile, 3+ on tablet, 4 on desktop */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-5">
           {ACTION_BUTTONS.map(action => (
