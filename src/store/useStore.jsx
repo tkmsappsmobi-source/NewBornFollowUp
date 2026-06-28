@@ -150,8 +150,10 @@ export function StoreProvider({ children }) {
         // @ts-ignore
         const saved = await window.electronAPI?.readState?.()
         if (saved) {
-          // Merge with defaults for new keys
           const merged = { ...DEFAULT_STATE, ...saved }
+          const existingIds = new Set((merged.categories || []).map(c => c.id))
+          const missing = DEFAULT_STATE.categories.filter(c => !existingIds.has(c.id))
+          if (missing.length > 0) merged.categories = [...(merged.categories || []), ...missing]
           dispatch({ type: 'LOAD_STATE', payload: merged })
         }
       } catch (error) {

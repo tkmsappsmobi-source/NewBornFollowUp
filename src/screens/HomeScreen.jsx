@@ -6,23 +6,17 @@ import WeightInputSheet from '../components/WeightInputSheet'
 import { formatTime, isToday } from '../lib/time'
 
 const ACTION_BUTTONS = [
-  { id: 'pee', label: 'פיפי', bg: '#C6E2FF', emoji: '💧' },
-  { id: 'feed', label: 'האכלה', bg: '#E4D6FF', emoji: '🍼' },
-  { id: 'poop', label: 'קקי', bg: '#ECCFC0', emoji: '💩' },
-  { id: 'bath', label: 'מקלחת', bg: '#C4E8FF', emoji: '🛁' },
-  { id: 'clothes', label: 'החלפת בגדים', bg: '#DAD4FF', emoji: '👕' },
-  { id: 'vitd', label: 'ויטמין D', bg: '#FFE8A4', emoji: '☀️' },
-  { id: 'growth', label: 'מעקב גדילה', bg: '#D6CCFF', emoji: '📏' },
-  { id: 'manual', label: 'רישום ידני', bg: '#DAD4FF', emoji: '✏️' },
+  { id: 'pee',         label: 'חיתול',    bg: '#C8F0E0', emoji: '🧷' },
+  { id: 'feeding',     label: 'האכלה',    bg: '#FFF3CC', emoji: '🍼' },
+  { id: 'sleep',       label: 'שינה',     bg: '#E0D8FF', emoji: '🌙' },
+  { id: 'milestone',   label: 'אבן דרך', bg: '#FFD6EC', emoji: '⭐' },
+  { id: 'growth',      label: 'גדילה',    bg: '#C8F0E8', emoji: '👶' },
+  { id: 'bath',        label: 'מקלחת',   bg: '#FFE4CC', emoji: '🚿' },
+  { id: 'weight',      label: 'משקל',     bg: '#C8EEFF', emoji: '⚖️' },
+  { id: 'vaccination', label: 'חיסון',   bg: '#E8E0FF', emoji: '💉' },
 ]
 
-const NAV_ITEMS = [
-  { id: 'settings', label: 'הגדרות', route: '/settings' },
-  { id: 'alerts', label: 'התראות', route: '/alerts' },
-  { id: 'home', label: 'בית', route: '/' },
-  { id: 'stats', label: 'סטטיסטיקה', route: '/stats' },
-  { id: 'journal', label: 'יומן', route: '/journal' },
-]
+const ACTION_BG_MAP = Object.fromEntries(ACTION_BUTTONS.map(b => [b.id, b.bg]))
 
 export default function HomeScreen({ showToast, setTab }) {
   const { state, dispatch } = useStore()
@@ -32,21 +26,19 @@ export default function HomeScreen({ showToast, setTab }) {
 
   const babyName = state.babyName || 'מיכאל'
   const todayLogs = state.logs.filter(l => isToday(new Date(l.timestamp)))
-  const recentLogs = [...todayLogs]
+  const recentLogs = [...state.logs]
     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-    .slice(0, 3)
+    .slice(0, 4)
 
   const catMap = Object.fromEntries(state.categories.map(c => [c.id, c]))
 
   const handleAction = (actionId) => {
-    if (actionId === 'manual') {
-      setManualOpen(true)
+    if (actionId === 'weight') {
+      setWeightOpen(true)
       return
     }
-
     const cat = state.categories.find(c => c.id === actionId)
     if (!cat) return
-
     if (cat.type === 'feeding') {
       setFeedingOpen(true)
     } else if (cat.type === 'weight') {
@@ -67,7 +59,7 @@ export default function HomeScreen({ showToast, setTab }) {
   const handleWeightConfirm = (weight, note) => {
     setWeightOpen(false)
     dispatch({ type: 'ADD_WEIGHT', weight, note })
-    showToast(`📏 משקל ${weight} ק״ג נשמר`)
+    showToast(`⚖️ משקל ${weight} ק״ג נשמר`)
   }
 
   const handleManualSave = ({ categoryId, amount, note, timestamp }) => {
@@ -77,264 +69,327 @@ export default function HomeScreen({ showToast, setTab }) {
     showToast(`${cat?.emoji ?? ''} ${cat?.label ?? ''} נרשם`)
   }
 
-  const todaySummaryText = useMemo(() => {
+  const todayStats = useMemo(() => {
     const counts = {}
     todayLogs.forEach(log => {
       const cat = catMap[log.categoryId]
       if (cat) {
-        counts[cat.label] = (counts[cat.label] || 0) + 1
+        if (!counts[cat.id]) counts[cat.id] = { cat, count: 0 }
+        counts[cat.id].count++
       }
     })
-    return Object.entries(counts)
-      .map(([label, count]) => `${count} ${label}`)
-      .join(', ')
+    return Object.values(counts).sort((a, b) => b.count - a.count).slice(0, 3)
   }, [todayLogs, catMap])
 
-  const currentTime = new Date().toLocaleTimeString('he-IL', {
-    hour: '2-digit',
-    minute: '2-digit',
+  const today = new Date().toLocaleDateString('he-IL', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
   })
 
+  const getRelativeTime = (timestamp) => {
+    const diff = Date.now() - new Date(timestamp).getTime()
+    const minutes = Math.floor(diff / 60000)
+    if (minutes < 1) return 'עכשיו'
+    if (minutes < 60) return `לפני ${minutes} דק'`
+    const hours = Math.floor(minutes / 60)
+    const mins = minutes % 60
+    if (mins === 0) return `לפני ${hours} שעה${hours > 1 ? 'ות' : ''}`
+    return `לפני ${hours} שעה ו-${mins} דק'`
+  }
+
   return (
-    <div dir="rtl" className="font-['Heebo'] w-full h-screen flex flex-col bg-[#F5F2FC] relative overflow-hidden">
-      {/* Status Bar */}
-      <div className="shrink-0 h-11 bg-[#240E6A] flex items-center justify-between px-4 sm:px-6 md:px-8">
-        <span className="text-white text-[12px] sm:text-[13px] font-semibold">{currentTime}</span>
-        <div className="flex gap-1.5 items-center">
-          {/* Signal, WiFi, Battery icons */}
-          <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
-            <path d="M1 10.5l2-2M4 12l3-3M7 12l4-4M11 12l4-4" stroke="white" strokeWidth="1" strokeLinecap="round" />
-          </svg>
-          <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
-            <path d="M2 6c2-2 4-3 6-3s4 1 6 3M4 4c1.5-1.5 3-2 4-2s2.5.5 4 2" stroke="white" strokeWidth="1" strokeLinecap="round" />
-          </svg>
-          <svg width="18" height="10" viewBox="0 0 18 10" fill="none">
-            <rect x="1" y="1" width="16" height="8" rx="1.5" stroke="white" strokeWidth="1" />
-            <rect x="14.5" y="3.5" width="3" height="3" fill="white" />
+    <div
+      dir="rtl"
+      style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: '#F0F8FF', fontFamily: 'Heebo, sans-serif' }}
+    >
+      {/* ── HEADER ── */}
+      <div
+        style={{
+          flexShrink: 0,
+          position: 'relative',
+          overflow: 'hidden',
+          background: 'linear-gradient(180deg, #6EC6E6 0%, #9DDAF4 35%, #C8EDFA 70%, #E4F6FC 100%)',
+        }}
+      >
+        {/* Stars */}
+        {[
+          { top: 22, left: 32, size: 17, op: 1 },
+          { top: 14, left: 68, size: 11, op: 0.8 },
+          { top: 52, left: 22, size: 9,  op: 0.6 },
+          { top: 85, left: 82, size: 13, op: 0.7 },
+          { top: 28, right: 140, size: 10, op: 0.7 },
+          { top: 65, right: 50, size: 8, op: 0.5 },
+        ].map((s, i) => (
+          <span
+            key={i}
+            style={{
+              position: 'absolute',
+              top: s.top,
+              left: s.left,
+              right: s.right,
+              fontSize: s.size,
+              color: '#FFD700',
+              opacity: s.op,
+              lineHeight: 1,
+              pointerEvents: 'none',
+            }}
+          >★</span>
+        ))}
+
+        {/* Sun */}
+        <div style={{ position: 'absolute', top: -8, right: -12, pointerEvents: 'none' }}>
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+            <circle cx="50" cy="34" r="30" fill="#FFD54F" />
+            <circle cx="50" cy="34" r="27" fill="#FFCA28" />
+            <ellipse cx="43" cy="30" rx="3" ry="3.5" fill="#8B6500" />
+            <ellipse cx="57" cy="30" rx="3" ry="3.5" fill="#8B6500" />
+            <path d="M43 40 Q50 47 57 40" stroke="#8B6500" strokeWidth="2" fill="none" strokeLinecap="round" />
+            <ellipse cx="35" cy="38" rx="5" ry="3.5" fill="#FFB74D" opacity="0.65" />
+            <ellipse cx="65" cy="38" rx="5" ry="3.5" fill="#FFB74D" opacity="0.65" />
           </svg>
         </div>
-      </div>
 
-      {/* Header with Moon */}
-      <div className="shrink-0 relative z-[2]">
-        {/* Gradient Background */}
-        <div
-          className="h-[120px] sm:h-[140px] md:h-[160px] px-4 sm:px-6 md:px-8 pt-2 sm:pt-3 relative overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, #240E6A 0%, #3D1A8C 25%, #5830C8 75%, #7040E0 100%)',
-          }}
-        >
-          {/* Stars */}
-          <svg className="absolute top-6 left-4 w-5 h-5" viewBox="0 0 20 20" fill="none">
-            <path d="M10 2L13 8H19L14.5 12L16 18L10 14.5L4 18L5.5 12L1 8H7L10 2Z" fill="#FFD700" />
-          </svg>
-          <svg className="absolute top-12 right-6 w-4 h-4" viewBox="0 0 16 16" fill="none">
-            <path d="M8 1L10.4 6.2H16L11.8 9.8L13.2 15L8 11.4L2.8 15L4.2 9.8L0 6.2H5.6L8 1Z" fill="white" opacity="0.7" />
-          </svg>
-          <svg className="absolute bottom-8 right-12 w-3.5 h-3.5" viewBox="0 0 14 14" fill="none">
-            <path d="M7 1L8.5 4.5H12.2L9.3 6.8L10.8 10.3L7 8L3.2 10.3L4.7 6.8L1.8 4.5H5.5L7 1Z" fill="white" opacity="0.6" />
-          </svg>
-
-          {/* Clouds */}
-          <svg className="absolute bottom-2 left-0 w-32 h-8 opacity-40" viewBox="0 0 140 30" fill="none">
-            <path d="M10 18C5 18 2 22 2 27C2 28.1 2.9 29 4 29H40C41.1 29 42 28.1 42 27C42 24 40 21 36 20C35 18 33 16 30 16C27 16 24.5 18 22 18C19 18 15 15 12 15C10.3 15 8.5 16 7 18" stroke="white" strokeWidth="1.5" fill="none" opacity="0.6" />
-          </svg>
-          <svg className="absolute bottom-3 right-0 w-40 h-10 opacity-30" viewBox="0 0 180 35" fill="none">
-            <path d="M30 20C20 20 15 25 15 32C15 33.1 15.9 34 17 34H80C81.1 34 82 33.1 82 32C82 28 80 24 75 22C73.5 20 71 18 67 18C63 18 59 21 55 21C50 21 44 17 38 17C35.5 17 33 18 31 20" stroke="white" strokeWidth="1.2" fill="none" opacity="0.5" />
-          </svg>
-
-          <h1 className="m-0 pt-2 sm:pt-3 text-white text-[28px] sm:text-[32px] md:text-[36px] font-black text-right tracking-tight leading-tight">
-            שלום {babyName},
-          </h1>
-        </div>
-
-        {/* Moon - positioned absolutely, overlaps content */}
-        <div className="absolute left-[-2px] bottom-[-20px] sm:bottom-[-24px] w-[90px] sm:w-[110px] md:w-[116px] h-[100px] sm:h-[120px] md:h-[126px] z-[5] pointer-events-none">
-          <svg width="100%" height="100%" viewBox="0 0 116 126" fill="none" preserveAspectRatio="xMidYMid meet">
+        {/* Moon */}
+        <div style={{ position: 'absolute', top: 10, left: 2, pointerEvents: 'none' }}>
+          <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
             <defs>
-              <mask id="crescent">
-                <rect width="116" height="126" fill="white" />
-                <circle cx="78" cy="43" r="47" fill="black" />
+              <mask id="moonMask">
+                <rect width="58" height="58" fill="white" />
+                <circle cx="38" cy="20" r="22" fill="black" />
               </mask>
-              <radialGradient id="moonGrad" cx="35%" cy="35%">
-                <stop offset="0%" stopColor="#FFE566" />
-                <stop offset="60%" stopColor="#FFC520" />
-                <stop offset="100%" stopColor="#CF8A10" />
-              </radialGradient>
             </defs>
-
-            {/* Crescent moon */}
-            <circle cx="50" cy="69" r="52" fill="url(#moonGrad)" mask="url(#crescent)" />
-
-            {/* Face - eyes */}
-            <path d="M35 55 Q40 50 45 55" stroke="#A0652A" strokeWidth="2" fill="none" strokeLinecap="round" />
-            <path d="M65 55 Q70 50 75 55" stroke="#A0652A" strokeWidth="2" fill="none" strokeLinecap="round" />
-
-            {/* Smile */}
-            <path d="M40 75 Q55 85 70 75" stroke="#A0652A" strokeWidth="2" fill="none" strokeLinecap="round" />
-
-            {/* Rosy cheek */}
-            <ellipse cx="25" cy="75" rx="8" ry="6" fill="#FFB0A0" opacity="0.8" />
+            <circle cx="24" cy="30" r="24" fill="#FFF9C4" mask="url(#moonMask)" />
+            <circle cx="24" cy="30" r="22" fill="#FFF176" mask="url(#moonMask)" />
+            <path d="M16 27 Q19 23 22 27" stroke="#8B7B1A" strokeWidth="1.5" fill="none" strokeLinecap="round" mask="url(#moonMask)" />
+            <path d="M26 27 Q29 23 32 27" stroke="#8B7B1A" strokeWidth="1.5" fill="none" strokeLinecap="round" mask="url(#moonMask)" />
+            <path d="M17 35 Q24 41 31 35" stroke="#8B7B1A" strokeWidth="1.5" fill="none" strokeLinecap="round" mask="url(#moonMask)" />
           </svg>
+        </div>
+
+        {/* Text: date + name + badge */}
+        <div style={{ textAlign: 'center', paddingTop: 18, position: 'relative', zIndex: 2 }}>
+          <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: '#1A3A5C' }}>
+            {today} • היום
+          </p>
+          <h1 style={{ margin: '4px 0 8px', fontSize: 46, fontWeight: 900, color: '#0D2640', lineHeight: 1.05, letterSpacing: -1 }}>
+            {babyName}
+          </h1>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: 'rgba(255,255,255,0.6)', borderRadius: 24,
+            padding: '5px 16px', backdropFilter: 'blur(6px)',
+          }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: '#1A5A8A' }}>מעקב תינוק</span>
+            <span style={{ fontSize: 16 }}>⭐</span>
+          </div>
+        </div>
+
+        {/* Baby illustration */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 4 }}>
+          <BabyOnCloud />
         </div>
       </div>
 
-      {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-[#F5F2FC] px-3 sm:px-4 md:px-6 pt-[24px] sm:pt-[28px] md:pt-[32px] pb-[100px] md:pb-[110px] max-w-7xl mx-auto w-full">
-        {/* Daily Summary Cards - stats grid */}
-        {todayLogs.length > 0 && (
-          <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
-            {[...new Map(todayLogs.map(log => {
-              const cat = catMap[log.categoryId]
-              const key = log.categoryId
-              return [key, { ...log, category: cat }]
-            })).values()].slice(0, 3).map((log, idx) => {
-              const cat = log.category
-              const count = todayLogs.filter(l => l.categoryId === log.categoryId).length
-              return (
-                <div
-                  key={log.categoryId}
-                  className="bg-white rounded-[12px] sm:rounded-[14px] p-2.5 sm:p-3 flex flex-col items-center text-center"
+      {/* ── SCROLLABLE CONTENT ── */}
+      <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', paddingBottom: 90 }}>
+        <div style={{ padding: '14px 14px 0' }}>
+
+          {/* סיכום היום */}
+          <div style={cardStyle}>
+            <div style={rowBetween}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="2" y="4" width="20" height="17" rx="3" stroke="#4A90D9" strokeWidth="1.8" fill="#EEF6FF" />
+                <path d="M7 2v4M17 2v4M2 9h20" stroke="#4A90D9" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+              <span style={{ fontSize: 15, fontWeight: 700, color: '#111827' }}>סיכום היום</span>
+            </div>
+
+            {todayStats.length > 0 ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 12 }}>
+                {todayStats.map(({ cat, count }) => (
+                  <div key={cat.id} style={{ background: ACTION_BG_MAP[cat.id] || '#F3F4F6', borderRadius: 14, padding: '12px 6px', textAlign: 'center' }}>
+                    <div style={{ fontSize: 28, lineHeight: 1, marginBottom: 5 }}>{cat.emoji}</div>
+                    <p style={{ fontSize: 24, fontWeight: 800, color: '#111827', margin: 0, lineHeight: 1 }}>{count}</p>
+                    <p style={{ fontSize: 11, color: '#6B7280', margin: '4px 0 0', fontWeight: 500 }}>{cat.label}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p style={{ textAlign: 'center', color: '#9CA3AF', fontSize: 13, margin: '12px 0 0' }}>
+                עדיין אין פעילויות היום — לחץ על כפתור לרישום 👆
+              </p>
+            )}
+          </div>
+
+          {/* פיצ'רים */}
+          <div style={cardStyle}>
+            <div style={rowBetween}>
+              <span style={{ fontSize: 20 }}>⭐</span>
+              <span style={{ fontSize: 15, fontWeight: 700, color: '#111827' }}>פיצ'רים</span>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginTop: 14 }}>
+              {ACTION_BUTTONS.map(action => (
+                <button
+                  key={action.id}
+                  onClick={() => handleAction(action.id)}
+                  style={{
+                    background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                  }}
                 >
                   <div
-                    className="w-[36px] h-[36px] sm:w-[40px] sm:h-[40px] rounded-full flex items-center justify-center text-[18px] sm:text-[20px] mb-1.5 shrink-0"
-                    style={{ backgroundColor: cat?.label === 'חיתול' || cat?.id === 'pee' ? '#C6E2FF' : cat?.label === 'קקי' || cat?.id === 'poop' ? '#ECCFC0' : '#E4D6FF' }}
+                    style={{
+                      width: '100%',
+                      aspectRatio: '1',
+                      borderRadius: 18,
+                      background: action.bg,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 28,
+                      transition: 'transform 0.12s',
+                    }}
+                    onPointerDown={e => (e.currentTarget.style.transform = 'scale(0.91)')}
+                    onPointerUp={e => (e.currentTarget.style.transform = 'scale(1)')}
+                    onPointerLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
                   >
-                    {cat?.emoji}
+                    {action.emoji}
                   </div>
-                  <p className="text-[16px] sm:text-[18px] font-bold text-[#1A0F3C]">{count}</p>
-                  <p className="text-[10px] sm:text-[11px] text-[#72728A] font-medium">{cat?.label}</p>
-                </div>
-              )
-            })}
+                  <span style={{ fontSize: 11, fontWeight: 600, color: '#374151', textAlign: 'center', lineHeight: 1.25 }}>
+                    {action.label}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
-        )}
 
-        {/* Action Grid - 2 columns mobile, 3+ on tablet, 4 on desktop */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-5">
-          {ACTION_BUTTONS.map(action => (
-            <button
-              key={action.id}
-              onClick={() => handleAction(action.id)}
-              className="bg-white rounded-[14px] sm:rounded-[16px] md:rounded-[18px] p-2 sm:p-3 md:p-[15px_14px] flex flex-col sm:flex-col md:flex-row items-center justify-between min-h-[70px] sm:min-h-[78px] md:min-h-[86px] cursor-pointer transition-all duration-150 hover:shadow-[0_5px_20px_rgba(70,25,150,0.15)] hover:-translate-y-0.5 active:scale-[0.97] gap-1.5 md:gap-2"
-            >
-              <span className="text-[13px] sm:text-[15px] md:text-[17px] font-semibold text-[#1A0F3C] leading-tight text-center md:text-right">{action.label}</span>
-              <div
-                className="w-[48px] h-[48px] sm:w-[52px] sm:h-[52px] md:w-[58px] md:h-[58px] rounded-full flex items-center justify-center text-[22px] sm:text-[26px] md:text-[28px] shrink-0 leading-none"
-                style={{ backgroundColor: action.bg }}
-              >
-                {action.emoji}
+          {/* הפעולות האחרונות */}
+          {recentLogs.length > 0 && (
+            <div style={cardStyle}>
+              <div style={rowBetween}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="1.8">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v6l4 2" strokeLinecap="round" />
+                </svg>
+                <span style={{ fontSize: 15, fontWeight: 700, color: '#111827' }}>
+                  {recentLogs.length} הפעולות האחרונות
+                </span>
               </div>
-            </button>
-          ))}
+
+              <div style={{ marginTop: 10 }}>
+                {recentLogs.map((log, i) => {
+                  const cat = catMap[log.categoryId]
+                  const bg = ACTION_BG_MAP[log.categoryId] || '#F3F4F6'
+                  return (
+                    <div
+                      key={log.id}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        borderBottom: i < recentLogs.length - 1 ? '1px solid #F3F4F6' : 'none',
+                        direction: 'ltr',
+                      }}
+                    >
+                      {/* Arrow */}
+                      <span style={{ color: '#D1D5DB', fontSize: 18, flexShrink: 0 }}>‹</span>
+
+                      {/* Time */}
+                      <div style={{ minWidth: 56, flexShrink: 0 }}>
+                        <p style={{ fontSize: 14, fontWeight: 700, color: '#111827', margin: 0, lineHeight: 1.25 }}>
+                          {formatTime(new Date(log.timestamp))}
+                        </p>
+                        <p style={{ fontSize: 10, color: '#9CA3AF', margin: 0, lineHeight: 1.4 }}>
+                          {getRelativeTime(log.timestamp)}
+                        </p>
+                      </div>
+
+                      {/* Emoji circle */}
+                      <div style={{
+                        width: 44, height: 44, borderRadius: '50%',
+                        background: bg,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 22, flexShrink: 0,
+                      }}>
+                        {cat?.emoji || '📝'}
+                      </div>
+
+                      {/* Name + detail */}
+                      <div style={{ flex: 1, textAlign: 'right', direction: 'rtl' }}>
+                        <p style={{ fontSize: 14, fontWeight: 700, color: '#111827', margin: 0, lineHeight: 1.25 }}>
+                          {cat?.label || 'פעולה'}
+                        </p>
+                        <p style={{ fontSize: 11, color: '#9CA3AF', margin: 0, lineHeight: 1.4 }}>
+                          {log.amount ? `${log.amount} מ״ל` : log.note || cat?.label || ''}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
         </div>
+      </div>
 
-        {/* Summary Card - "היום בקצרה" */}
-        {todayLogs.length > 0 && (
-          <div
-            className="bg-white rounded-[14px] sm:rounded-[16px] md:rounded-[18px] p-3 sm:p-4 md:p-[15px_14px] flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5"
-            style={{ direction: 'ltr' }}
-          >
-            {/* Teddy bear - LEFT */}
-            <div className="text-[40px] sm:text-[48px] md:text-[56px] leading-none shrink-0">🧸</div>
+      {/* ── BOTTOM NAV ── */}
+      <nav
+        style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0,
+          background: 'white',
+          borderTop: '1px solid #E5E7EB',
+          display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around',
+          paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 10px)',
+          paddingTop: 8,
+          zIndex: 50,
+          direction: 'ltr',
+        }}
+      >
+        <NavBtn
+          icon={<PersonIcon />}
+          label="פרופיל"
+          onClick={() => setTab('settings')}
+        />
+        <NavBtn
+          icon={<ChartIcon />}
+          label="גרפים"
+          onClick={() => setTab('stats')}
+        />
 
-            {/* Text - CENTER */}
-            <div className="flex-1 text-right pr-1 sm:pr-2 md:pr-0.5" dir="rtl">
-              <p className="text-[13px] sm:text-[14px] md:text-[15px] font-bold text-[#5B21B6] mb-0.5 sm:mb-1">היום בקצרה ✨</p>
-              <p className="text-[11px] sm:text-[12px] md:text-[12.5px] text-[#72728A] leading-relaxed mb-0.5">
-                {todaySummaryText || 'עדיין אין פעילויות היום'}
-              </p>
-              <p className="text-[11px] sm:text-[12px] md:text-[12.5px] text-[#5B21B6] font-semibold">כל הכבוד! ממשיכים כך 💜</p>
-            </div>
-
-            {/* Calendar icon - RIGHT */}
-            <div className="w-[40px] h-[40px] sm:w-[44px] sm:h-[44px] md:w-[52px] md:h-[52px] rounded-[8px] sm:rounded-[10px] md:rounded-[12px] bg-[#EDE5FF] flex items-center justify-center shrink-0">
-              <svg width="20" height="20" className="sm:w-[24px] sm:h-[24px] md:w-[30px] md:h-[30px]" viewBox="0 0 30 30" fill="none">
-                <rect x="2" y="4" width="26" height="23" rx="3.5" stroke="#7B3FDB" strokeWidth="2" fill="rgba(123,63,219,0.07)" />
-                <rect x="2" y="4" width="26" height="8" rx="3.5" fill="rgba(123,63,219,0.18)" />
-                <path d="M8 2v5.5M22 2v5.5" stroke="#7B3FDB" strokeWidth="2" strokeLinecap="round" />
-                <path d="M9 18l4 4 8-8" stroke="#7B3FDB" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-          </div>
-        )}
-
-        {/* CTA Button - רישום ידני */}
+        {/* Center + button */}
         <button
           onClick={() => setManualOpen(true)}
-          className="w-full rounded-[14px] sm:rounded-[16px] md:rounded-[18px] py-3 sm:py-[15px] md:py-[17px] px-4 sm:px-5 md:px-5 text-white text-[15px] sm:text-[16px] md:text-[18px] font-bold flex items-center justify-center gap-2 sm:gap-2.5 mb-4 sm:mb-5 border-none cursor-pointer transition-all active:scale-[0.98]"
           style={{
-            background: 'linear-gradient(135deg, #4A1FA0 0%, #6A33D4 100%)',
-            boxShadow: '0 6px 20px rgba(74,31,160,0.32)',
+            width: 60, height: 60, borderRadius: '50%',
+            background: 'linear-gradient(135deg, #48CAE4 0%, #0096C7 100%)',
+            border: 'none', cursor: 'pointer', flexShrink: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 18px rgba(0,150,199,0.45)',
+            marginBottom: 12,
+            transition: 'transform 0.12s',
           }}
+          onPointerDown={e => (e.currentTarget.style.transform = 'scale(0.92)')}
+          onPointerUp={e => (e.currentTarget.style.transform = 'scale(1)')}
+          onPointerLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
         >
-          רישום ידני
-          <svg width="16" height="16" className="sm:w-[18px] sm:h-[18px] md:w-[20px] md:h-[20px]" viewBox="0 0 20 20" fill="none">
-            <path d="M14.7 2.3a2.1 2.1 0 013 3L6.2 16.8 2 18l1.2-4.2z" fill="white" stroke="white" strokeWidth="0.4" strokeLinejoin="round" />
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round">
+            <path d="M12 4v16M4 12h16" />
           </svg>
         </button>
 
-        {/* Recent Activities */}
-        {recentLogs.length > 0 && (
-          <div className="bg-white rounded-[14px] sm:rounded-[16px] md:rounded-[18px] pt-3 sm:pt-4 md:pt-4 px-3 sm:px-4 md:px-[14px] pb-1.5">
-            <h3 className="text-[13px] sm:text-[14px] md:text-[15px] font-bold text-[#5B21B6] text-right mb-2">פעולות אחרונות</h3>
-
-            {recentLogs.map((log, i) => (
-              <div
-                key={log.id}
-                className={`flex items-center justify-between py-2 sm:py-2.5 md:py-2.5 ${i < recentLogs.length - 1 ? 'border-b border-[#F0EDF8]' : ''}`}
-              >
-                <div className="flex items-center gap-1 sm:gap-1.5 md:gap-1.5">
-                  <span className="text-[11px] sm:text-[12px] md:text-[13.5px] font-medium text-[#2D1B5C]">
-                    {catMap[log.categoryId]?.label || 'Unknown'}
-                  </span>
-                  <span className="text-[16px] sm:text-[18px] md:text-[20px] leading-none">{catMap[log.categoryId]?.emoji}</span>
-                </div>
-                <span className="text-[11px] sm:text-[12px] md:text-[13px] font-medium text-[#9898B0]">
-                  {formatTime(new Date(log.timestamp))}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Bottom Navigation */}
-      <nav
-        className="absolute bottom-0 left-0 right-0 bg-white pt-2 sm:pt-2.5 pb-4 sm:pb-5 md:pb-[22px] flex justify-around items-start z-[20]"
-        style={{ direction: 'ltr' }}
-      >
-        {NAV_ITEMS.map(item => (
-          <button
-            key={item.id}
-            onClick={() => {
-              if (item.id === 'stats') {
-                setTab('stats')
-              } else if (item.id === 'journal') {
-                setTab('history')
-              } else if (item.id === 'alerts') {
-                setTab('reminders')
-              } else if (item.id === 'settings') {
-                setTab('settings')
-              }
-            }}
-            className={`flex flex-col items-center gap-0.5 cursor-pointer flex-1 pt-0.5 bg-transparent border-none hover:opacity-75 transition-opacity`}
-          >
-            {item.id === 'home' ? (
-              <div className="bg-[#EDE5FF] rounded-[14px] px-[15px] py-[5px] flex items-center justify-center">
-                <HomeIcon />
-              </div>
-            ) : (
-              item.id === 'journal' ? <HistoryIcon /> :
-              item.id === 'stats' ? <StatsIcon /> :
-              item.id === 'alerts' ? <BellIcon /> :
-              <SettingsIcon />
-            )}
-            <span className={`text-[8px] sm:text-[9px] md:text-[10px] font-${item.id === 'home' ? 'bold' : 'medium'} text-${item.id === 'home' ? '[#6B35D6]' : '[#9090B0]'}`}>
-              {item.label}
-            </span>
-          </button>
-        ))}
+        <NavBtn
+          icon={<ClockIcon />}
+          label="היסטוריה"
+          onClick={() => setTab('history')}
+        />
+        <NavBtn
+          icon={<HomeIconSvg active />}
+          label="בית"
+          onClick={() => {}}
+          active
+        />
       </nav>
 
       {/* Modals */}
@@ -345,14 +400,12 @@ export default function HomeScreen({ showToast, setTab }) {
           onClose={() => setFeedingOpen(false)}
         />
       )}
-
       {weightOpen && (
         <WeightInputSheet
           onConfirm={handleWeightConfirm}
           onClose={() => setWeightOpen(false)}
         />
       )}
-
       {manualOpen && (
         <ManualLogForm
           categories={state.categories}
@@ -364,46 +417,133 @@ export default function HomeScreen({ showToast, setTab }) {
   )
 }
 
-function HomeIcon() {
+/* ── Shared styles ── */
+const cardStyle = {
+  background: 'white',
+  borderRadius: 20,
+  padding: '14px 16px',
+  marginBottom: 12,
+  boxShadow: '0 2px 14px rgba(0,0,0,0.07)',
+}
+
+const rowBetween = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+}
+
+/* ── Baby illustration ── */
+function BabyOnCloud() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B35D6" strokeWidth="2">
-      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+    <svg width="240" height="118" viewBox="0 0 240 118" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Clouds */}
+      <ellipse cx="120" cy="108" rx="108" ry="16" fill="white" opacity="0.96" />
+      <ellipse cx="78" cy="97" rx="42" ry="25" fill="white" opacity="0.96" />
+      <ellipse cx="120" cy="90" rx="50" ry="30" fill="white" opacity="0.96" />
+      <ellipse cx="162" cy="97" rx="42" ry="25" fill="white" opacity="0.96" />
+      <ellipse cx="198" cy="103" rx="28" ry="18" fill="white" opacity="0.9" />
+      <ellipse cx="42" cy="103" rx="28" ry="18" fill="white" opacity="0.9" />
+
+      {/* Baby body — blue starry onesie */}
+      <ellipse cx="143" cy="82" rx="45" ry="24" fill="#6BBFDF" />
+      <ellipse cx="143" cy="82" rx="42" ry="21" fill="#5BAED6" />
+      <text x="126" y="82" fontSize="9" fill="white" opacity="0.6" fontFamily="sans-serif">★</text>
+      <text x="143" y="76" fontSize="7" fill="white" opacity="0.6" fontFamily="sans-serif">★</text>
+      <text x="155" y="86" fontSize="8" fill="white" opacity="0.6" fontFamily="sans-serif">★</text>
+
+      {/* Legs */}
+      <ellipse cx="172" cy="97" rx="15" ry="10" fill="#5BAED6" transform="rotate(25 172 97)" />
+      <ellipse cx="188" cy="90" rx="14" ry="9" fill="#5BAED6" transform="rotate(-12 188 90)" />
+      {/* Booties */}
+      <ellipse cx="180" cy="104" rx="10" ry="7.5" fill="#4A9BC0" />
+      <ellipse cx="194" cy="97" rx="10" ry="7.5" fill="#4A9BC0" />
+
+      {/* Head */}
+      <circle cx="87" cy="74" r="30" fill="#FFCBA4" />
+
+      {/* Hair */}
+      <ellipse cx="87" cy="49" rx="22" ry="10" fill="#5C3317" />
+      <circle cx="68" cy="56" r="8" fill="#5C3317" />
+      <circle cx="106" cy="56" r="8" fill="#5C3317" />
+      <ellipse cx="87" cy="53" rx="18" ry="9" fill="#6B3D1E" />
+
+      {/* Closed eyes */}
+      <path d="M75 71 Q79 67 83 71" stroke="#8B5A2B" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+      <path d="M91 71 Q95 67 99 71" stroke="#8B5A2B" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+      {/* Lashes */}
+      <path d="M75 71 L73 68" stroke="#8B5A2B" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M83 71 L83 68" stroke="#8B5A2B" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M91 71 L91 68" stroke="#8B5A2B" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M99 71 L101 68" stroke="#8B5A2B" strokeWidth="1.2" strokeLinecap="round" />
+
+      {/* Nose */}
+      <ellipse cx="87" cy="78" rx="3" ry="2.5" fill="#E8A882" />
+
+      {/* Smile */}
+      <path d="M78 86 Q87 94 96 86" stroke="#C0784A" strokeWidth="2" fill="none" strokeLinecap="round" />
+
+      {/* Cheeks */}
+      <ellipse cx="68" cy="80" rx="10" ry="7" fill="#FFB3A5" opacity="0.65" />
+      <ellipse cx="106" cy="80" rx="10" ry="7" fill="#FFB3A5" opacity="0.65" />
+
+      {/* Arm */}
+      <ellipse cx="112" cy="89" rx="15" ry="7.5" fill="#FFCBA4" transform="rotate(-28 112 89)" />
+      <ellipse cx="122" cy="81" rx="9" ry="7" fill="#FFCBA4" />
+
+      {/* Heart */}
+      <text x="100" y="54" fontSize="16" fill="#FF6B8A" opacity="0.85" fontFamily="sans-serif">♥</text>
     </svg>
   )
 }
 
-function HistoryIcon() {
+/* ── Nav button ── */
+function NavBtn({ icon, label, onClick, active }) {
+  const color = active ? '#0096C7' : '#9CA3AF'
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9090B0" strokeWidth="2">
-      <rect x="3" y="4" width="18" height="18" rx="2" />
-      <path d="M16 2v4M8 2v4M3 10h18" />
-    </svg>
+    <button
+      onClick={onClick}
+      style={{
+        background: 'none', border: 'none', cursor: 'pointer',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
+        padding: '0 6px', color,
+      }}
+    >
+      {icon}
+      <span style={{ fontSize: 10, fontWeight: 500, color }}>{label}</span>
+    </button>
   )
 }
 
-function StatsIcon() {
+/* ── Icons ── */
+function PersonIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9090B0" strokeWidth="2">
-      <line x1="12" y1="2" x2="12" y2="22" />
-      <path d="M17 5h-5v14h5zM7 11h-2v8h2z" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" strokeLinecap="round" />
     </svg>
   )
 }
-
-function BellIcon() {
+function ChartIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9090B0" strokeWidth="2">
-      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <rect x="3" y="12" width="4" height="9" rx="1" />
+      <rect x="10" y="7" width="4" height="14" rx="1" />
+      <rect x="17" y="3" width="4" height="18" rx="1" />
     </svg>
   )
 }
-
-function SettingsIcon() {
+function ClockIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9090B0" strokeWidth="2">
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24" />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 6v6l4 2" strokeLinecap="round" />
+    </svg>
+  )
+}
+function HomeIconSvg({ active }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" strokeLinejoin="round" />
     </svg>
   )
 }
