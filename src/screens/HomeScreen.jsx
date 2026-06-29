@@ -10,7 +10,7 @@ import { formatTime, isToday, calcAge } from '../lib/time'
 
 const ACTION_BUTTONS = [
   { id: 'diaper',      label: 'חיתול',    bg: '#C8F0E0', emoji: '🚼' },
-  { id: 'feeding',     label: 'האכלה',    bg: '#FFF3CC', emoji: '🍼' },
+  { id: 'feeding',     label: 'האכלה',    bg: '#FFF3CC', emoji: null, icon: '/bottle-icon.svg' },
   { id: 'sleep',       label: 'שינה',     bg: '#E0D8FF', emoji: '🌙' },
   { id: 'bath',        label: 'מקלחת',   bg: '#FFE4CC', emoji: '🛁' },
   { id: 'growth',      label: 'גדילה',    bg: '#C8F0E8', emoji: '📏' },
@@ -351,7 +351,9 @@ export default function HomeScreen({ showToast, setTab }) {
                 {ACTION_BUTTONS.map(action => (
                   <button key={action.id} className="hs-feat-btn" onClick={()=>handleAction(action.id)}>
                     <div className="hs-feat-icon" style={{background: action.id==='sleep' && state.sleepTimerStart ? '#9C89E6' : action.bg}}>
-                      {action.emoji}
+                      {action.icon
+                        ? <img src={action.icon} alt={action.label} style={{width:'62%',height:'62%',objectFit:'contain',display:'block'}}/>
+                        : action.emoji}
                     </div>
                     <span className="hs-feat-lbl">{action.id==='sleep' && state.sleepTimerStart ? 'סיום שינה' : action.label}</span>
                   </button>
