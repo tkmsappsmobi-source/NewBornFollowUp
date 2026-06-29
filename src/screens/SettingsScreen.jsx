@@ -35,67 +35,77 @@ export default function SettingsScreen({ showToast }) {
   }
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto p-4 space-y-6">
-      <section>
-        <h2 className="text-sm font-bold text-gray-500 mb-2">שם התינוק</h2>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={nameInput}
-            onChange={e => setNameInput(e.target.value)}
-            placeholder="שם התינוק"
-            className="flex-1 border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
-          />
-          <button
-            onClick={handleNameSave}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-medium"
-          >
-            שמור
-          </button>
+    <>
+      <style>{`
+        .sett-root { height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#F0F8FF; font-family:Heebo,sans-serif; padding: clamp(10px,3vw,16px) clamp(10px,4vw,16px); padding-bottom: clamp(80px,20vw,100px); display:flex; flex-direction:column; gap: clamp(12px,3vw,18px); }
+        .sett-card { background:white; border-radius: clamp(14px,4vw,20px); padding: clamp(14px,4vw,20px); box-shadow:0 2px 14px rgba(0,0,0,0.07); }
+        .sett-title { font-size: clamp(11px,3vw,13px); font-weight:700; color:#6B7280; text-transform:uppercase; letter-spacing:0.06em; margin-bottom: clamp(10px,3vw,14px); }
+        .sett-input { width:100%; border:1.5px solid #D1D5DB; border-radius: clamp(10px,3vw,14px); padding: clamp(10px,3vw,14px) clamp(12px,3.5vw,16px); font-size: clamp(13px,3.5vw,16px); font-family:Heebo,sans-serif; direction:rtl; outline:none; box-sizing:border-box; transition:border-color 0.15s; }
+        .sett-input:focus { border-color:#0096C7; }
+        .sett-row { display:flex; gap: clamp(8px,2.5vw,12px); }
+        .sett-btn-primary { background: linear-gradient(135deg,#48CAE4,#0096C7); color:white; border:none; border-radius: clamp(10px,3vw,14px); padding: clamp(10px,3vw,14px) clamp(16px,4.5vw,22px); font-size: clamp(13px,3.5vw,15px); font-weight:700; font-family:Heebo,sans-serif; cursor:pointer; white-space:nowrap; transition:transform 0.12s; }
+        .sett-btn-primary:active { transform:scale(0.95); }
+        .sett-btn-outline-blue { width:100%; border:1.5px solid #0096C7; color:#0096C7; background:#E0F4FB; border-radius: clamp(10px,3vw,14px); padding: clamp(12px,3.5vw,15px); font-size: clamp(13px,3.5vw,15px); font-weight:600; font-family:Heebo,sans-serif; cursor:pointer; transition:transform 0.12s; }
+        .sett-btn-outline-blue:active { transform:scale(0.97); }
+        .sett-btn-outline-red { width:100%; border:1.5px solid #FCA5A5; color:#EF4444; background:#FEF2F2; border-radius: clamp(10px,3vw,14px); padding: clamp(12px,3.5vw,15px); font-size: clamp(13px,3.5vw,15px); font-weight:600; font-family:Heebo,sans-serif; cursor:pointer; transition:transform 0.12s; }
+        .sett-btn-outline-red:active { transform:scale(0.97); }
+        .sett-btn-solid-red { width:100%; background:#EF4444; color:white; border:none; border-radius: clamp(10px,3vw,14px); padding: clamp(12px,3.5vw,15px); font-size: clamp(13px,3.5vw,15px); font-weight:700; font-family:Heebo,sans-serif; cursor:pointer; transition:transform 0.12s; }
+        .sett-btn-solid-red:active { transform:scale(0.97); }
+        .sett-btn-cancel { width:100%; background:none; border:none; color:#9CA3AF; font-size: clamp(12px,3vw,14px); font-family:Heebo,sans-serif; cursor:pointer; padding: clamp(8px,2vw,10px); }
+        .sett-hint { font-size: clamp(10px,2.5vw,12px); color:#9CA3AF; text-align:center; margin-top:8px; }
+      `}</style>
+      <div className="sett-root" dir="rtl">
+
+        {/* שם התינוק */}
+        <div className="sett-card">
+          <p className="sett-title">שם התינוק</p>
+          <div className="sett-row">
+            <input
+              type="text"
+              value={nameInput}
+              onChange={e => setNameInput(e.target.value)}
+              placeholder="שם התינוק"
+              className="sett-input"
+              style={{ flex: 1 }}
+            />
+            <button onClick={handleNameSave} className="sett-btn-primary">שמור</button>
+          </div>
         </div>
-      </section>
 
-      <section>
-        <h2 className="text-sm font-bold text-gray-500 mb-3">ניהול קטגוריות</h2>
-        <CategoryManager
-          categories={state.categories}
-          onToggle={(id) => dispatch({ type: 'TOGGLE_CATEGORY', id })}
-          onAdd={(label, emoji) => dispatch({ type: 'ADD_CATEGORY', label, emoji })}
-          onDelete={(id) => dispatch({ type: 'DELETE_CATEGORY', id })}
-        />
-      </section>
+        {/* ניהול קטגוריות */}
+        <div className="sett-card">
+          <p className="sett-title">ניהול קטגוריות</p>
+          <CategoryManager
+            categories={state.categories}
+            onToggle={(id) => dispatch({ type: 'TOGGLE_CATEGORY', id })}
+            onAdd={(label, emoji) => dispatch({ type: 'ADD_CATEGORY', label, emoji })}
+            onDelete={(id) => dispatch({ type: 'DELETE_CATEGORY', id })}
+          />
+        </div>
 
-      <section>
-        <h2 className="text-sm font-bold text-gray-500 mb-3">התראות</h2>
-        <button
-          onClick={handleNotifications}
-          className="w-full border border-indigo-300 text-indigo-600 bg-indigo-50 rounded-xl py-3 text-sm font-medium"
-        >
-          {isGranted() ? '✅ התראות מופעלות' : '🔔 הפעל התראות דפדפן'}
-        </button>
-        <p className="text-xs text-gray-400 mt-2 text-center">
-          התראות יורות רק כשהאפליקציה פתוחה בדפדפן
-        </p>
-      </section>
-
-      <section>
-        <h2 className="text-sm font-bold text-gray-500 mb-3">נתונים</h2>
-        <button
-          onClick={handleClearAll}
-          className={`w-full rounded-xl py-3 text-sm font-medium transition-colors ${
-            confirmClear
-              ? 'bg-red-600 text-white'
-              : 'border border-red-300 text-red-500 bg-red-50'
-          }`}
-        >
-          {confirmClear ? '⚠️ לחץ שוב לאישור מחיקה' : '🗑️ מחק את כל הנתונים'}
-        </button>
-        {confirmClear && (
-          <button onClick={() => setConfirmClear(false)} className="w-full text-gray-400 text-sm py-2">
-            ביטול
+        {/* התראות */}
+        <div className="sett-card">
+          <p className="sett-title">התראות</p>
+          <button onClick={handleNotifications} className="sett-btn-outline-blue">
+            {isGranted() ? '✅ התראות מופעלות' : '🔔 הפעל התראות דפדפן'}
           </button>
-        )}
-      </section>
-    </div>
+          <p className="sett-hint">התראות יורות רק כשהאפליקציה פתוחה בדפדפן</p>
+        </div>
+
+        {/* נתונים */}
+        <div className="sett-card">
+          <p className="sett-title">נתונים</p>
+          {confirmClear ? (
+            <>
+              <button onClick={handleClearAll} className="sett-btn-solid-red">⚠️ לחץ שוב לאישור מחיקה</button>
+              <button onClick={() => setConfirmClear(false)} className="sett-btn-cancel">ביטול</button>
+            </>
+          ) : (
+            <button onClick={handleClearAll} className="sett-btn-outline-red">🗑️ מחק את כל הנתונים</button>
+          )}
+        </div>
+
+      </div>
+    </>
   )
 }

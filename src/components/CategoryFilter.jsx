@@ -4,7 +4,7 @@ export default function CategoryFilter({ categories, selected, onChange }) {
       <button
         onClick={() => onChange(null)}
         className={`shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-          selected === null ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600'
+          selected === null ? 'bg-[#0096C7] text-white' : 'bg-gray-100 text-gray-600'
         }`}
       >
         הכל
@@ -14,7 +14,7 @@ export default function CategoryFilter({ categories, selected, onChange }) {
           key={c.id}
           onClick={() => onChange(c.id)}
           className={`shrink-0 px-3 py-1.5 rounded-full text-sm transition-colors ${
-            selected === c.id ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600'
+            selected === c.id ? 'bg-[#0096C7] text-white' : 'bg-gray-100 text-gray-600'
           }`}
         >
           {c.emoji} {c.label}

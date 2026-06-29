@@ -24,57 +24,74 @@ export default function RemindersScreen({ showToast }) {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
-        {state.reminders.length === 0 ? (
-          <div className="text-center text-gray-400 py-16">
-            <div className="text-4xl mb-2">🔔</div>
-            <div className="text-sm">אין תזכורות עדיין</div>
-            <div className="text-xs mt-1 text-gray-300">תזכורות פועלות כשהאפליקציה פתוחה</div>
-          </div>
-        ) : (
-          state.reminders.map(r => (
-            <div key={r.id} className="flex items-center gap-3 bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100">
-              <span className="text-2xl">🔔</span>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-gray-800">{r.label}</div>
-                <div className="text-xs text-gray-400">{intervalLabel(r)}</div>
-                {r.lastFired && (
-                  <div className="text-xs text-gray-300">הופעל לאחרונה: {formatDateTime(r.lastFired)}</div>
-                )}
-              </div>
-              <button
-                onClick={() => dispatch({ type: 'TOGGLE_REMINDER', id: r.id })}
-                className={`relative w-12 h-6 rounded-full transition-colors shrink-0 ${r.enabled ? 'bg-indigo-500' : 'bg-gray-200'}`}
-              >
-                <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${r.enabled ? 'translate-x-6' : 'translate-x-0.5'}`} />
-              </button>
-              <button
-                onClick={() => dispatch({ type: 'DELETE_REMINDER', id: r.id })}
-                className="text-gray-300 hover:text-red-400 text-xl"
-              >
-                ×
-              </button>
+    <>
+      <style>{`
+        .rem-root { display:flex; flex-direction:column; height:100%; background:#F0F8FF; font-family:Heebo,sans-serif; }
+        .rem-list { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding: clamp(10px,3vw,14px) clamp(10px,4vw,16px); display:flex; flex-direction:column; gap: clamp(8px,2vw,12px); }
+        .rem-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:10px; color:#9CA3AF; }
+        .rem-empty-icon { font-size: clamp(40px,12vw,56px); }
+        .rem-empty-text { font-size: clamp(13px,3.5vw,16px); font-weight:500; }
+        .rem-empty-hint { font-size: clamp(11px,3vw,13px); color:#D1D5DB; }
+        .rem-card { background:white; border-radius: clamp(12px,3.5vw,18px); padding: clamp(12px,3.5vw,16px); box-shadow:0 2px 10px rgba(0,0,0,0.06); display:flex; align-items:center; gap: clamp(10px,3vw,14px); }
+        .rem-label { font-size: clamp(13px,3.5vw,15px); font-weight:600; color:#111827; line-height:1.3; }
+        .rem-interval { font-size: clamp(10px,2.5vw,12px); color:#9CA3AF; margin-top:2px; }
+        .rem-fired { font-size: clamp(9px,2.5vw,11px); color:#D1D5DB; margin-top:2px; }
+        .rem-toggle { position:relative; width: clamp(44px,12vw,52px); height: clamp(24px,6.5vw,28px); border-radius:999px; border:none; cursor:pointer; flex-shrink:0; transition:background 0.2s; }
+        .rem-toggle-knob { position:absolute; top:2px; width: calc(50% - 2px); height: calc(100% - 4px); background:white; border-radius:50%; box-shadow:0 1px 4px rgba(0,0,0,0.2); transition:transform 0.2s; }
+        .rem-delete { background:none; border:none; font-size: clamp(18px,5vw,22px); color:#D1D5DB; cursor:pointer; flex-shrink:0; line-height:1; padding:0 2px; transition:color 0.15s; }
+        .rem-delete:active { color:#EF4444; }
+        .rem-footer { padding: clamp(10px,3vw,14px) clamp(10px,4vw,16px); padding-bottom: max(env(safe-area-inset-bottom,0px),10px); flex-shrink:0; display:flex; flex-direction:column; gap: clamp(8px,2vw,12px); }
+        .rem-warning { font-size: clamp(10px,2.5vw,12px); color:#D97706; background:#FFFBEB; border-radius: clamp(8px,2.5vw,12px); padding: clamp(8px,2.5vw,12px) clamp(12px,3.5vw,16px); text-align:center; }
+        .rem-add-btn { width:100%; background: linear-gradient(135deg,#48CAE4,#0096C7); color:white; border:none; border-radius: clamp(12px,3.5vw,18px); padding: clamp(13px,4vw,17px); font-size: clamp(14px,4vw,17px); font-weight:700; font-family:Heebo,sans-serif; cursor:pointer; transition:transform 0.12s; }
+        .rem-add-btn:active { transform:scale(0.97); }
+      `}</style>
+      <div className="rem-root" dir="rtl">
+        <div className="rem-list">
+          {state.reminders.length === 0 ? (
+            <div className="rem-empty">
+              <span className="rem-empty-icon">🔔</span>
+              <span className="rem-empty-text">אין תזכורות עדיין</span>
+              <span className="rem-empty-hint">תזכורות פועלות כשהאפליקציה פתוחה</span>
             </div>
-          ))
+          ) : (
+            state.reminders.map(r => (
+              <div key={r.id} className="rem-card">
+                <span style={{ fontSize: 'clamp(20px,6vw,26px)', flexShrink: 0 }}>🔔</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="rem-label">{r.label}</div>
+                  <div className="rem-interval">{intervalLabel(r)}</div>
+                  {r.lastFired && (
+                    <div className="rem-fired">הופעל לאחרונה: {formatDateTime(r.lastFired)}</div>
+                  )}
+                </div>
+                <button
+                  onClick={() => dispatch({ type: 'TOGGLE_REMINDER', id: r.id })}
+                  className="rem-toggle"
+                  style={{ background: r.enabled ? '#0096C7' : '#E5E7EB' }}
+                >
+                  <span
+                    className="rem-toggle-knob"
+                    style={{ transform: r.enabled ? 'translateX(calc(100% + 0px))' : 'translateX(0)' }}
+                  />
+                </button>
+                <button
+                  onClick={() => dispatch({ type: 'DELETE_REMINDER', id: r.id })}
+                  className="rem-delete"
+                >×</button>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="rem-footer">
+          <div className="rem-warning">⚠️ תזכורות פועלות רק כשהאפליקציה פתוחה בדפדפן</div>
+          <button onClick={() => setFormOpen(true)} className="rem-add-btn">+ תזכורת חדשה</button>
+        </div>
+
+        {formOpen && (
+          <ReminderForm onSave={handleAdd} onClose={() => setFormOpen(false)} />
         )}
       </div>
-
-      <div className="p-4">
-        <div className="text-xs text-center text-amber-500 bg-amber-50 rounded-xl px-3 py-2 mb-3">
-          ⚠️ תזכורות פועלות רק כשהאפליקציה פתוחה בדפדפן
-        </div>
-        <button
-          onClick={() => setFormOpen(true)}
-          className="w-full bg-indigo-600 text-white rounded-2xl py-3 text-sm font-medium"
-        >
-          + תזכורת חדשה
-        </button>
-      </div>
-
-      {formOpen && (
-        <ReminderForm onSave={handleAdd} onClose={() => setFormOpen(false)} />
-      )}
-    </div>
+    </>
   )
 }

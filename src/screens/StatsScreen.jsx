@@ -17,49 +17,64 @@ export default function StatsScreen() {
   }).filter(x => x.count > 0)
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto p-4 space-y-5">
-      <section>
-        <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">היום</h2>
-        {todayByCategory.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-4">אין רישומים להיום</p>
-        ) : (
-          <div className="space-y-2">
-            {todayByCategory.map(({ cat, count, totalMl }) => (
-              <div key={cat.id} className="flex items-center gap-3 bg-white rounded-xl px-4 py-3 shadow-sm border border-gray-100">
-                <span className="text-2xl">{cat.emoji}</span>
-                <span className="flex-1 text-sm font-medium text-gray-700">{cat.label}</span>
-                <div className="text-left">
-                  <span className="text-lg font-bold text-indigo-600">{count}</span>
-                  <span className="text-xs text-gray-400"> פעמים</span>
-                  {totalMl > 0 && (
-                    <div className="text-xs text-gray-500">{totalMl} מ״ל סה״כ</div>
-                  )}
+    <>
+      <style>{`
+        .stats-root { height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#F0F8FF; font-family:Heebo,sans-serif; padding: clamp(10px,3vw,16px) clamp(10px,4vw,16px); padding-bottom: clamp(80px,20vw,100px); display:flex; flex-direction:column; gap: clamp(12px,3vw,18px); }
+        .stats-card { background:white; border-radius: clamp(14px,4vw,20px); padding: clamp(12px,3.5vw,18px); box-shadow:0 2px 14px rgba(0,0,0,0.07); }
+        .stats-section-title { font-size: clamp(11px,3vw,13px); font-weight:700; color:#6B7280; text-transform:uppercase; letter-spacing:0.06em; margin-bottom: clamp(10px,3vw,14px); }
+        .stats-row { display:flex; align-items:center; gap: clamp(8px,2.5vw,14px); padding: clamp(8px,2.5vw,12px) 0; border-bottom:1px solid #F3F4F6; }
+        .stats-row:last-child { border-bottom:none; padding-bottom:0; }
+        .stats-row:first-child { padding-top:0; }
+        .stats-emoji { font-size: clamp(20px,6vw,26px); flex-shrink:0; }
+        .stats-label { flex:1; font-size: clamp(12px,3.5vw,15px); font-weight:500; color:#374151; }
+        .stats-count { font-size: clamp(18px,5vw,24px); font-weight:800; color:#0096C7; line-height:1; }
+        .stats-unit { font-size: clamp(10px,2.5vw,12px); color:#9CA3AF; }
+        .stats-ml { font-size: clamp(10px,2.5vw,12px); color:#6B7280; margin-top:2px; }
+        .stats-empty { text-align:center; color:#9CA3AF; padding: clamp(16px,5vw,24px) 0; font-size: clamp(12px,3vw,14px); }
+      `}</style>
+      <div className="stats-root" dir="rtl">
+
+        {/* Today */}
+        <div className="stats-card">
+          <p className="stats-section-title">היום</p>
+          {todayByCategory.length === 0 ? (
+            <p className="stats-empty">אין רישומים להיום 👶</p>
+          ) : (
+            todayByCategory.map(({ cat, count, totalMl }) => (
+              <div key={cat.id} className="stats-row">
+                <span className="stats-emoji">{cat.emoji}</span>
+                <span className="stats-label">{cat.label}</span>
+                <div style={{ textAlign: 'left' }}>
+                  <div>
+                    <span className="stats-count">{count}</span>
+                    <span className="stats-unit"> פעמים</span>
+                  </div>
+                  {totalMl > 0 && <div className="stats-ml">{totalMl} מ״ל סה״כ</div>}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </section>
+            ))
+          )}
+        </div>
 
-      {feedingCat && (
-        <section>
-          <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">האכלות — 24 שעות אחרונות</h2>
-          <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+        {/* Feeding 24h */}
+        {feedingCat && (
+          <div className="stats-card">
+            <p className="stats-section-title">האכלות — 24 שעות אחרונות</p>
             {feeding24h.some(b => b.amount > 0) ? (
               <BarChart data={feeding24h} valueKey="amount" labelKey="label" unit=" מ״ל" />
             ) : (
-              <p className="text-gray-400 text-sm text-center py-6">אין האכלות ב-24 שעות האחרונות</p>
+              <p className="stats-empty">אין האכלות ב-24 שעות האחרונות</p>
             )}
           </div>
-        </section>
-      )}
+        )}
 
-      <section>
-        <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">פעילות שבועית</h2>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-          <BarChart data={weekly} valueKey="count" labelKey="label" color="#10b981" unit=" פעולות" />
+        {/* Weekly */}
+        <div className="stats-card">
+          <p className="stats-section-title">פעילות שבועית</p>
+          <BarChart data={weekly} valueKey="count" labelKey="label" color="#0096C7" unit=" פעולות" />
         </div>
-      </section>
-    </div>
+
+      </div>
+    </>
   )
 }

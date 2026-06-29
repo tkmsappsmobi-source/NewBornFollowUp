@@ -43,15 +43,16 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col h-dvh bg-gray-50" dir="rtl">
+    <div className="flex flex-col h-dvh" style={{ background: '#F0F8FF', fontFamily: 'Heebo, sans-serif' }} dir="rtl">
       <ToastContainer toasts={toasts} dismiss={dismiss} />
 
       {/* Header - hidden on home */}
       {tab !== 'home' && (
       <header
-        className="text-white px-4 py-4 flex items-center justify-center shrink-0 safe-top relative overflow-hidden bg-[#6b3fa0]"
+        style={{ background: 'linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%)', flexShrink: 0 }}
+        className="px-4 py-4 flex items-center justify-center relative overflow-hidden"
       >
-        <h1 className="text-lg font-bold relative z-10">{tabTitles[tab]}</h1>
+        <h1 className="text-lg font-bold relative z-10" style={{ color: '#0D2640' }}>{tabTitles[tab]}</h1>
       </header>
       )}
 
@@ -70,7 +71,7 @@ export default function App() {
       <nav className="bg-white border-t border-gray-200 flex shrink-0 safe-bottom">
         {TABS.map(t => {
           const isActive = tab === t.id
-          const iconColor = isActive ? '#6b3fa0' : '#999'
+          const iconColor = isActive ? '#0096C7' : '#999'
           const icons = {
             home: (
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2">
@@ -109,7 +110,7 @@ export default function App() {
               className="flex-1 flex flex-col items-center justify-center py-2 gap-1 transition-colors"
             >
               {icons[t.id]}
-              <span className={`text-[10px] font-medium ${isActive ? 'text-[#6b3fa0]' : 'text-gray-400'}`}>
+              <span className={`text-[10px] font-medium ${isActive ? 'text-[#0096C7]' : 'text-gray-400'}`}>
                 {t.label}
               </span>
             </button>

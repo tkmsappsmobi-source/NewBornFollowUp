@@ -12,7 +12,7 @@ export default function HistoryItem({ log, category, onDelete }) {
         <div className="flex items-center gap-2">
           <span className="font-medium text-gray-800 text-sm">{category?.label ?? 'לא ידוע'}</span>
           {log.amount != null && (
-            <span className="text-xs bg-indigo-100 text-indigo-700 rounded-full px-2 py-0.5">{log.amount} מ״ל</span>
+            <span className="text-xs bg-[#E0F4FB] text-[#0096C7] rounded-full px-2 py-0.5">{log.amount} מ״ל</span>
           )}
         </div>
         <div className="text-xs text-gray-400 mt-0.5">

@@ -21,32 +21,45 @@ export default function HistoryScreen({ showToast }) {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="p-4 pb-2">
-        <CategoryFilter
-          categories={state.categories}
-          selected={filter}
-          onChange={setFilter}
-        />
+    <>
+      <style>{`
+        .hist-root { display:flex; flex-direction:column; height:100%; background:#F0F8FF; font-family:Heebo,sans-serif; }
+        .hist-filter { padding: clamp(10px,3vw,16px) clamp(10px,4vw,16px) clamp(8px,2vw,12px); background:white; border-bottom:1px solid #E5E7EB; flex-shrink:0; }
+        .hist-list { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding: clamp(10px,3vw,14px) clamp(10px,4vw,16px); padding-bottom: clamp(80px,20vw,100px); display:flex; flex-direction:column; gap: clamp(8px,2vw,12px); }
+        .hist-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:10px; color:#9CA3AF; }
+        .hist-empty-icon { font-size: clamp(40px,12vw,56px); }
+        .hist-empty-text { font-size: clamp(13px,3.5vw,16px); font-weight:500; }
+        .hist-count { font-size: clamp(11px,3vw,13px); color:#9CA3AF; text-align:center; padding: clamp(6px,2vw,10px) 0 0; }
+      `}</style>
+      <div className="hist-root" dir="rtl">
+        <div className="hist-filter">
+          <CategoryFilter
+            categories={state.categories}
+            selected={filter}
+            onChange={setFilter}
+          />
+        </div>
+        <div className="hist-list">
+          {filtered.length === 0 ? (
+            <div className="hist-empty">
+              <span className="hist-empty-icon">📋</span>
+              <span className="hist-empty-text">אין רישומים עדיין</span>
+            </div>
+          ) : (
+            <>
+              {filtered.map(log => (
+                <HistoryItem
+                  key={log.id}
+                  log={log}
+                  category={catMap[log.categoryId]}
+                  onDelete={handleDelete}
+                />
+              ))}
+              <p className="hist-count">{filtered.length} רישומים סה״כ</p>
+            </>
+          )}
+        </div>
       </div>
-
-      <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
-        {filtered.length === 0 ? (
-          <div className="text-center text-gray-400 py-16">
-            <div className="text-4xl mb-2">📋</div>
-            <div className="text-sm">אין רישומים עדיין</div>
-          </div>
-        ) : (
-          filtered.map(log => (
-            <HistoryItem
-              key={log.id}
-              log={log}
-              category={catMap[log.categoryId]}
-              onDelete={handleDelete}
-            />
-          ))
-        )}
-      </div>
-    </div>
+    </>
   )
 }
