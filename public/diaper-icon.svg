@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" fill="none">
+  <!-- Outer blue trim / frills left -->
+  <path d="M 18 90 C 12 80 10 95 14 108 C 16 116 20 124 26 130 C 30 134 36 136 40 132 C 34 122 28 110 24 98 Z" fill="#7EC8E3" stroke="#1a4d7a" stroke-width="2"/>
+  <path d="M 20 95 C 15 88 13 100 16 110 C 18 117 22 124 28 129" stroke="#5ab3d4" stroke-width="1.5" fill="none"/>
+
+  <!-- Outer blue trim / frills right -->
+  <path d="M 182 90 C 188 80 190 95 186 108 C 184 116 180 124 174 130 C 170 134 164 136 160 132 C 166 122 172 110 176 98 Z" fill="#7EC8E3" stroke="#1a4d7a" stroke-width="2"/>
+  <path d="M 180 95 C 185 88 187 100 184 110 C 182 117 178 124 172 129" stroke="#5ab3d4" stroke-width="1.5" fill="none"/>
+
+  <!-- Main diaper body (white) -->
+  <path d="M 36 72 C 36 68 40 65 50 64 L 150 64 C 160 65 164 68 164 72 L 168 140 C 168 152 158 162 144 164 L 56 164 C 42 162 32 152 32 140 Z" fill="white" stroke="#1a4d7a" stroke-width="2.5"/>
+
+  <!-- Waistband blue -->
+  <path d="M 36 72 C 36 60 42 52 60 50 L 140 50 C 158 52 164 60 164 72 L 164 82 C 164 86 160 88 150 88 L 50 88 C 40 88 36 86 36 82 Z" fill="#7EC8E3" stroke="#1a4d7a" stroke-width="2.5"/>
+
+  <!-- Waistband inner texture (zigzag top) -->
+  <path d="M 44 52 L 48 46 L 52 52 L 56 46 L 60 52 L 64 46 L 68 52 L 72 46 L 76 52 L 80 46 L 84 52 L 88 46 L 92 52 L 96 46 L 100 52 L 104 46 L 108 52 L 112 46 L 116 52 L 120 46 L 124 52 L 128 46 L 132 52 L 136 46 L 140 52 L 144 46 L 148 52 L 152 46 L 156 52" stroke="#a8dcf0" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
+
+  <!-- Left velcro tab -->
+  <rect x="20" y="72" width="38" height="22" rx="5" fill="#7EC8E3" stroke="#1a4d7a" stroke-width="2"/>
+  <rect x="23" y="75" width="32" height="16" rx="3" fill="#a8dcf0"/>
+  <!-- Dashed border on tab -->
+  <rect x="24" y="76" width="30" height="14" rx="3" fill="none" stroke="#5ab3d4" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- Right velcro tab -->
+  <rect x="142" y="72" width="38" height="22" rx="5" fill="#7EC8E3" stroke="#1a4d7a" stroke-width="2"/>
+  <rect x="145" y="75" width="32" height="16" rx="3" fill="#a8dcf0"/>
+  <rect x="146" y="76" width="30" height="14" rx="3" fill="none" stroke="#5ab3d4" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- Body dashed seam lines -->
+  <path d="M 50 88 L 42 164" stroke="#c8d8e8" stroke-width="1.5" stroke-dasharray="4,3" fill="none"/>
+  <path d="M 150 88 L 158 164" stroke="#c8d8e8" stroke-width="1.5" stroke-dasharray="4,3" fill="none"/>
+  <!-- Horizontal seam below waistband -->
+  <path d="M 40 95 L 160 95" stroke="#c8d8e8" stroke-width="1.5" stroke-dasharray="5,3" fill="none"/>
+
+  <!-- Body shading / highlight -->
+  <path d="M 50 100 C 50 95 56 92 64 92 L 64 155 C 48 150 44 140 44 130 Z" fill="#eef4f8" opacity="0.7"/>
+
+  <!-- Heart in center -->
+  <path d="M 100 118 C 100 118 88 108 88 101 C 88 95 94 92 100 98 C 106 92 112 95 112 101 C 112 108 100 118 100 118 Z" fill="#7EC8E3" stroke="#1a4d7a" stroke-width="2"/>
+  <path d="M 100 115 C 100 115 90 107 90 101 C 90 96 95 94 100 99" fill="#a8dcf0" opacity="0.6"/>
+</svg>

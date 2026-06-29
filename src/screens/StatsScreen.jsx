@@ -92,7 +92,7 @@ export default function StatsScreen({ setTab }) {
                 <p className="stats-sum-lbl">האכלה סה"כ</p>
               </div>
               <div className="stats-sum-box" style={{background:'#C8F0E0'}}>
-                <span className="stats-sum-emoji">🚼</span>
+                <img src="/diaper-icon.svg" alt="חיתול" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{diaperCount}</p>
                 <p className="stats-sum-lbl">חיתולים</p>
               </div>

@@ -9,7 +9,7 @@ import VaccinationModal from '../components/VaccinationModal'
 import { formatTime, isToday, calcAge } from '../lib/time'
 
 const ACTION_BUTTONS = [
-  { id: 'diaper',      label: 'חיתול',    bg: '#C8F0E0', emoji: null, icon: '/poop-icon.svg' },
+  { id: 'diaper',      label: 'חיתול',    bg: '#C8F0E0', emoji: null, icon: '/diaper-icon.svg' },
   { id: 'feeding',     label: 'האכלה',    bg: '#FFF3CC', emoji: null, icon: '/bottle-icon.svg' },
   { id: 'sleep',       label: 'שינה',     bg: '#E0D8FF', emoji: '🌙' },
   { id: 'bath',        label: 'מקלחת',   bg: '#FFE4CC', emoji: '🛁' },
@@ -310,7 +310,7 @@ export default function HomeScreen({ showToast, setTab }) {
                   <p className="hs-stat-lbl">האכלה</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#C8F0E0'}}>
-                  <div className="hs-stat-emoji">🚼</div>
+                  <div className="hs-stat-emoji"><img src="/diaper-icon.svg" alt="חיתול" style={{width:'clamp(22px,6vw,30px)',height:'clamp(22px,6vw,30px)',objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{diaperToday}</p>
                   <p className="hs-stat-lbl">חיתול</p>
                 </div>

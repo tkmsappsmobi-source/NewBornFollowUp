@@ -15,8 +15,8 @@ const FILTER_OPTIONS = [
 ]
 
 const CAT_INFO = {
-  feeding:     { emoji: '🍼', label: 'האכלה',    bg: '#FFF3CC' },
-  diaper:      { emoji: '🚼', label: 'חיתול',    bg: '#C8F0E0' },
+  feeding:     { icon: '/bottle-icon.svg', label: 'האכלה',    bg: '#FFF3CC' },
+  diaper:      { icon: '/diaper-icon.svg', label: 'חיתול',    bg: '#C8F0E0' },
   sleep:       { emoji: '🌙', label: 'שינה',     bg: '#E0D8FF' },
   bath:        { emoji: '🛁', label: 'מקלחת',   bg: '#FFE4CC' },
   growth:      { emoji: '📏', label: 'גדילה',    bg: '#C8F0E8' },
@@ -24,17 +24,35 @@ const CAT_INFO = {
   vaccination: { emoji: '💉', label: 'חיסון',   bg: '#E8E0FF' },
 }
 
+function CatIcon({ info, size = '58%' }) {
+  if (info.icon) return <img src={info.icon} alt={info.label} style={{width:size,height:size,objectFit:'contain'}}/>
+  return <span>{info.emoji}</span>
+}
+
+const SUBTYPE_ICONS = {
+  pee:  { src: '/pee-icon.svg',   label: 'פיפי' },
+  poop: { src: '/poop-icon.svg',  label: 'קקי' },
+  both: { src: null,              label: 'שניהם' },
+}
+
 function getDetail(log) {
   if (log._source === 'weight') return `${log.weight} ק"ג${log.height ? ` • ${log.height} ס"מ` : ''}`
   if (log._source === 'milestone') return log.description || ''
   if (log.amount) return `${log.amount} מ"ל`
   if (log.data && log.data.subtype) {
-    const s = { pee: 'פיפי 💧', poop: 'קקי 💩', both: 'שניהם 🔄' }
+    const s = { pee: 'פיפי', poop: 'קקי', both: 'שניהם' }
     return s[log.data.subtype] || ''
   }
   if (log.data && log.data.vaccineName) return log.data.vaccineName
   if (log.data && log.data.durationMinutes) return `${log.data.durationMinutes} דקות`
   return log.note || ''
+}
+
+function SubtypeDetail({ subtype }) {
+  if (subtype === 'pee') return <span style={{display:'flex',alignItems:'center',gap:4}}><img src="/pee-icon.svg" style={{width:14,height:14,objectFit:'contain'}} alt=""/>פיפי</span>
+  if (subtype === 'poop') return <span style={{display:'flex',alignItems:'center',gap:4}}><img src="/poop-icon.svg" style={{width:14,height:14,objectFit:'contain'}} alt=""/>קקי</span>
+  if (subtype === 'both') return <span style={{display:'flex',alignItems:'center',gap:3}}><img src="/pee-icon.svg" style={{width:12,height:12,objectFit:'contain'}} alt=""/><img src="/poop-icon.svg" style={{width:12,height:12,objectFit:'contain'}} alt=""/>שניהם</span>
+  return null
 }
 
 export default function HistoryScreen({ showToast, setTab }) {
@@ -160,10 +178,12 @@ export default function HistoryScreen({ showToast, setTab }) {
                   const info = getCatInfo(log)
                   return (
                     <div key={log.id} className="hist-card">
-                      <div className="hist-emoji-circle" style={{background:info.bg}}>{info.emoji}</div>
+                      <div className="hist-emoji-circle" style={{background:info.bg}}><CatIcon info={info}/></div>
                       <div className="hist-info">
                         <p className="hist-info-label">{info.label}</p>
-                        <p className="hist-info-detail">{getDetail(log)}</p>
+                        <p className="hist-info-detail">
+                          {log.data?.subtype ? <SubtypeDetail subtype={log.data.subtype}/> : getDetail(log)}
+                        </p>
                       </div>
                       <span className="hist-time">{formatTime(log.timestamp)}</span>
                       <div className="hist-actions">

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" fill="none">
+  <!-- Puddle / splash base -->
+  <ellipse cx="100" cy="188" rx="62" ry="16" fill="#FFD700" opacity="0.5"/>
+  <path d="M 48 182 C 38 178 32 185 42 190 C 55 196 80 196 100 195 C 120 196 145 196 158 190 C 168 185 162 178 152 182 C 140 187 120 190 100 190 C 80 190 60 187 48 182 Z" fill="#FFD700" opacity="0.6"/>
+  <!-- Puddle highlight -->
+  <ellipse cx="82" cy="186" rx="14" ry="4" fill="#FFEE55" opacity="0.5"/>
+
+  <!-- Small droplets left -->
+  <circle cx="36" cy="165" r="7" fill="#FFD700" stroke="#8B6500" stroke-width="1.5"/>
+  <circle cx="36" cy="165" r="4" fill="#FFEE55" opacity="0.6"/>
+  <circle cx="28" cy="148" r="4.5" fill="#FFD700" stroke="#8B6500" stroke-width="1.2"/>
+  <circle cx="28" cy="148" r="2.5" fill="#FFEE55" opacity="0.6"/>
+
+  <!-- Small droplets right -->
+  <circle cx="164" cy="155" r="5.5" fill="#FFD700" stroke="#8B6500" stroke-width="1.2"/>
+  <circle cx="164" cy="155" r="3" fill="#FFEE55" opacity="0.6"/>
+  <circle cx="172" cy="172" r="4" fill="#FFD700" stroke="#8B6500" stroke-width="1.2"/>
+
+  <!-- Main drop body -->
+  <path d="M 100 14 C 100 14 48 80 44 120 C 40 158 68 182 100 182 C 132 182 160 158 156 120 C 152 80 100 14 100 14 Z" fill="#8B6500" stroke="#5a3d00" stroke-width="3"/>
+  <path d="M 100 20 C 100 20 52 84 48 122 C 44 158 70 178 100 178 C 130 178 156 158 152 122 C 148 84 100 20 100 20 Z" fill="#FFD700"/>
+  <path d="M 100 20 C 100 20 52 84 48 122 C 44 158 70 178 100 178 C 130 178 156 158 152 122 C 148 84 100 20 100 20 Z" fill="url(#dropGrad)"/>
+
+  <!-- Inner glow highlight -->
+  <path d="M 100 28 C 85 55 70 85 68 108" stroke="white" stroke-width="10" stroke-linecap="round" opacity="0.35"/>
+  <ellipse cx="78" cy="72" rx="10" ry="18" fill="white" opacity="0.3" transform="rotate(-20 78 72)"/>
+
+  <!-- Sparkle top right -->
+  <path d="M 148 30 L 150 22 L 152 30 L 160 32 L 152 34 L 150 42 L 148 34 L 140 32 Z" fill="#FFEE55" opacity="0.9"/>
+  <path d="M 148 30 L 150 22 L 152 30 L 160 32 L 152 34 L 150 42 L 148 34 L 140 32 Z" stroke="#FFD700" stroke-width="0.5"/>
+
+  <!-- Eyes -->
+  <circle cx="84" cy="128" r="12" fill="#1a0a00"/>
+  <circle cx="116" cy="128" r="12" fill="#1a0a00"/>
+  <circle cx="84" cy="128" r="10" fill="#2d1200"/>
+  <circle cx="116" cy="128" r="10" fill="#2d1200"/>
+  <!-- Eye whites -->
+  <circle cx="88" cy="124" r="5" fill="white"/>
+  <circle cx="120" cy="124" r="5" fill="white"/>
+  <!-- Pupils -->
+  <circle cx="87" cy="125" r="3" fill="#1a0a00"/>
+  <circle cx="119" cy="125" r="3" fill="#1a0a00"/>
+  <!-- Eye shine -->
+  <circle cx="89.5" cy="123" r="1.5" fill="white"/>
+  <circle cx="121.5" cy="123" r="1.5" fill="white"/>
+
+  <!-- Rosy cheeks -->
+  <ellipse cx="70" cy="142" rx="12" ry="7" fill="#ffb3c1" opacity="0.55"/>
+  <ellipse cx="130" cy="142" rx="12" ry="7" fill="#ffb3c1" opacity="0.55"/>
+
+  <!-- Smile -->
+  <path d="M 87 150 Q 100 161 113 150" stroke="#8B6500" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Sparkle dots on body -->
+  <circle cx="118" cy="100" r="3" fill="white" opacity="0.5"/>
+  <circle cx="112" cy="88" r="2" fill="white" opacity="0.4"/>
+
+  <defs>
+    <radialGradient id="dropGrad" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFEE55" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#FFA500" stop-opacity="0.1"/>
+    </radialGradient>
+  </defs>
+</svg>
