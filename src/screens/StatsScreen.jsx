@@ -49,7 +49,7 @@ export default function StatsScreen({ setTab }) {
         .stats-root{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#F0F8FF;font-family:Heebo,sans-serif;display:flex;flex-direction:column;}
         .stats-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
         .stats-title{font-size:clamp(15px,4.5vw,19px);font-weight:800;color:#0D2640;}
-        .stats-back{position:absolute;right:12px;background:none;border:none;cursor:pointer;padding:8px;color:#0D2640;}
+        .stats-back{position:absolute;left:12px;background:none;border:none;cursor:pointer;padding:8px;color:#0D2640;}
         .stats-scroll{flex:1;overflow-y:auto;padding:clamp(10px,3vw,16px) clamp(10px,4vw,16px);padding-bottom:clamp(80px,20vw,100px);display:flex;flex-direction:column;gap:clamp(12px,3vw,18px);}
         .stats-toggle{display:flex;background:white;border-radius:20px;padding:3px;box-shadow:0 1px 6px rgba(0,0,0,0.08);width:fit-content;margin:0 auto;}
         .stats-toggle-btn{border:none;border-radius:17px;padding:7px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;transition:all 0.15s;background:transparent;color:#6B7280;}
@@ -67,7 +67,7 @@ export default function StatsScreen({ setTab }) {
         <div className="stats-header">
           <span className="stats-title">סטטיסטיקות</span>
           <button className="stats-back" onClick={()=>setTab('home')}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </button>
         </div>
 

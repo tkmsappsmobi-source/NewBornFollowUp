@@ -108,7 +108,7 @@ export default function HistoryScreen({ showToast, setTab }) {
         .hist-root{display:flex;flex-direction:column;height:100%;background:#F0F8FF;font-family:Heebo,sans-serif;}
         .hist-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
         .hist-title{font-size:clamp(15px,4.5vw,19px);font-weight:800;color:#0D2640;}
-        .hist-back{position:absolute;right:12px;background:none;border:none;cursor:pointer;padding:8px;color:#0D2640;}
+        .hist-back{position:absolute;left:12px;background:none;border:none;cursor:pointer;padding:8px;color:#0D2640;}
         .hist-filter-bar{padding:clamp(8px,2.5vw,12px) clamp(10px,4vw,16px);background:white;border-bottom:1px solid #E5E7EB;flex-shrink:0;overflow-x:auto;white-space:nowrap;display:flex;gap:8px;scrollbar-width:none;}
         .hist-filter-bar::-webkit-scrollbar{display:none;}
         .hist-pill{border:1.5px solid #E5E7EB;border-radius:20px;padding:6px 14px;font-size:clamp(11px,3vw,13px);font-weight:600;cursor:pointer;font-family:Heebo,sans-serif;background:white;white-space:nowrap;min-height:36px;transition:all 0.15s;}
@@ -132,7 +132,7 @@ export default function HistoryScreen({ showToast, setTab }) {
         <div className="hist-header">
           <span className="hist-title">היסטוריה</span>
           <button className="hist-back" onClick={()=>setTab('home')}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </button>
         </div>
 

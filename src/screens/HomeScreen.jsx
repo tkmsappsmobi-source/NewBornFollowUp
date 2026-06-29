@@ -199,18 +199,16 @@ export default function HomeScreen({ showToast, setTab }) {
       <style>{`
         .hs-root{width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#F0F8FF;font-family:Heebo,sans-serif;}
         .hs-header{flex-shrink:0;position:relative;overflow:hidden;background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 35%,#C8EDFA 70%,#E4F6FC 100%);}
-        .hs-header-top{display:flex;flex-direction:column;align-items:center;padding-top:clamp(10px,3vw,16px);position:relative;z-index:2;}
+        .hs-header-top{display:flex;flex-direction:column;align-items:center;padding:clamp(10px,3vw,16px) clamp(12px,4vw,20px) clamp(14px,4vw,20px);position:relative;z-index:2;}
         .hs-profile-circle{width:clamp(52px,14vw,68px);height:clamp(52px,14vw,68px);border-radius:50%;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;font-size:clamp(26px,7vw,36px);cursor:pointer;border:3px solid rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.12);overflow:hidden;margin-bottom:clamp(4px,1.5vw,8px);}
         .hs-profile-circle img{width:100%;height:100%;object-fit:cover;}
         .hs-name{margin:0;font-size:clamp(26px,8vw,44px);font-weight:900;color:#0D2640;line-height:1.05;letter-spacing:-1px;}
         .hs-age{font-size:clamp(11px,3vw,14px);font-weight:600;color:#1A5A8A;margin:clamp(2px,0.8vw,5px) 0 0;}
         .hs-date{font-size:clamp(10px,2.8vw,13px);color:#3A7BA8;margin:2px 0 0;}
-        .hs-illustration{display:flex;justify-content:center;margin-top:clamp(2px,1vw,6px);}
-        .hs-illustration svg{width:clamp(160px,60vw,240px);height:auto;}
         .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:clamp(80px,20vw,100px);}
         .hs-inner{padding:clamp(10px,3vw,16px) clamp(10px,4vw,16px) 0;}
         .hs-card{background:white;border-radius:clamp(14px,4vw,20px);padding:clamp(12px,3.5vw,16px);margin-bottom:clamp(8px,2.5vw,14px);box-shadow:0 2px 14px rgba(0,0,0,0.07);}
-        .hs-card-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:clamp(8px,2.5vw,14px);}
+        .hs-card-title{display:flex;flex-direction:row-reverse;justify-content:space-between;align-items:center;margin-bottom:clamp(8px,2.5vw,14px);}
         .hs-card-title span{font-size:clamp(13px,3.5vw,16px);font-weight:700;color:#111827;}
         .hs-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(6px,2vw,12px);}
         .hs-stat-box{border-radius:clamp(10px,3vw,16px);padding:clamp(8px,2.5vw,14px) clamp(4px,1.5vw,8px);text-align:center;}
@@ -227,7 +225,7 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-timer-label{font-size:clamp(12px,3vw,15px);font-weight:700;color:#374151;}
         .hs-timer-time{font-size:clamp(14px,4vw,18px);font-weight:800;color:#D97706;font-variant-numeric:tabular-nums;}
         .hs-timer-end{background:#EF4444;color:white;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;min-height:44px;flex-shrink:0;}
-        .hs-recent-row{display:flex;align-items:center;gap:clamp(6px,2vw,12px);padding:clamp(8px,2.5vw,12px) 0;direction:ltr;}
+        .hs-recent-row{display:flex;align-items:center;gap:clamp(6px,2vw,12px);padding:clamp(8px,2.5vw,12px) 0;direction:rtl;}
         .hs-recent-row + .hs-recent-row{border-top:1px solid #F3F4F6;}
         .hs-recent-time-val{font-size:clamp(12px,3.5vw,15px);font-weight:700;color:#111827;margin:0;line-height:1.25;}
         .hs-recent-time-rel{font-size:clamp(9px,2.5vw,11px);color:#9CA3AF;margin:0;line-height:1.4;}
@@ -274,7 +272,6 @@ export default function HomeScreen({ showToast, setTab }) {
             <p className="hs-date">{today}</p>
           </div>
 
-          <div className="hs-illustration"><BabyOnCloud /></div>
         </div>
 
         {/* SCROLL */}
@@ -364,15 +361,14 @@ export default function HomeScreen({ showToast, setTab }) {
                   const info = getCatInfo(log)
                   return (
                     <div key={log.id} className="hs-recent-row">
-                      <span style={{color:'#D1D5DB',fontSize:'clamp(14px,4vw,20px)',flexShrink:0}}>‹</span>
-                      <div style={{minWidth:'clamp(44px,12vw,58px)',flexShrink:0}}>
-                        <p className="hs-recent-time-val">{formatTime(log.timestamp)}</p>
-                        <p className="hs-recent-time-rel">{getRelativeTime(log.timestamp)}</p>
-                      </div>
                       <div className="hs-recent-circle" style={{background:info.bg}}>{info.emoji}</div>
-                      <div style={{flex:1,textAlign:'right',direction:'rtl'}}>
+                      <div style={{flex:1}}>
                         <p className="hs-recent-name">{info.label}</p>
                         <p className="hs-recent-detail">{getLogDetail(log)}</p>
+                      </div>
+                      <div style={{minWidth:'clamp(44px,12vw,58px)',flexShrink:0,textAlign:'left'}}>
+                        <p className="hs-recent-time-val">{formatTime(log.timestamp)}</p>
+                        <p className="hs-recent-time-rel">{getRelativeTime(log.timestamp)}</p>
                       </div>
                     </div>
                   )
