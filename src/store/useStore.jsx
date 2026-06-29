@@ -1,16 +1,27 @@
-import { createContext, useContext, useReducer, useEffect, useCallback } from 'react'
+import { createContext, useContext, useReducer, useEffect } from 'react'
 import { DEFAULT_STATE } from './defaults'
 
 // @ts-ignore
 const isElectron = typeof window !== 'undefined' && !!window.electronAPI
 
 function load() {
-  // If not in Electron, try to load from localStorage
   if (!isElectron) {
     try {
       const saved = localStorage.getItem('nbf_state')
       if (saved) {
-        return { ...DEFAULT_STATE, ...JSON.parse(saved) }
+        const parsed = JSON.parse(saved)
+        // Merge missing new fields from DEFAULT_STATE
+        return {
+          ...DEFAULT_STATE,
+          ...parsed,
+          milestoneLogs: parsed.milestoneLogs ?? [],
+          sleepTimerStart: parsed.sleepTimerStart ?? null,
+          bottleTimerStart: parsed.bottleTimerStart ?? null,
+          birthDate: parsed.birthDate ?? '',
+          birthWeight: parsed.birthWeight ?? null,
+          profileImage: parsed.profileImage ?? null,
+          colorTheme: parsed.colorTheme ?? 'blue',
+        }
       }
     } catch (e) {
       console.error('Error loading from localStorage:', e)
@@ -22,10 +33,8 @@ function load() {
 async function save(state) {
   try {
     if (isElectron) {
-      // Electron mode — save to JSON file
       await window.electronAPI.writeState(state)
     } else {
-      // Web mode — save to localStorage
       localStorage.setItem('nbf_state', JSON.stringify(state))
     }
   } catch (error) {
@@ -38,6 +47,24 @@ function reducer(state, action) {
     case 'SET_BABY_NAME':
       return { ...state, babyName: action.name }
 
+    case 'SET_BIRTH_DATE':
+      return { ...state, birthDate: action.birthDate }
+
+    case 'SET_BIRTH_WEIGHT':
+      return { ...state, birthWeight: action.weight }
+
+    case 'SET_PROFILE_IMAGE':
+      return { ...state, profileImage: action.image }
+
+    case 'SET_COLOR_THEME':
+      return { ...state, colorTheme: action.theme }
+
+    case 'SET_SLEEP_TIMER':
+      return { ...state, sleepTimerStart: action.start }
+
+    case 'SET_BOTTLE_TIMER':
+      return { ...state, bottleTimerStart: action.start }
+
     case 'ADD_LOG': {
       const log = {
         id: crypto.randomUUID(),
@@ -45,12 +72,29 @@ function reducer(state, action) {
         timestamp: action.timestamp || new Date().toISOString(),
         amount: action.amount ?? null,
         note: action.note ?? '',
+        data: action.data ?? {},
       }
       return { ...state, logs: [log, ...state.logs] }
     }
 
+    case 'EDIT_LOG':
+      return { ...state, logs: state.logs.map(l => l.id === action.id ? { ...l, ...action.patch } : l) }
+
     case 'DELETE_LOG':
       return { ...state, logs: state.logs.filter(l => l.id !== action.id) }
+
+    case 'ADD_MILESTONE': {
+      const m = {
+        id: crypto.randomUUID(),
+        description: action.description,
+        category: action.category,
+        timestamp: new Date().toISOString(),
+      }
+      return { ...state, milestoneLogs: [m, ...(state.milestoneLogs || [])] }
+    }
+
+    case 'DELETE_MILESTONE':
+      return { ...state, milestoneLogs: (state.milestoneLogs || []).filter(m => m.id !== action.id) }
 
     case 'TOGGLE_CATEGORY':
       return {
@@ -88,24 +132,24 @@ function reducer(state, action) {
         enabled: true,
         lastFired: null,
       }
-      return { ...state, reminders: [reminder, ...state.reminders] }
+      return { ...state, reminders: [reminder, ...(state.reminders || [])] }
     }
 
     case 'TOGGLE_REMINDER':
       return {
         ...state,
-        reminders: state.reminders.map(r =>
+        reminders: (state.reminders || []).map(r =>
           r.id === action.id ? { ...r, enabled: !r.enabled } : r
         ),
       }
 
     case 'DELETE_REMINDER':
-      return { ...state, reminders: state.reminders.filter(r => r.id !== action.id) }
+      return { ...state, reminders: (state.reminders || []).filter(r => r.id !== action.id) }
 
     case 'FIRE_REMINDER':
       return {
         ...state,
-        reminders: state.reminders.map(r =>
+        reminders: (state.reminders || []).map(r =>
           r.id === action.id ? { ...r, lastFired: new Date().toISOString() } : r
         ),
       }
@@ -117,12 +161,17 @@ function reducer(state, action) {
       const weight = {
         id: crypto.randomUUID(),
         weight: action.weight,
+        height: action.height ?? null,
+        headCircumference: action.headCircumference ?? null,
         unit: 'kg',
         note: action.note ?? '',
         timestamp: action.timestamp || new Date().toISOString(),
       }
       return { ...state, weightLogs: [weight, ...state.weightLogs] }
     }
+
+    case 'UPDATE_WEIGHT':
+      return { ...state, weightLogs: state.weightLogs.map(w => w.id === action.id ? { ...w, ...action.patch } : w) }
 
     case 'DELETE_WEIGHT':
       return { ...state, weightLogs: state.weightLogs.filter(w => w.id !== action.id) }
@@ -143,14 +192,24 @@ const StoreContext = createContext(null)
 export function StoreProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, null, load)
 
-  // Load from file on mount
+  // Load from Electron file on mount
   useEffect(() => {
     async function loadState() {
       try {
         // @ts-ignore
         const saved = await window.electronAPI?.readState?.()
         if (saved) {
-          const merged = { ...DEFAULT_STATE, ...saved }
+          const merged = {
+            ...DEFAULT_STATE,
+            ...saved,
+            milestoneLogs: saved.milestoneLogs ?? [],
+            sleepTimerStart: saved.sleepTimerStart ?? null,
+            bottleTimerStart: saved.bottleTimerStart ?? null,
+            birthDate: saved.birthDate ?? '',
+            birthWeight: saved.birthWeight ?? null,
+            profileImage: saved.profileImage ?? null,
+            colorTheme: saved.colorTheme ?? 'blue',
+          }
           const existingIds = new Set((merged.categories || []).map(c => c.id))
           const missing = DEFAULT_STATE.categories.filter(c => !existingIds.has(c.id))
           if (missing.length > 0) merged.categories = [...(merged.categories || []), ...missing]
@@ -164,7 +223,6 @@ export function StoreProvider({ children }) {
     loadState()
   }, [])
 
-  // Save to file on change
   useEffect(() => {
     save(state)
   }, [state])

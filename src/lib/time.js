@@ -33,7 +33,6 @@ export function last24hBuckets(logs, categoryId) {
   const filtered = logs.filter(
     l => l.categoryId === categoryId && new Date(l.timestamp).getTime() >= cutoff
   )
-  // group by hour
   const buckets = Array.from({ length: 24 }, (_, i) => ({
     label: `${((new Date().getHours() - 23 + i + 24) % 24).toString().padStart(2, '0')}:00`,
     amount: 0,
@@ -63,4 +62,48 @@ export function weeklyActivity(logs) {
     if (day) day.count++
   })
   return days
+}
+
+export function calcAge(birthDateStr) {
+  if (!birthDateStr) return null
+  const birth = new Date(birthDateStr)
+  const now = new Date()
+  const totalDays = Math.floor((now - birth) / 86400000)
+  const months = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth())
+  if (totalDays < 7) return `${totalDays} ימים`
+  if (months < 1) { const weeks = Math.floor(totalDays / 7); return `${weeks} שבועות` }
+  if (months < 24) return `${months} חודשים`
+  const years = Math.floor(months / 12); const m = months % 12
+  return m ? `${years} שנ' ו-${m} חודשים` : `${years} שנים`
+}
+
+export function formatDuration(minutes) {
+  if (!minutes) return "0 דק'"
+  const h = Math.floor(minutes / 60); const m = minutes % 60
+  if (h === 0) return `${m} דק'`
+  if (m === 0) return `${h} שע'`
+  return `${h}:${String(m).padStart(2,'0')} שע'`
+}
+
+export function formatDateLabel(isoOrDate) {
+  const d = new Date(isoOrDate)
+  const today = new Date(); today.setHours(0,0,0,0)
+  const yesterday = new Date(today); yesterday.setDate(today.getDate()-1)
+  const day = new Date(d); day.setHours(0,0,0,0)
+  if (day.getTime() === today.getTime()) return 'היום'
+  if (day.getTime() === yesterday.getTime()) return 'אתמול'
+  return d.toLocaleDateString('he-IL', { day:'2-digit', month:'2-digit' })
+}
+
+export function activityByDay(logs, nDays = 7) {
+  return Array.from({ length: nDays }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() - (nDays - 1 - i)); d.setHours(0,0,0,0)
+    const label = nDays === 7
+      ? d.toLocaleDateString('he-IL', { weekday: 'short' })
+      : d.toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit' })
+    return { label, date: d, count: 0 }
+  }).map(day => {
+    const count = logs.filter(l => { const t = new Date(l.timestamp); return t >= day.date && t < new Date(day.date.getTime()+86400000) }).length
+    return { ...day, count }
+  })
 }
