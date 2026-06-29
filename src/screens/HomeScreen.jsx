@@ -127,10 +127,24 @@ export default function HomeScreen({ showToast, setTab }) {
     if (actionId === 'manual') { setManualOpen(true); return }
   }
 
-  const handleFeedingConfirm = (ml) => {
+  const handleFeedingConfirm = (ml, bottleStart) => {
     setFeedingOpen(false)
-    dispatch({ type: 'ADD_LOG', categoryId: 'feeding', amount: ml })
+    const now = new Date().toISOString()
+    if (bottleStart) {
+      const durationMs = Date.now() - new Date(bottleStart).getTime()
+      const durationMinutes = Math.round(durationMs / 60000)
+      dispatch({ type: 'ADD_LOG', categoryId: 'feeding', amount: ml, data: { start: bottleStart, end: now, durationMinutes } })
+      dispatch({ type: 'SET_BOTTLE_TIMER', start: null })
+    } else {
+      dispatch({ type: 'ADD_LOG', categoryId: 'feeding', amount: ml })
+    }
     showToast(`🍼 האכלה ${ml} מ"ל נרשמה`)
+  }
+
+  const handleStartBottle = () => {
+    setFeedingOpen(false)
+    dispatch({ type: 'SET_BOTTLE_TIMER', start: new Date().toISOString() })
+    showToast('🍼 טיימר בקבוק התחיל')
   }
 
   const handleDiaperConfirm = (subtype) => {
@@ -166,10 +180,7 @@ export default function HomeScreen({ showToast, setTab }) {
   }
 
   const handleEndBottle = () => {
-    const durationMs = Date.now() - new Date(state.bottleTimerStart).getTime()
-    const durationMinutes = Math.round(durationMs / 60000)
-    dispatch({ type: 'SET_BOTTLE_TIMER', start: null })
-    showToast(`🍼 בקבוק הסתיים — ${durationMinutes} דקות`)
+    setFeedingOpen(true)
   }
 
   const handleProfileImageUpload = (e) => {
@@ -391,7 +402,7 @@ export default function HomeScreen({ showToast, setTab }) {
         </nav>
 
         {/* Modals */}
-        {feedingOpen && <FeedingAmountSheet quickAmounts={state.feedingQuickAmounts} onConfirm={handleFeedingConfirm} onClose={()=>setFeedingOpen(false)}/>}
+        {feedingOpen && <FeedingAmountSheet quickAmounts={state.feedingQuickAmounts} onConfirm={handleFeedingConfirm} onClose={()=>setFeedingOpen(false)} bottleTimerStart={state.bottleTimerStart} onStartBottle={handleStartBottle}/>}
         {diaperOpen && <DiaperModal onConfirm={handleDiaperConfirm} onClose={()=>setDiaperOpen(false)}/>}
         {growthOpen && <GrowthModal onConfirm={handleGrowthConfirm} onClose={()=>setGrowthOpen(false)}/>}
         {milestoneOpen && <MilestoneModal onConfirm={handleMilestoneConfirm} onClose={()=>setMilestoneOpen(false)}/>}
