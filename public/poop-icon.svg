@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Shadow -->
+  <ellipse cx="100" cy="178" rx="68" ry="12" fill="#3d1a00" opacity="0.12"/>
+
+  <!-- Base / bottom tier -->
+  <ellipse cx="100" cy="162" rx="72" ry="28" fill="#3d1a00"/>
+  <ellipse cx="100" cy="158" rx="70" ry="26" fill="#8B5A2B"/>
+  <ellipse cx="100" cy="154" rx="68" ry="24" fill="#a0682e"/>
+
+  <!-- Middle tier -->
+  <ellipse cx="100" cy="130" rx="55" ry="32" fill="#3d1a00"/>
+  <ellipse cx="100" cy="125" rx="53" ry="30" fill="#8B5A2B"/>
+  <ellipse cx="100" cy="121" rx="51" ry="28" fill="#a0682e"/>
+
+  <!-- Upper tier -->
+  <ellipse cx="100" cy="96" rx="40" ry="32" fill="#3d1a00"/>
+  <ellipse cx="100" cy="91" rx="38" ry="30" fill="#8B5A2B"/>
+  <ellipse cx="100" cy="87" rx="36" ry="28" fill="#a0682e"/>
+
+  <!-- Swirl top -->
+  <path d="M 100 58 C 115 42 130 48 126 62 C 122 72 110 70 108 60 C 106 50 116 44 124 50" stroke="#3d1a00" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M 100 58 C 90 32 108 18 118 28 C 128 38 120 55 108 52 C 96 49 94 36 104 30" fill="#3d1a00"/>
+  <path d="M 100 60 C 90 35 107 20 116 30 C 124 38 116 54 106 51 C 96 48 95 37 103 32" fill="#8B5A2B"/>
+  <path d="M 101 62 C 93 40 108 26 115 34 C 121 42 115 56 107 53 C 100 51 99 41 105 36" fill="#a0682e"/>
+
+  <!-- Shine highlights -->
+  <ellipse cx="76" cy="120" rx="9" ry="14" fill="#d4904a" opacity="0.55" transform="rotate(-20 76 120)"/>
+  <ellipse cx="78" cy="86" rx="7" ry="11" fill="#d4904a" opacity="0.5" transform="rotate(-20 78 86)"/>
+  <ellipse cx="110" cy="42" rx="5" ry="8" fill="#e8b87a" opacity="0.6" transform="rotate(-30 110 42)"/>
+
+  <!-- Eyes -->
+  <circle cx="84" cy="136" r="11" fill="#1a0a00"/>
+  <circle cx="116" cy="136" r="11" fill="#1a0a00"/>
+  <circle cx="84" cy="136" r="9" fill="#2d1200"/>
+  <circle cx="116" cy="136" r="9" fill="#2d1200"/>
+  <!-- Eye whites -->
+  <circle cx="88" cy="132" r="4" fill="white"/>
+  <circle cx="120" cy="132" r="4" fill="white"/>
+  <!-- Eye pupils -->
+  <circle cx="87" cy="133" r="2.5" fill="#1a0a00"/>
+  <circle cx="119" cy="133" r="2.5" fill="#1a0a00"/>
+  <!-- Eye shine -->
+  <circle cx="89.5" cy="131" r="1.2" fill="white"/>
+  <circle cx="121.5" cy="131" r="1.2" fill="white"/>
+
+  <!-- Rosy cheeks -->
+  <ellipse cx="68" cy="150" rx="12" ry="7" fill="#ff9eb5" opacity="0.5"/>
+  <ellipse cx="132" cy="150" rx="12" ry="7" fill="#ff9eb5" opacity="0.5"/>
+
+  <!-- Smile -->
+  <path d="M 87 156 Q 100 167 113 156" stroke="#3d1a00" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>

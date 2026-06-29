@@ -9,7 +9,7 @@ import VaccinationModal from '../components/VaccinationModal'
 import { formatTime, isToday, calcAge } from '../lib/time'
 
 const ACTION_BUTTONS = [
-  { id: 'diaper',      label: 'חיתול',    bg: '#C8F0E0', emoji: '🚼' },
+  { id: 'diaper',      label: 'חיתול',    bg: '#C8F0E0', emoji: null, icon: '/poop-icon.svg' },
   { id: 'feeding',     label: 'האכלה',    bg: '#FFF3CC', emoji: null, icon: '/bottle-icon.svg' },
   { id: 'sleep',       label: 'שינה',     bg: '#E0D8FF', emoji: '🌙' },
   { id: 'bath',        label: 'מקלחת',   bg: '#FFE4CC', emoji: '🛁' },
