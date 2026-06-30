@@ -66,11 +66,17 @@ export function weeklyActivity(logs) {
 
 export function calcAge(birthDateStr) {
   if (!birthDateStr) return null
-  const birth = new Date(birthDateStr)
+  // Parse as local time — avoids UTC offset shifting birth date by a day
+  const [y, mo, d] = birthDateStr.split('-').map(Number)
+  const birth = new Date(y, mo - 1, d)
   const now = new Date()
   const totalDays = Math.floor((now - birth) / 86400000)
-  const months = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth())
+  if (totalDays < 0) return null
+  if (totalDays === 0) return 'נולד היום 🎉'
   if (totalDays < 7) return `${totalDays} ימים`
+  // Accurate month count: subtract 1 if haven't passed birth day yet this month
+  let months = (now.getFullYear() - birth.getFullYear()) * 12 + (now.getMonth() - birth.getMonth())
+  if (now.getDate() < birth.getDate()) months--
   if (months < 1) { const weeks = Math.floor(totalDays / 7); return `${weeks} שבועות` }
   if (months < 24) return `${months} חודשים`
   const years = Math.floor(months / 12); const m = months % 12
