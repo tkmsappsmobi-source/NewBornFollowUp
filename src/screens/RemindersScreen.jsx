@@ -27,6 +27,8 @@ export default function RemindersScreen({ showToast }) {
     <>
       <style>{`
         .rem-root { display:flex; flex-direction:column; height:100%; background:#F0F8FF; font-family:Heebo,sans-serif; }
+        .rem-header { background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%); padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px); flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; }
+        .rem-header-title { font-size:clamp(15px,4.5vw,19px); font-weight:800; color:#0D2640; }
         .rem-list { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding: clamp(10px,3vw,14px) clamp(10px,4vw,16px); display:flex; flex-direction:column; gap: clamp(8px,2vw,12px); }
         .rem-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:10px; color:#9CA3AF; }
         .rem-empty-icon { font-size: clamp(40px,12vw,56px); }
@@ -46,6 +48,9 @@ export default function RemindersScreen({ showToast }) {
         .rem-add-btn:active { transform:scale(0.97); }
       `}</style>
       <div className="rem-root" dir="rtl">
+        <div className="rem-header">
+          <span className="rem-header-title">תזכורות</span>
+        </div>
         <div className="rem-list">
           {state.reminders.length === 0 ? (
             <div className="rem-empty">

@@ -11,6 +11,7 @@ export default function StatsScreen({ setTab }) {
   const feedingLogs = state.logs.filter(l => l.categoryId === 'feeding')
   const diaperLogs = state.logs.filter(l => l.categoryId === 'diaper')
   const bathLogs = state.logs.filter(l => l.categoryId === 'bath')
+  const medicineLogs = state.logs.filter(l => l.categoryId === 'medicine')
 
   // Summary stats for the period
   const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - nDays); cutoff.setHours(0,0,0,0)
@@ -20,6 +21,7 @@ export default function StatsScreen({ setTab }) {
   const feedingMl = feedingLogs.filter(inPeriod).reduce((s, l) => s + (l.amount || 0), 0)
   const diaperCount = diaperLogs.filter(inPeriod).length
   const bathCount = bathLogs.filter(inPeriod).length
+  const medicineCount = medicineLogs.filter(inPeriod).length
 
   const feedingByDay = useMemo(() => activityByDay(feedingLogs, nDays).map(d => ({
     ...d,
@@ -82,24 +84,29 @@ export default function StatsScreen({ setTab }) {
             <p className="stats-section-title">סיכום {nDays} ימים</p>
             <div className="stats-summary-grid">
               <div className="stats-sum-box" style={{background:'#E0D8FF'}}>
-                <span className="stats-sum-emoji">🌙</span>
+                <img src="/sleep-icon.png" alt="שינה" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{fmtH(sleepMinutes)}</p>
                 <p className="stats-sum-lbl">שינה סה"כ</p>
               </div>
               <div className="stats-sum-box" style={{background:'#FFF3CC'}}>
-                <span className="stats-sum-emoji">🍼</span>
+                <img src="/bottle-icon.png" alt="האכלה" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{feedingMl} מ"ל</p>
                 <p className="stats-sum-lbl">האכלה סה"כ</p>
               </div>
               <div className="stats-sum-box" style={{background:'#C8F0E0'}}>
-                <img src="/diaper-icon.svg" alt="חיתול" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
+                <img src="/diaper-icon.png" alt="חיתול" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{diaperCount}</p>
                 <p className="stats-sum-lbl">חיתולים</p>
               </div>
               <div className="stats-sum-box" style={{background:'#FFE4CC'}}>
-                <span className="stats-sum-emoji">🛁</span>
+                <img src="/bath-icon.png" alt="מקלחת" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{bathCount}</p>
                 <p className="stats-sum-lbl">מקלחות</p>
+              </div>
+              <div className="stats-sum-box" style={{background:'#FCE7F3'}}>
+                <span style={{fontSize:'clamp(22px,6.5vw,30px)',lineHeight:1}}>💊</span>
+                <p className="stats-sum-val">{medicineCount}</p>
+                <p className="stats-sum-lbl">תרופות</p>
               </div>
             </div>
           </div>

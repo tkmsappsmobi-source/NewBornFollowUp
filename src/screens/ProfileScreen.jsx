@@ -1,11 +1,6 @@
 import { useState, useRef } from 'react'
 import { useStore } from '../store/useStore'
 
-const THEMES = [
-  { id: 'blue',   color: '#0096C7', label: 'כחול' },
-  { id: 'purple', color: '#7B3FDB', label: 'סגול' },
-  { id: 'teal',   color: '#00ACC1', label: 'ירוק-כחול' },
-]
 
 export default function ProfileScreen({ showToast, setTab }) {
   const { state, dispatch } = useStore()
@@ -115,11 +110,8 @@ export default function ProfileScreen({ showToast, setTab }) {
         .prof-label{font-size:12px;font-weight:600;color:#6B7280;margin-bottom:5px;}
         .prof-input{width:100%;border:1.5px solid #E5E7EB;border-radius:12px;padding:10px 14px;font-size:15px;font-family:Heebo,sans-serif;outline:none;box-sizing:border-box;}
         .prof-input:focus{border-color:#0096C7;}
-        .prof-save-btn{background:#0096C7;color:white;border:none;border-radius:12px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;min-height:44px;width:100%;margin-top:4px;}
-        .prof-theme-row{display:flex;gap:14px;justify-content:center;padding:8px 0;}
-        .prof-theme-circle{width:44px;height:44px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all 0.15s;display:flex;align-items:center;justify-content:center;}
-        .prof-theme-circle.active{border-color:#111827;transform:scale(1.15);}
-        .prof-weight-diff{text-align:center;font-size:clamp(14px,4vw,18px);font-weight:800;margin-bottom:12px;}
+        .prof-save-btn{background:linear-gradient(135deg,#48CAE4,#0096C7);color:white;border:none;border-radius:12px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;min-height:44px;width:100%;margin-top:4px;}
+.prof-weight-diff{text-align:center;font-size:clamp(14px,4vw,18px);font-weight:800;margin-bottom:12px;}
         .prof-weight-bars{display:flex;align-items:flex-end;gap:8px;height:60px;margin-top:8px;}
         .prof-weight-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
         .prof-weight-bar{width:100%;background:#0096C7;border-radius:6px 6px 0 0;transition:height 0.3s;}
@@ -192,25 +184,6 @@ export default function ProfileScreen({ showToast, setTab }) {
               )}
             </div>
           )}
-
-          {/* Theme */}
-          <div className="prof-card">
-            <div className="prof-card-title">ערכת צבעים 🎨</div>
-            <div className="prof-theme-row">
-              {THEMES.map(t => (
-                <div key={t.id} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
-                  <div
-                    className={`prof-theme-circle${state.colorTheme===t.id?' active':''}`}
-                    style={{background:t.color}}
-                    onClick={()=>dispatch({type:'SET_COLOR_THEME',theme:t.id})}
-                  >
-                    {state.colorTheme===t.id && <span style={{fontSize:18}}>✓</span>}
-                  </div>
-                  <span style={{fontSize:11,color:'#6B7280'}}>{t.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
 
           {/* Export/Import */}
           <div className="prof-card">

@@ -5,9 +5,9 @@ const DURATION = 2500
 export function useToast() {
   const [toasts, setToasts] = useState([])
 
-  const showToast = (message, type = 'success') => {
+  const showToast = (message, type = 'success', icon = null) => {
     const id = Date.now()
-    setToasts(prev => [...prev, { id, message, type, closing: false }])
+    setToasts(prev => [...prev, { id, message, type, icon, closing: false }])
     setTimeout(() => {
       setToasts(prev => prev.map(t => t.id === id ? { ...t, closing: true } : t))
       setTimeout(() => {
@@ -58,19 +58,20 @@ export function ToastContainer({ toasts, dismiss }) {
         style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
         onClick={() => dismiss(latest.id)}
       >
-        <div className="bg-white rounded-3xl shadow-2xl px-8 py-7 flex flex-col items-center gap-3 min-w-[220px] max-w-[300px] text-center"
-          dir="rtl"
-        >
+        <div className="bg-white rounded-3xl shadow-2xl px-8 py-7 flex flex-col items-center gap-3 min-w-[220px] max-w-[300px] text-center" dir="rtl">
           {/* Icon */}
-          <div className={`w-16 h-16 rounded-full flex items-center justify-center text-4xl ${
-            latest.type === 'error' ? 'bg-red-100' : 'bg-[#EDE5FF]'
-          }`}>
-            {latest.type === 'error' ? '❌' : extractEmoji(latest.message)}
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center ${latest.type === 'error' ? 'bg-red-100' : 'bg-[#EDE5FF]'}`}>
+            {latest.type === 'error'
+              ? <span style={{fontSize:32}}>❌</span>
+              : latest.icon
+                ? <img src={latest.icon} alt="" style={{width:40,height:40,objectFit:'contain'}}/>
+                : <span style={{fontSize:32}}>{extractEmoji(latest.message)}</span>
+            }
           </div>
 
           {/* Message */}
           <p className="text-[16px] font-bold text-[#1A0F3C] leading-snug">
-            {stripEmoji(latest.message)}
+            {latest.icon ? latest.message : stripEmoji(latest.message)}
           </p>
 
           {latest.type !== 'error' && (
@@ -80,7 +81,7 @@ export function ToastContainer({ toasts, dismiss }) {
           {/* Progress bar */}
           <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden mt-1">
             <div
-              className={`h-full rounded-full ${latest.type === 'error' ? 'bg-red-400' : 'bg-[#7B3FDB]'}`}
+              className={`h-full rounded-full ${latest.type === 'error' ? 'bg-red-400' : 'bg-[#0096C7]'}`}
               style={{
                 width: latest.closing ? '0%' : '100%',
                 transition: latest.closing ? 'none' : `width ${DURATION - 350}ms linear`,

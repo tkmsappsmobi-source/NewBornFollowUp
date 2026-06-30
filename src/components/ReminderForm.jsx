@@ -25,80 +25,71 @@ export default function ReminderForm({ onSave, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end" onClick={onClose}>
-      <div className="w-full max-w-[480px] mx-auto" onClick={e => e.stopPropagation()}>
-        <div className="bg-white rounded-t-3xl shadow-2xl p-5 pb-8">
-          <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
-          <h2 className="text-lg font-bold text-center mb-4">תזכורת חדשה</h2>
-
-          <div className="space-y-3">
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">תיאור התזכורת</label>
-              <input
-                type="text"
-                value={label}
-                onChange={e => setLabel(e.target.value)}
-                placeholder="לדוגמה: זמן האכלה"
-                className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-600 mb-2">סוג תזכורת</label>
-              <div className="flex rounded-xl border border-gray-200 overflow-hidden">
-                {[['recurring', 'חוזרת'], ['once', 'חד-פעמית']].map(([val, txt]) => (
-                  <button
-                    key={val}
-                    onClick={() => setType(val)}
-                    className={`flex-1 py-2 text-sm font-medium transition-colors ${type === val ? 'bg-indigo-600 text-white' : 'text-gray-600'}`}
-                  >
-                    {txt}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {type === 'recurring' ? (
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">כל כמה זמן?</label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    value={hours}
-                    onChange={e => setHours(e.target.value)}
-                    min="0" max="23"
-                    className="w-20 border border-gray-300 rounded-xl px-3 py-2 text-sm text-center focus:outline-none focus:border-indigo-400"
-                  />
-                  <span className="text-sm text-gray-600">שעות</span>
-                  <input
-                    type="number"
-                    value={minutes}
-                    onChange={e => setMinutes(e.target.value)}
-                    min="0" max="59"
-                    className="w-20 border border-gray-300 rounded-xl px-3 py-2 text-sm text-center focus:outline-none focus:border-indigo-400"
-                  />
-                  <span className="text-sm text-gray-600">דקות</span>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">תאריך ושעה</label>
-                <input
-                  type="datetime-local"
-                  value={datetime}
-                  onChange={e => setDatetime(e.target.value)}
-                  className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
-                />
-              </div>
-            )}
+    <>
+      <style>{`
+        .rf-backdrop{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;background:rgba(0,0,0,0.45);}
+        .rf-panel{width:100%;max-width:480px;margin:0 auto;background:white;border-radius:24px 24px 0 0;padding:20px 20px 0;box-shadow:0 -4px 30px rgba(0,0,0,0.15);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 90px);}
+        .rf-handle{width:40px;height:4px;background:#E5E7EB;border-radius:4px;margin:0 auto 14px;}
+        .rf-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+        .rf-title{font-size:clamp(16px,5vw,20px);font-weight:800;color:#111827;flex:1;text-align:center;font-family:Heebo,sans-serif;}
+        .rf-close{width:34px;height:34px;border-radius:50%;background:#F3F4F6;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6B7280;font-size:16px;flex-shrink:0;}
+        .rf-label{font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;font-family:Heebo,sans-serif;}
+        .rf-input{width:100%;border:1.5px solid #E5E7EB;border-radius:12px;padding:12px 14px;font-size:15px;font-family:Heebo,sans-serif;outline:none;box-sizing:border-box;direction:rtl;}
+        .rf-input:focus{border-color:#0096C7;}
+        .rf-field{margin-bottom:12px;}
+        .rf-toggle{display:flex;background:#F3F4F6;border-radius:12px;padding:3px;margin-bottom:12px;}
+        .rf-toggle-btn{flex:1;border:none;border-radius:10px;padding:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:Heebo,sans-serif;transition:all 0.15s;background:transparent;color:#6B7280;}
+        .rf-toggle-btn.active{background:#0096C7;color:white;}
+        .rf-interval-row{display:flex;align-items:center;gap:10px;}
+        .rf-interval-input{width:72px;border:1.5px solid #E5E7EB;border-radius:12px;padding:10px;font-size:15px;font-family:Heebo,sans-serif;outline:none;text-align:center;box-sizing:border-box;}
+        .rf-interval-input:focus{border-color:#0096C7;}
+        .rf-interval-label{font-size:14px;color:#374151;font-family:Heebo,sans-serif;font-weight:500;}
+        .rf-btn-save{width:100%;background:linear-gradient(135deg,#48CAE4,#0096C7);color:white;border:none;border-radius:14px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;margin-top:8px;}
+        .rf-btn-save:disabled{opacity:0.4;cursor:default;}
+      `}</style>
+      <div className="rf-backdrop" onClick={onClose}>
+        <div className="rf-panel" onClick={e => e.stopPropagation()} dir="rtl">
+          <div className="rf-handle" />
+          <div className="rf-topbar">
+            <div style={{width:34}}/>
+            <div className="rf-title">🔔 תזכורת חדשה</div>
+            <button className="rf-close" onClick={onClose}>✕</button>
           </div>
 
-          <div className="flex gap-2 mt-5">
-            <button onClick={onClose} className="flex-1 border border-gray-300 rounded-xl py-3 text-sm text-gray-600">ביטול</button>
-            <button onClick={handleSave} disabled={!label.trim()} className="flex-1 bg-indigo-600 text-white rounded-xl py-3 text-sm font-medium disabled:opacity-40">שמור</button>
+          <div className="rf-field">
+            <div className="rf-label">תיאור התזכורת</div>
+            <input className="rf-input" type="text" value={label} onChange={e => setLabel(e.target.value)} placeholder='לדוגמה: זמן האכלה' autoFocus/>
           </div>
+
+          <div className="rf-field">
+            <div className="rf-label">סוג תזכורת</div>
+            <div className="rf-toggle">
+              {[['recurring', 'חוזרת'], ['once', 'חד-פעמית']].map(([val, txt]) => (
+                <button key={val} className={`rf-toggle-btn${type===val?' active':''}`} onClick={() => setType(val)}>{txt}</button>
+              ))}
+            </div>
+          </div>
+
+          {type === 'recurring' ? (
+            <div className="rf-field">
+              <div className="rf-label">כל כמה זמן?</div>
+              <div className="rf-interval-row">
+                <input className="rf-interval-input" type="number" value={hours} onChange={e => setHours(e.target.value)} min="0" max="23"/>
+                <span className="rf-interval-label">שעות</span>
+                <input className="rf-interval-input" type="number" value={minutes} onChange={e => setMinutes(e.target.value)} min="0" max="59"/>
+                <span className="rf-interval-label">דקות</span>
+              </div>
+            </div>
+          ) : (
+            <div className="rf-field">
+              <div className="rf-label">תאריך ושעה</div>
+              <input className="rf-input" type="datetime-local" value={datetime} onChange={e => setDatetime(e.target.value)}/>
+            </div>
+          )}
+
+          <button className="rf-btn-save" disabled={!label.trim()} onClick={handleSave}>שמור</button>
         </div>
       </div>
-    </div>
+    </>
   )
 }

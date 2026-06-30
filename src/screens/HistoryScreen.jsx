@@ -4,24 +4,26 @@ import EditLogSheet from '../components/EditLogSheet'
 import { formatTime, formatDateLabel } from '../lib/time'
 
 const FILTER_OPTIONS = [
-  { id: null, label: 'הכל' },
-  { id: 'feeding', label: '🍼 האכלה' },
-  { id: 'diaper', label: '🚼 חיתול' },
-  { id: 'sleep', label: '🌙 שינה' },
-  { id: 'bath', label: '🛁 מקלחת' },
-  { id: 'growth', label: '📏 גדילה' },
-  { id: 'milestone', label: '⭐ אבן דרך' },
-  { id: 'vaccination', label: '💉 חיסון' },
+  { id: null,         label: 'הכל' },
+  { id: 'feeding',    label: 'האכלה',   icon: '/bottle-icon.png' },
+  { id: 'diaper',     label: 'חיתול',   icon: '/diaper-icon.png' },
+  { id: 'sleep',      label: 'שינה',    icon: '/sleep-icon.png' },
+  { id: 'bath',       label: 'מקלחת',  icon: '/bath-icon.png' },
+  { id: 'growth',     label: 'משקל',   icon: '/growth-icon.png' },
+  { id: 'milestone',  label: 'אבן דרך', emoji: '⭐' },
+  { id: 'vaccination',label: 'חיסון',   icon: '/vaccine-icon.png' },
+  { id: 'medicine',   label: 'תרופה',   emoji: '💊' },
 ]
 
 const CAT_INFO = {
-  feeding:     { icon: '/bottle-icon.svg', label: 'האכלה',    bg: '#FFF3CC' },
-  diaper:      { icon: '/diaper-icon.svg', label: 'חיתול',    bg: '#C8F0E0' },
-  sleep:       { emoji: '🌙', label: 'שינה',     bg: '#E0D8FF' },
-  bath:        { emoji: '🛁', label: 'מקלחת',   bg: '#FFE4CC' },
-  growth:      { emoji: '📏', label: 'גדילה',    bg: '#C8F0E8' },
+  feeding:     { icon: '/bottle-icon.png', label: 'האכלה',    bg: '#FFF3CC' },
+  diaper:      { icon: '/diaper-icon.png', label: 'חיתול',    bg: '#C8F0E0' },
+  sleep:       { icon: '/sleep-icon.png', label: 'שינה',     bg: '#E0D8FF' },
+  bath:        { icon: '/bath-icon.png', label: 'מקלחת',   bg: '#FFE4CC' },
+  growth:      { icon: '/growth-icon.png', label: 'משקל',    bg: '#C8F0E8' },
   milestone:   { emoji: '⭐', label: 'אבן דרך', bg: '#FFD6EC' },
-  vaccination: { emoji: '💉', label: 'חיסון',   bg: '#E8E0FF' },
+  vaccination: { icon: '/vaccine-icon.png', label: 'חיסון',   bg: '#E8E0FF' },
+  medicine:    { emoji: '💊',              label: 'תרופה',   bg: '#FCE7F3' },
 }
 
 function CatIcon({ info, size = '58%' }) {
@@ -30,8 +32,8 @@ function CatIcon({ info, size = '58%' }) {
 }
 
 const SUBTYPE_ICONS = {
-  pee:  { src: '/pee-icon.svg',   label: 'פיפי' },
-  poop: { src: '/poop-icon.svg',  label: 'קקי' },
+  pee:  { src: '/pee-icon.png',   label: 'פיפי' },
+  poop: { src: '/poop-icon.png',  label: 'קקי' },
   both: { src: null,              label: 'שניהם' },
 }
 
@@ -43,15 +45,16 @@ function getDetail(log) {
     const s = { pee: 'פיפי', poop: 'קקי', both: 'שניהם' }
     return s[log.data.subtype] || ''
   }
+  if (log.data && log.data.medicineName) return `${log.data.medicineName}${log.data.dose ? ` · ${log.data.dose} ${log.data.unit}` : ''}`
   if (log.data && log.data.vaccineName) return log.data.vaccineName
   if (log.data && log.data.durationMinutes) return `${log.data.durationMinutes} דקות`
   return log.note || ''
 }
 
 function SubtypeDetail({ subtype }) {
-  if (subtype === 'pee') return <span style={{display:'flex',alignItems:'center',gap:4}}><img src="/pee-icon.svg" style={{width:14,height:14,objectFit:'contain'}} alt=""/>פיפי</span>
-  if (subtype === 'poop') return <span style={{display:'flex',alignItems:'center',gap:4}}><img src="/poop-icon.svg" style={{width:14,height:14,objectFit:'contain'}} alt=""/>קקי</span>
-  if (subtype === 'both') return <span style={{display:'flex',alignItems:'center',gap:3}}><img src="/pee-icon.svg" style={{width:12,height:12,objectFit:'contain'}} alt=""/><img src="/poop-icon.svg" style={{width:12,height:12,objectFit:'contain'}} alt=""/>שניהם</span>
+  if (subtype === 'pee') return <span style={{display:'flex',alignItems:'center',gap:4}}><img src="/pee-icon.png" style={{width:14,height:14,objectFit:'contain'}} alt=""/>פיפי</span>
+  if (subtype === 'poop') return <span style={{display:'flex',alignItems:'center',gap:4}}><img src="/poop-icon.png" style={{width:14,height:14,objectFit:'contain'}} alt=""/>קקי</span>
+  if (subtype === 'both') return <span style={{display:'flex',alignItems:'center',gap:3}}><img src="/pee-icon.png" style={{width:12,height:12,objectFit:'contain'}} alt=""/><img src="/poop-icon.png" style={{width:12,height:12,objectFit:'contain'}} alt=""/>שניהם</span>
   return null
 }
 
@@ -94,7 +97,7 @@ export default function HistoryScreen({ showToast, setTab }) {
   const handleDelete = (log) => {
     if (log._source === 'weight') {
       dispatch({ type: 'DELETE_WEIGHT', id: log.id })
-      showToast('🗑️ רשומת גדילה נמחקה')
+      showToast('🗑️ רשומת משקל נמחקה')
     } else if (log._source === 'milestone') {
       dispatch({ type: 'DELETE_MILESTONE', id: log.id })
       showToast('🗑️ אבן דרך נמחקה')
@@ -160,7 +163,12 @@ export default function HistoryScreen({ showToast, setTab }) {
               key={String(f.id)}
               className={`hist-pill${filter === f.id ? ' active' : ''}`}
               onClick={()=>setFilter(f.id)}
-            >{f.label}</button>
+              style={{display:'flex',alignItems:'center',gap:5}}
+            >
+              {f.icon && <img src={f.icon} alt="" style={{width:14,height:14,objectFit:'contain',flexShrink:0}}/>}
+              {f.emoji && <span style={{fontSize:13,lineHeight:1}}>{f.emoji}</span>}
+              {f.label}
+            </button>
           ))}
         </div>
 

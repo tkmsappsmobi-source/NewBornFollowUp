@@ -6,17 +6,17 @@ import DiaperModal from '../components/DiaperModal'
 import GrowthModal from '../components/GrowthModal'
 import MilestoneModal from '../components/MilestoneModal'
 import VaccinationModal from '../components/VaccinationModal'
+import MedicineModal from '../components/MedicineModal'
 import { formatTime, isToday, calcAge } from '../lib/time'
 
 const ACTION_BUTTONS = [
-  { id: 'diaper',      label: 'חיתול',    bg: '#C8F0E0', emoji: null, icon: '/diaper-icon.svg' },
-  { id: 'feeding',     label: 'האכלה',    bg: '#FFF3CC', emoji: null, icon: '/bottle-icon.svg' },
-  { id: 'sleep',       label: 'שינה',     bg: '#E0D8FF', emoji: '🌙' },
-  { id: 'bath',        label: 'מקלחת',   bg: '#FFE4CC', emoji: '🛁' },
-  { id: 'growth',      label: 'גדילה',    bg: '#C8F0E8', emoji: '📏' },
-  { id: 'milestone',   label: 'אבן דרך', bg: '#FFD6EC', emoji: '⭐' },
-  { id: 'vaccination', label: 'חיסון',   bg: '#E8E0FF', emoji: '💉' },
-  { id: 'manual',      label: 'ידני',     bg: '#C8EEFF', emoji: '✏️' },
+  { id: 'diaper',      label: 'חיתול',    bg: '#C8F0E0', emoji: null, icon: '/diaper-icon.png' },
+  { id: 'feeding',     label: 'האכלה',    bg: '#FFF3CC', emoji: null, icon: '/bottle-icon.png' },
+  { id: 'sleep',       label: 'שינה',     bg: '#E0D8FF', emoji: null, icon: '/sleep-icon.png' },
+  { id: 'bath',        label: 'מקלחת',   bg: '#FFE4CC', emoji: null, icon: '/bath-icon.png' },
+  { id: 'growth',      label: 'משקל',    bg: '#C8F0E8', emoji: null, icon: '/growth-icon.png' },
+  { id: 'vaccination', label: 'חיסון',   bg: '#E8E0FF', emoji: null, icon: '/vaccine-icon.png' },
+  { id: 'medicine',    label: 'תרופה',   bg: '#FCE7F3', emoji: '💊' },
 ]
 
 const BG_MAP = {
@@ -40,6 +40,7 @@ export default function HomeScreen({ showToast, setTab }) {
   const [growthOpen, setGrowthOpen] = useState(false)
   const [milestoneOpen, setMilestoneOpen] = useState(false)
   const [vaccinationOpen, setVaccinationOpen] = useState(false)
+  const [medicineOpen, setMedicineOpen] = useState(false)
   const [timerNow, setTimerNow] = useState(Date.now())
   const profileInputRef = useRef(null)
 
@@ -51,7 +52,9 @@ export default function HomeScreen({ showToast, setTab }) {
 
   const babyName = state.babyName || 'התינוק שלי'
   const ageStr = calcAge(state.birthDate)
-  const today = new Date().toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  const birthDateStr = state.birthDate
+    ? new Date(state.birthDate).toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    : null
 
   const todayLogs = state.logs.filter(l => isToday(new Date(l.timestamp)))
 
@@ -69,7 +72,32 @@ export default function HomeScreen({ showToast, setTab }) {
 
   const sleepToday = todayLogs.filter(l => l.categoryId === 'sleep').length
   const feedingToday = todayLogs.filter(l => l.categoryId === 'feeding').length
+  const peeToday = todayLogs.filter(l => l.categoryId === 'diaper' && (l.data?.subtype === 'pee' || l.data?.subtype === 'both')).length
+  const poopToday = todayLogs.filter(l => l.categoryId === 'diaper' && (l.data?.subtype === 'poop' || l.data?.subtype === 'both')).length
   const diaperToday = todayLogs.filter(l => l.categoryId === 'diaper').length
+
+  const lastOf = (filterFn) => {
+    const log = state.logs.filter(filterFn).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))[0]
+    if (!log) return null
+    return new Date(log.timestamp)
+  }
+  const fmtLast = (date) => {
+    if (!date) return null
+    const now = new Date()
+    const diff = now - date
+    const mins = Math.floor(diff / 60000)
+    if (mins < 1) return 'עכשיו'
+    if (mins < 60) return `לפני ${mins} דק'`
+    const hrs = Math.floor(mins / 60)
+    const rem = mins % 60
+    if (rem === 0) return `לפני ${hrs} שע'`
+    return `לפני ${hrs}:${String(rem).padStart(2,'0')} שע'`
+  }
+  const lastSleep   = fmtLast(lastOf(l => l.categoryId === 'sleep'))
+  const lastFeeding = fmtLast(lastOf(l => l.categoryId === 'feeding'))
+  const lastPee     = fmtLast(lastOf(l => l.categoryId === 'diaper' && (l.data?.subtype === 'pee' || l.data?.subtype === 'both')))
+  const lastPoop    = fmtLast(lastOf(l => l.categoryId === 'diaper' && (l.data?.subtype === 'poop' || l.data?.subtype === 'both')))
+  const lastDiaper  = fmtLast(lastOf(l => l.categoryId === 'diaper'))
 
   const getRelativeTime = (timestamp) => {
     const diff = Date.now() - new Date(timestamp).getTime()
@@ -93,11 +121,21 @@ export default function HomeScreen({ showToast, setTab }) {
     return log.note || ''
   }
 
+  const ICON_MAP = {
+    feeding:     '/bottle-icon.png',
+    sleep:       '/sleep-icon.png',
+    bath:        '/bath-icon.png',
+    vaccination: '/vaccine-icon.png',
+    diaper:      (log) => log.data?.subtype === 'pee' ? '/pee-icon.png' : log.data?.subtype === 'poop' ? '/poop-icon.png' : '/diaper-icon.png',
+    medicine:    null,
+  }
   const getCatInfo = (log) => {
-    if (log._source === 'weight') return { emoji: '📏', label: 'גדילה', bg: '#C8F0E8' }
+    if (log._source === 'weight')    return { icon: '/growth-icon.png', label: 'משקל',    bg: '#C8F0E8' }
     if (log._source === 'milestone') return { emoji: '⭐', label: 'אבן דרך', bg: '#FFD6EC' }
     const cat = catMap[log.categoryId]
-    return { emoji: cat?.emoji || '📝', label: cat?.label || 'פעולה', bg: BG_MAP[log.categoryId] || '#F3F4F6' }
+    const iconVal = ICON_MAP[log.categoryId]
+    const icon = typeof iconVal === 'function' ? iconVal(log) : iconVal || null
+    return { emoji: cat?.emoji || '📝', icon, label: cat?.label || 'פעולה', bg: BG_MAP[log.categoryId] || '#F3F4F6' }
   }
 
   const handleAction = (actionId) => {
@@ -109,21 +147,22 @@ export default function HomeScreen({ showToast, setTab }) {
         const durationMinutes = Math.round(durationMs / 60000)
         dispatch({ type: 'ADD_LOG', categoryId: 'sleep', data: { start: state.sleepTimerStart, durationMinutes } })
         dispatch({ type: 'SET_SLEEP_TIMER', start: null })
-        showToast(`🌙 שינה נרשמה — ${durationMinutes} דקות`)
+        showToast(`שינה נרשמה — ${durationMinutes} דקות`, 'success', '/sleep-icon.png')
       } else {
         dispatch({ type: 'SET_SLEEP_TIMER', start: new Date().toISOString() })
-        showToast('🌙 טיימר שינה התחיל')
+        showToast('טיימר שינה התחיל', 'success', '/sleep-icon.png')
       }
       return
     }
     if (actionId === 'bath') {
       dispatch({ type: 'ADD_LOG', categoryId: 'bath' })
-      showToast('🛁 מקלחת נרשמה')
+      showToast('מקלחת נרשמה', 'success', '/bath-icon.png')
       return
     }
     if (actionId === 'growth') { setGrowthOpen(true); return }
     if (actionId === 'milestone') { setMilestoneOpen(true); return }
     if (actionId === 'vaccination') { setVaccinationOpen(true); return }
+    if (actionId === 'medicine') { setMedicineOpen(true); return }
     if (actionId === 'manual') { setManualOpen(true); return }
   }
 
@@ -138,45 +177,53 @@ export default function HomeScreen({ showToast, setTab }) {
     } else {
       dispatch({ type: 'ADD_LOG', categoryId: 'feeding', amount: ml })
     }
-    showToast(`🍼 האכלה ${ml} מ"ל נרשמה`)
+    showToast(`האכלה ${ml} מ"ל נרשמה`, 'success', '/bottle-icon.png')
   }
 
   const handleStartBottle = () => {
     setFeedingOpen(false)
     dispatch({ type: 'SET_BOTTLE_TIMER', start: new Date().toISOString() })
-    showToast('🍼 טיימר בקבוק התחיל')
+    showToast('טיימר בקבוק התחיל', 'success', '/bottle-icon.png')
   }
 
   const handleDiaperConfirm = (subtype) => {
     setDiaperOpen(false)
     const labels = { pee: 'פיפי', poop: 'קקי', both: 'שניהם' }
+    const icons  = { pee: '/pee-icon.png', poop: '/poop-icon.png', both: '/diaper-icon.png' }
     dispatch({ type: 'ADD_LOG', categoryId: 'diaper', data: { subtype } })
-    showToast(`🚼 חיתול (${labels[subtype]}) נרשם`)
+    showToast(`חיתול (${labels[subtype]}) נרשם`, 'success', icons[subtype])
   }
 
   const handleGrowthConfirm = ({ weight, height, headCircumference, note }) => {
     setGrowthOpen(false)
     dispatch({ type: 'ADD_WEIGHT', weight, height, headCircumference, note })
-    showToast(`📏 גדילה ${weight} ק"ג נשמרה`)
+    showToast(`משקל ${weight} ק"ג נשמרה`, 'success', null)
   }
 
   const handleMilestoneConfirm = ({ description, category }) => {
     setMilestoneOpen(false)
     dispatch({ type: 'ADD_MILESTONE', description, category })
-    showToast('⭐ אבן דרך נשמרה')
+    showToast('אבן דרך נשמרה', 'success', null)
   }
 
   const handleVaccinationConfirm = ({ vaccineName, doctor, notes }) => {
     setVaccinationOpen(false)
     dispatch({ type: 'ADD_LOG', categoryId: 'vaccination', note: vaccineName, data: { vaccineName, doctor, notes } })
-    showToast(`💉 חיסון "${vaccineName}" נרשם`)
+    showToast(`חיסון "${vaccineName}" נרשם`, 'success', '/vaccine-icon.png')
+  }
+
+  const handleMedicineConfirm = ({ medicineName, dose, unit, reminderHours, nextDoseAt }) => {
+    setMedicineOpen(false)
+    dispatch({ type: 'ADD_LOG', categoryId: 'medicine', note: medicineName, data: { medicineName, dose, unit, reminderHours, nextDoseAt } })
+    showToast(`💊 ${medicineName}${dose ? ` ${dose} ${unit}` : ''} נרשם`, 'success', null)
   }
 
   const handleManualSave = ({ categoryId, amount, note, timestamp }) => {
     setManualOpen(false)
     dispatch({ type: 'ADD_LOG', categoryId, amount, note, timestamp })
     const cat = state.categories.find(c => c.id === categoryId)
-    showToast(`${cat?.emoji ?? ''} ${cat?.label ?? ''} נרשם`)
+    const iconMap = { feeding: '/bottle-icon.png', diaper: '/diaper-icon.png', sleep: '/sleep-icon.png', bath: '/bath-icon.png', vaccination: '/vaccine-icon.png' }
+    showToast(`${cat?.label ?? ''} נרשם`, 'success', iconMap[categoryId] || null)
   }
 
   const handleEndBottle = () => {
@@ -219,13 +266,14 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:clamp(80px,20vw,100px);}
         .hs-inner{padding:clamp(10px,3vw,16px) clamp(10px,4vw,16px) 0;}
         .hs-card{background:white;border-radius:clamp(14px,4vw,20px);padding:clamp(12px,3.5vw,16px);margin-bottom:clamp(8px,2.5vw,14px);box-shadow:0 2px 14px rgba(0,0,0,0.07);}
-        .hs-card-title{display:flex;flex-direction:row-reverse;justify-content:space-between;align-items:center;margin-bottom:clamp(8px,2.5vw,14px);}
+        .hs-card-title{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:6px;margin-bottom:clamp(8px,2.5vw,14px);}
         .hs-card-title span{font-size:clamp(13px,3.5vw,16px);font-weight:700;color:#111827;}
-        .hs-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(6px,2vw,12px);}
-        .hs-stat-box{border-radius:clamp(10px,3vw,16px);padding:clamp(8px,2.5vw,14px) clamp(4px,1.5vw,8px);text-align:center;}
-        .hs-stat-emoji{font-size:clamp(20px,6vw,30px);line-height:1;margin-bottom:4px;}
-        .hs-stat-num{font-size:clamp(18px,5.5vw,26px);font-weight:800;color:#111827;margin:0;line-height:1;}
-        .hs-stat-lbl{font-size:clamp(9px,2.5vw,12px);color:#6B7280;margin:3px 0 0;font-weight:500;}
+        .hs-stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(5px,1.5vw,10px);}
+        .hs-stat-box{border-radius:clamp(10px,3vw,16px);padding:clamp(8px,2.5vw,14px) clamp(3px,1vw,6px);text-align:center;display:flex;flex-direction:column;align-items:center;}
+        .hs-stat-emoji{display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
+        .hs-stat-num{font-size:clamp(16px,5vw,24px);font-weight:800;color:#111827;margin:0;line-height:1;}
+        .hs-stat-lbl{font-size:clamp(8px,2.2vw,11px);color:#6B7280;margin:3px 0 0;font-weight:600;}
+        .hs-stat-time{font-size:clamp(7px,1.8vw,10px);color:#9CA3AF;margin:2px 0 0;line-height:1.2;}
         .hs-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,2.5vw,14px);}
         .hs-feat-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:clamp(4px,1.5vw,8px);-webkit-tap-highlight-color:transparent;}
         .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:clamp(12px,3.5vw,20px);display:flex;align-items:center;justify-content:center;font-size:clamp(20px,6vw,30px);transition:transform 0.12s;}
@@ -280,7 +328,7 @@ export default function HomeScreen({ showToast, setTab }) {
             </div>
             <h1 className="hs-name">{babyName}</h1>
             <p className="hs-age">{ageStr || 'הגדר תאריך לידה'}</p>
-            <p className="hs-date">{today}</p>
+            {birthDateStr && <p className="hs-date">{birthDateStr}</p>}
           </div>
 
         </div>
@@ -292,27 +340,38 @@ export default function HomeScreen({ showToast, setTab }) {
             {/* Daily summary */}
             <div className="hs-card">
               <div className="hs-card-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <rect x="2" y="4" width="20" height="17" rx="3" stroke="#4A90D9" strokeWidth="1.8" fill="#EEF6FF"/>
-                  <path d="M7 2v4M17 2v4M2 9h20" stroke="#4A90D9" strokeWidth="1.8" strokeLinecap="round"/>
-                </svg>
                 <span>סיכום היום</span>
               </div>
               <div className="hs-stats-grid">
                 <div className="hs-stat-box" style={{background:'#E0D8FF'}}>
-                  <div className="hs-stat-emoji">🌙</div>
+                  <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:'clamp(20px,5.5vw,28px)',height:'clamp(20px,5.5vw,28px)',objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{sleepToday}</p>
                   <p className="hs-stat-lbl">שינה</p>
+                  {lastSleep && <p className="hs-stat-time">{lastSleep}</p>}
                 </div>
                 <div className="hs-stat-box" style={{background:'#FFF3CC'}}>
-                  <div className="hs-stat-emoji">🍼</div>
+                  <div className="hs-stat-emoji"><img src="/bottle-icon.png" alt="האכלה" style={{width:'clamp(20px,5.5vw,28px)',height:'clamp(20px,5.5vw,28px)',objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{feedingToday}</p>
                   <p className="hs-stat-lbl">האכלה</p>
+                  {lastFeeding && <p className="hs-stat-time">{lastFeeding}</p>}
                 </div>
                 <div className="hs-stat-box" style={{background:'#C8F0E0'}}>
-                  <div className="hs-stat-emoji"><img src="/diaper-icon.svg" alt="חיתול" style={{width:'clamp(22px,6vw,30px)',height:'clamp(22px,6vw,30px)',objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/diaper-icon.png" alt="חיתול" style={{width:'clamp(20px,5.5vw,28px)',height:'clamp(20px,5.5vw,28px)',objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{diaperToday}</p>
                   <p className="hs-stat-lbl">חיתול</p>
+                  {lastDiaper && <p className="hs-stat-time">{lastDiaper}</p>}
+                </div>
+                <div className="hs-stat-box" style={{background:'#DBEAFE'}}>
+                  <div className="hs-stat-emoji"><img src="/pee-icon.png" alt="פיפי" style={{width:'clamp(20px,5.5vw,28px)',height:'clamp(20px,5.5vw,28px)',objectFit:'contain'}}/></div>
+                  <p className="hs-stat-num">{peeToday}</p>
+                  <p className="hs-stat-lbl">פיפי</p>
+                  {lastPee && <p className="hs-stat-time">{lastPee}</p>}
+                </div>
+                <div className="hs-stat-box" style={{background:'#FEF3C7'}}>
+                  <div className="hs-stat-emoji"><img src="/poop-icon.png" alt="קקי" style={{width:'clamp(20px,5.5vw,28px)',height:'clamp(20px,5.5vw,28px)',objectFit:'contain'}}/></div>
+                  <p className="hs-stat-num">{poopToday}</p>
+                  <p className="hs-stat-lbl">קקי</p>
+                  {lastPoop && <p className="hs-stat-time">{lastPoop}</p>}
                 </div>
               </div>
             </div>
@@ -374,7 +433,11 @@ export default function HomeScreen({ showToast, setTab }) {
                   const info = getCatInfo(log)
                   return (
                     <div key={log.id} className="hs-recent-row">
-                      <div className="hs-recent-circle" style={{background:info.bg}}>{info.emoji}</div>
+                      <div className="hs-recent-circle" style={{background:info.bg}}>
+                        {info.icon
+                          ? <img src={info.icon} alt="" style={{width:'58%',height:'58%',objectFit:'contain'}}/>
+                          : info.emoji}
+                      </div>
                       <div style={{flex:1}}>
                         <p className="hs-recent-name">{info.label}</p>
                         <p className="hs-recent-detail">{getLogDetail(log)}</p>
@@ -409,6 +472,7 @@ export default function HomeScreen({ showToast, setTab }) {
         {growthOpen && <GrowthModal onConfirm={handleGrowthConfirm} onClose={()=>setGrowthOpen(false)}/>}
         {milestoneOpen && <MilestoneModal onConfirm={handleMilestoneConfirm} onClose={()=>setMilestoneOpen(false)}/>}
         {vaccinationOpen && <VaccinationModal onConfirm={handleVaccinationConfirm} onClose={()=>setVaccinationOpen(false)}/>}
+        {medicineOpen && <MedicineModal onConfirm={handleMedicineConfirm} onClose={()=>setMedicineOpen(false)} notificationsEnabled={state.settings?.notificationsEnabled}/>}
         {manualOpen && <ManualLogForm categories={state.categories} onSave={handleManualSave} onClose={()=>setManualOpen(false)}/>}
       </div>
     </>

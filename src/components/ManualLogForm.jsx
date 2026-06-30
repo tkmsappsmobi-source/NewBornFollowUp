@@ -25,72 +25,61 @@ export default function ManualLogForm({ categories, onSave, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end" onClick={onClose}>
-      <div className="w-full max-w-[480px] mx-auto" onClick={e => e.stopPropagation()}>
-        <div className="bg-white rounded-t-3xl shadow-2xl p-5 pb-8">
-          <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-4" />
-          <h2 className="text-lg font-bold text-center mb-4">רישום ידני</h2>
-
-          <div className="space-y-3">
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">קטגוריה</label>
-              <select
-                value={categoryId}
-                onChange={e => setCategoryId(e.target.value)}
-                className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
-              >
-                {enabled.map(c => (
-                  <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>
-                ))}
-              </select>
-            </div>
-
-            {isFeeding && (
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">כמות (מ״ל)</label>
-                <input
-                  type="number"
-                  value={amount}
-                  onChange={e => setAmount(e.target.value)}
-                  placeholder="לדוגמה: 120"
-                  className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
-                  min="1" max="500"
-                />
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">תאריך ושעה</label>
-              <input
-                type="datetime-local"
-                value={datetime}
-                onChange={e => setDatetime(e.target.value)}
-                className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">הערה</label>
-              <input
-                type="text"
-                value={note}
-                onChange={e => setNote(e.target.value)}
-                placeholder="הערה חופשית (אופציונלי)"
-                className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-indigo-400"
-              />
-            </div>
+    <>
+      <style>{`
+        .mlf-backdrop{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;background:rgba(0,0,0,0.45);}
+        .mlf-panel{width:100%;max-width:480px;margin:0 auto;background:white;border-radius:24px 24px 0 0;padding:20px 20px 0;box-shadow:0 -4px 30px rgba(0,0,0,0.15);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 90px);}
+        .mlf-handle{width:40px;height:4px;background:#E5E7EB;border-radius:4px;margin:0 auto 14px;}
+        .mlf-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+        .mlf-title{font-size:clamp(16px,5vw,20px);font-weight:800;color:#111827;flex:1;text-align:center;font-family:Heebo,sans-serif;}
+        .mlf-close{width:34px;height:34px;border-radius:50%;background:#F3F4F6;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6B7280;font-size:16px;flex-shrink:0;}
+        .mlf-label{font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;font-family:Heebo,sans-serif;}
+        .mlf-input{width:100%;border:1.5px solid #E5E7EB;border-radius:12px;padding:12px 14px;font-size:15px;font-family:Heebo,sans-serif;outline:none;box-sizing:border-box;direction:rtl;}
+        .mlf-input:focus{border-color:#0096C7;}
+        .mlf-select{width:100%;border:1.5px solid #E5E7EB;border-radius:12px;padding:12px 14px;font-size:15px;font-family:Heebo,sans-serif;outline:none;box-sizing:border-box;background:white;direction:rtl;}
+        .mlf-select:focus{border-color:#0096C7;}
+        .mlf-field{margin-bottom:12px;}
+        .mlf-btn-save{width:100%;background:linear-gradient(135deg,#48CAE4,#0096C7);color:white;border:none;border-radius:14px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;margin-top:8px;}
+        .mlf-btn-save:disabled{opacity:0.4;cursor:default;}
+      `}</style>
+      <div className="mlf-backdrop" onClick={onClose}>
+        <div className="mlf-panel" onClick={e => e.stopPropagation()} dir="rtl">
+          <div className="mlf-handle" />
+          <div className="mlf-topbar">
+            <div style={{width:34}}/>
+            <div className="mlf-title">✏️ רישום ידני</div>
+            <button className="mlf-close" onClick={onClose}>✕</button>
           </div>
 
-          <div className="flex gap-2 mt-5">
-            <button onClick={onClose} className="flex-1 border border-gray-300 rounded-xl py-3 text-sm text-gray-600">
-              ביטול
-            </button>
-            <button onClick={handleSave} className="flex-1 bg-indigo-600 text-white rounded-xl py-3 text-sm font-medium">
-              שמור
-            </button>
+          <div className="mlf-field">
+            <div className="mlf-label">קטגוריה</div>
+            <select className="mlf-select" value={categoryId} onChange={e => setCategoryId(e.target.value)}>
+              {enabled.map(c => (
+                <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>
+              ))}
+            </select>
           </div>
+
+          {isFeeding && (
+            <div className="mlf-field">
+              <div className="mlf-label">כמות (מ"ל)</div>
+              <input className="mlf-input" type="number" value={amount} onChange={e => setAmount(e.target.value)} placeholder='לדוגמה: 120' min="1" max="500"/>
+            </div>
+          )}
+
+          <div className="mlf-field">
+            <div className="mlf-label">תאריך ושעה</div>
+            <input className="mlf-input" type="datetime-local" value={datetime} onChange={e => setDatetime(e.target.value)}/>
+          </div>
+
+          <div className="mlf-field">
+            <div className="mlf-label">הערה</div>
+            <input className="mlf-input" type="text" value={note} onChange={e => setNote(e.target.value)} placeholder='הערה חופשית (אופציונלי)'/>
+          </div>
+
+          <button className="mlf-btn-save" disabled={!categoryId} onClick={handleSave}>שמור</button>
         </div>
       </div>
-    </div>
+    </>
   )
 }

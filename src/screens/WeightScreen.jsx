@@ -3,7 +3,7 @@ import { useStore } from '../store/useStore'
 import BarChart from '../components/BarChart'
 import { formatDateTime, formatDate } from '../lib/time'
 
-export default function WeightScreen({ showToast }) {
+export default function WeightScreen({ showToast, setTab }) {
   const { state, dispatch } = useStore()
   const [weight, setWeight] = useState('')
   const [note, setNote] = useState('')
@@ -11,12 +11,8 @@ export default function WeightScreen({ showToast }) {
   const handleSave = () => {
     const w = parseFloat(weight)
     if (w > 0) {
-      dispatch({
-        type: 'ADD_WEIGHT',
-        weight: w,
-        note,
-      })
-      showToast(`⚖️ משקל שמור: ${w} ק״ג`)
+      dispatch({ type: 'ADD_WEIGHT', weight: w, note })
+      showToast(`⚖️ משקל שמור: ${w} ק"ג`)
       setWeight('')
       setNote('')
     }
@@ -32,20 +28,19 @@ export default function WeightScreen({ showToast }) {
   const previous = sorted[1]
 
   let diffText = null
-  let diffColor = 'text-gray-500'
+  let diffColor = '#6B7280'
   if (current && previous) {
     const diff = (current.weight - previous.weight).toFixed(2)
     const currentDate = formatDate(new Date(current.timestamp))
     const previousDate = formatDate(new Date(previous.timestamp))
     if (Math.abs(diff) < 0.01) {
       diffText = `אין שינוי בין ${previousDate} ל-${currentDate}`
-      diffColor = 'text-gray-500'
     } else if (diff > 0) {
-      diffText = `בין ${previousDate} ל-${currentDate} עלה ${diff} ק״ג 📈`
-      diffColor = 'text-green-600'
+      diffText = `בין ${previousDate} ל-${currentDate} עלה ${diff} ק"ג 📈`
+      diffColor = '#059669'
     } else {
-      diffText = `בין ${previousDate} ל-${currentDate} ירד ${Math.abs(diff)} ק״ג 📉`
-      diffColor = 'text-red-600'
+      diffText = `בין ${previousDate} ל-${currentDate} ירד ${Math.abs(diff)} ק"ג 📉`
+      diffColor = '#DC2626'
     }
   }
 
@@ -55,82 +50,113 @@ export default function WeightScreen({ showToast }) {
   }))
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Input Section */}
-      <div className="p-4 bg-white border-b border-gray-200">
-        <div className="space-y-3">
-          <div className="flex gap-2">
-            <input
-              type="number"
-              step="0.1"
-              placeholder="משקל (ק״ג)"
-              value={weight}
-              onChange={e => setWeight(e.target.value)}
-              className="flex-1 border border-gray-300 rounded-xl px-4 py-2 text-center focus:outline-none focus:border-indigo-400"
-            />
-            <button
-              onClick={handleSave}
-              disabled={!parseFloat(weight)}
-              className="bg-indigo-600 text-white px-6 py-2 rounded-xl font-medium disabled:opacity-40"
-            >
-              שמור
+    <>
+      <style>{`
+        .wt-root{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#F0F8FF;font-family:Heebo,sans-serif;display:flex;flex-direction:column;}
+        .wt-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
+        .wt-title{font-size:clamp(15px,4.5vw,19px);font-weight:800;color:#0D2640;}
+        .wt-back{position:absolute;left:12px;background:none;border:none;cursor:pointer;padding:8px;color:#0D2640;}
+        .wt-scroll{flex:1;overflow-y:auto;padding:clamp(10px,3vw,16px) clamp(10px,4vw,16px);padding-bottom:clamp(80px,20vw,100px);display:flex;flex-direction:column;gap:clamp(12px,3vw,16px);}
+        .wt-card{background:white;border-radius:clamp(14px,4vw,20px);padding:clamp(14px,4vw,20px);box-shadow:0 2px 14px rgba(0,0,0,0.07);}
+        .wt-card-title{font-size:clamp(11px,3vw,13px);font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:clamp(10px,3vw,14px);}
+        .wt-input{width:100%;border:1.5px solid #E5E7EB;border-radius:12px;padding:12px 14px;font-size:15px;font-family:Heebo,sans-serif;outline:none;box-sizing:border-box;direction:rtl;}
+        .wt-input:focus{border-color:#0096C7;}
+        .wt-input-row{display:flex;gap:10px;margin-bottom:10px;}
+        .wt-save-btn{background:linear-gradient(135deg,#48CAE4,#0096C7);color:white;border:none;border-radius:12px;padding:12px 20px;font-size:15px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;white-space:nowrap;flex-shrink:0;}
+        .wt-save-btn:disabled{opacity:0.4;cursor:default;}
+        .wt-current-val{font-size:clamp(32px,10vw,44px);font-weight:900;color:#0096C7;text-align:center;margin:0;line-height:1;}
+        .wt-current-lbl{font-size:clamp(10px,2.8vw,13px);color:#9CA3AF;text-align:center;margin:4px 0 0;}
+        .wt-diff{font-size:clamp(12px,3.5vw,15px);font-weight:600;text-align:center;margin-top:10px;}
+        .wt-log-item{display:flex;align-items:center;padding:clamp(10px,3vw,14px) 0;gap:clamp(8px,2.5vw,14px);}
+        .wt-log-item+.wt-log-item{border-top:1px solid #F3F4F6;}
+        .wt-log-circle{width:clamp(38px,10vw,46px);height:clamp(38px,10vw,46px);border-radius:50%;background:#C8F0E8;display:flex;align-items:center;justify-content:center;font-size:clamp(18px,5vw,22px);flex-shrink:0;}
+        .wt-log-val{font-size:clamp(13px,3.5vw,15px);font-weight:700;color:#111827;margin:0;}
+        .wt-log-date{font-size:clamp(10px,2.8vw,12px);color:#9CA3AF;margin:2px 0 0;}
+        .wt-log-note{font-size:clamp(10px,2.5vw,12px);color:#6B7280;margin:2px 0 0;}
+        .wt-del-btn{background:none;border:1.5px solid #E5E7EB;border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;flex-shrink:0;}
+        .wt-del-btn:active{background:#FEE2E2;}
+        .wt-empty{text-align:center;color:#9CA3AF;padding:clamp(16px,5vw,24px) 0;font-size:clamp(13px,3.5vw,16px);}
+        .wt-empty-icon{font-size:clamp(36px,10vw,48px);display:block;margin-bottom:8px;}
+      `}</style>
+      <div className="wt-root" dir="rtl">
+        <div className="wt-header">
+          <span className="wt-title">מעקב משקל</span>
+          {setTab && (
+            <button className="wt-back" onClick={() => setTab('home')}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
-          </div>
-          <input
-            type="text"
-            placeholder="הערה (אופציונלי)"
-            value={note}
-            onChange={e => setNote(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-indigo-400"
-          />
+          )}
         </div>
-      </div>
 
-      {/* Summary Card */}
-      {current && (
-        <div className="p-4 bg-indigo-50 border-b border-gray-200">
-          <div className="text-center">
-            <div className="text-sm text-gray-600 mb-2">המשקל הנוכחי</div>
-            <div className="text-4xl font-bold text-indigo-600 mb-3">{current.weight} ק״ג</div>
-            <div className="text-xs text-gray-500 mb-4">{formatDateTime(new Date(current.timestamp))}</div>
-            {diffText && <div className={`text-sm ${diffColor}`}>{diffText}</div>}
-          </div>
-        </div>
-      )}
+        <div className="wt-scroll">
 
-      {/* Chart */}
-      {chartData.length > 1 && (
-        <div className="p-4 border-b border-gray-200">
-          <h3 className="text-sm font-bold text-gray-700 mb-3">עשרת המדידות האחרונות</h3>
-          <BarChart data={chartData} unit="ק״ג" height={200} />
-        </div>
-      )}
-
-      {/* History */}
-      <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
-        {sorted.length === 0 ? (
-          <div className="text-center text-gray-400 py-16">
-            <div className="text-4xl mb-2">⚖️</div>
-            <div className="text-sm">אין מדידות עדיין</div>
-          </div>
-        ) : (
-          sorted.map(w => (
-            <div key={w.id} className="bg-white rounded-xl p-3 flex items-center justify-between border border-gray-200">
-              <div className="flex-1">
-                <div className="text-sm font-medium">{w.weight} ק״ג</div>
-                <div className="text-xs text-gray-500">{formatDateTime(new Date(w.timestamp))}</div>
-                {w.note && <div className="text-xs text-gray-600 mt-1">הערה: {w.note}</div>}
-              </div>
-              <button
-                onClick={() => handleDelete(w.id)}
-                className="ml-2 text-red-500 text-lg active:scale-90 transition-transform"
-              >
-                ✕
-              </button>
+          {/* Input card */}
+          <div className="wt-card">
+            <p className="wt-card-title">הוסף מדידה</p>
+            <div className="wt-input-row">
+              <input
+                className="wt-input"
+                type="number"
+                step="0.1"
+                placeholder='משקל (ק"ג)'
+                value={weight}
+                onChange={e => setWeight(e.target.value)}
+                style={{flex:1}}
+              />
+              <button className="wt-save-btn" onClick={handleSave} disabled={!parseFloat(weight)}>שמור</button>
             </div>
-          ))
-        )}
+            <input
+              className="wt-input"
+              type="text"
+              placeholder='הערה (אופציונלי)'
+              value={note}
+              onChange={e => setNote(e.target.value)}
+            />
+          </div>
+
+          {/* Current weight */}
+          {current && (
+            <div className="wt-card" style={{textAlign:'center'}}>
+              <p className="wt-card-title">המשקל הנוכחי</p>
+              <p className="wt-current-val">{current.weight}</p>
+              <p className="wt-current-lbl">ק"ג · {formatDateTime(new Date(current.timestamp))}</p>
+              {diffText && <p className="wt-diff" style={{color: diffColor}}>{diffText}</p>}
+            </div>
+          )}
+
+          {/* Chart */}
+          {chartData.length > 1 && (
+            <div className="wt-card">
+              <p className="wt-card-title">10 מדידות אחרונות</p>
+              <BarChart data={chartData} unit='ק"ג' height={200}/>
+            </div>
+          )}
+
+          {/* History */}
+          <div className="wt-card">
+            <p className="wt-card-title">היסטוריה</p>
+            {sorted.length === 0 ? (
+              <div className="wt-empty">
+                <span className="wt-empty-icon">⚖️</span>
+                אין מדידות עדיין
+              </div>
+            ) : (
+              sorted.map(w => (
+                <div key={w.id} className="wt-log-item">
+                  <div className="wt-log-circle">⚖️</div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <p className="wt-log-val">{w.weight} ק"ג</p>
+                    <p className="wt-log-date">{formatDateTime(new Date(w.timestamp))}</p>
+                    {w.note && <p className="wt-log-note">{w.note}</p>}
+                  </div>
+                  <button className="wt-del-btn" onClick={() => handleDelete(w.id)}>🗑️</button>
+                </div>
+              ))
+            )}
+          </div>
+
+        </div>
       </div>
-    </div>
+    </>
   )
 }
