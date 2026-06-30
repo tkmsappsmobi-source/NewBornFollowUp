@@ -49,21 +49,21 @@ export default function StatsScreen({ setTab }) {
     <>
       <style>{`
         .stats-root{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#F0F8FF;font-family:Heebo,sans-serif;display:flex;flex-direction:column;}
-        .stats-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
-        .stats-title{font-size:clamp(15px,4.5vw,19px);font-weight:800;color:#0D2640;}
-        .stats-back{position:absolute;left:12px;background:none;border:none;cursor:pointer;padding:8px;color:#0D2640;}
-        .stats-scroll{flex:1;overflow-y:auto;padding:clamp(10px,3vw,16px) clamp(10px,4vw,16px);padding-bottom:clamp(80px,20vw,100px);display:flex;flex-direction:column;gap:clamp(12px,3vw,18px);}
-        .stats-toggle{display:flex;background:white;border-radius:20px;padding:3px;box-shadow:0 1px 6px rgba(0,0,0,0.08);width:fit-content;margin:0 auto;}
-        .stats-toggle-btn{border:none;border-radius:17px;padding:7px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;transition:all 0.15s;background:transparent;color:#6B7280;}
+        .stats-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:16px 16px;padding-top:max(env(safe-area-inset-top,16px),16px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
+        .stats-title{font-size:18px;font-weight:800;color:#0D2640;}
+        .stats-back{position:absolute;left:12px;top:50%;transform:translateY(-50%);margin-top:max(calc(env(safe-area-inset-top,0px)/2),0px);background:none;border:none;cursor:pointer;padding:10px;color:#0D2640;}
+        .stats-scroll{flex:1;overflow-y:auto;padding:14px 16px;padding-bottom:calc(env(safe-area-inset-bottom,0px)+24px);display:flex;flex-direction:column;gap:14px;}
+        .stats-toggle{display:flex;background:white;border-radius:22px;padding:4px;box-shadow:0 1px 6px rgba(0,0,0,0.08);width:fit-content;margin:0 auto;}
+        .stats-toggle-btn{border:none;border-radius:18px;padding:9px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;transition:all 0.15s;background:transparent;color:#6B7280;}
         .stats-toggle-btn.active{background:#0096C7;color:white;}
-        .stats-card{background:white;border-radius:clamp(14px,4vw,20px);padding:clamp(12px,3.5vw,18px);box-shadow:0 2px 14px rgba(0,0,0,0.07);}
-        .stats-summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(8px,2.5vw,14px);}
-        .stats-sum-box{border-radius:clamp(10px,3vw,14px);padding:clamp(10px,3vw,16px);display:flex;flex-direction:column;align-items:center;gap:4px;}
-        .stats-sum-emoji{font-size:clamp(22px,6.5vw,30px);line-height:1;}
-        .stats-sum-val{font-size:clamp(16px,5vw,22px);font-weight:800;color:#111827;margin:0;}
-        .stats-sum-lbl{font-size:clamp(9px,2.5vw,12px);color:#6B7280;margin:0;font-weight:500;}
-        .stats-section-title{font-size:clamp(11px,3vw,13px);font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:clamp(10px,3vw,14px);}
-        .stats-empty{text-align:center;color:#9CA3AF;padding:clamp(12px,4vw,20px) 0;font-size:clamp(12px,3vw,14px);}
+        .stats-card{background:white;border-radius:20px;padding:16px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
+        .stats-summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+        .stats-sum-box{border-radius:14px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;}
+        .stats-sum-emoji{font-size:28px;line-height:1;}
+        .stats-sum-val{font-size:20px;font-weight:800;color:#111827;margin:0;}
+        .stats-sum-lbl{font-size:12px;color:#6B7280;margin:0;font-weight:500;}
+        .stats-section-title{font-size:12px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;}
+        .stats-empty{text-align:center;color:#9CA3AF;padding:16px 0;font-size:14px;}
       `}</style>
       <div className="stats-root" dir="rtl">
         <div className="stats-header">

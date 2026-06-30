@@ -127,27 +127,27 @@ export default function HistoryScreen({ showToast, setTab }) {
     <>
       <style>{`
         .hist-root{display:flex;flex-direction:column;height:100%;background:#F0F8FF;font-family:Heebo,sans-serif;}
-        .hist-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
-        .hist-title{font-size:clamp(15px,4.5vw,19px);font-weight:800;color:#0D2640;}
-        .hist-back{position:absolute;left:12px;background:none;border:none;cursor:pointer;padding:8px;color:#0D2640;}
-        .hist-filter-bar{padding:clamp(8px,2.5vw,12px) clamp(10px,4vw,16px);background:white;border-bottom:1px solid #E5E7EB;flex-shrink:0;overflow-x:auto;white-space:nowrap;display:flex;gap:8px;scrollbar-width:none;}
+        .hist-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:16px 16px;padding-top:max(env(safe-area-inset-top,16px),16px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
+        .hist-title{font-size:18px;font-weight:800;color:#0D2640;}
+        .hist-back{position:absolute;left:12px;top:50%;transform:translateY(-50%);margin-top:max(calc(env(safe-area-inset-top,0px)/2),0px);background:none;border:none;cursor:pointer;padding:10px;color:#0D2640;}
+        .hist-filter-bar{padding:10px 14px;background:white;border-bottom:1px solid #E5E7EB;flex-shrink:0;overflow-x:auto;white-space:nowrap;display:flex;gap:8px;scrollbar-width:none;}
         .hist-filter-bar::-webkit-scrollbar{display:none;}
-        .hist-pill{border:1.5px solid #E5E7EB;border-radius:20px;padding:6px 14px;font-size:clamp(11px,3vw,13px);font-weight:600;cursor:pointer;font-family:Heebo,sans-serif;background:white;white-space:nowrap;min-height:36px;transition:all 0.15s;}
+        .hist-pill{border:1.5px solid #E5E7EB;border-radius:20px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:Heebo,sans-serif;background:white;white-space:nowrap;min-height:38px;transition:all 0.15s;}
         .hist-pill.active{background:#0096C7;color:white;border-color:#0096C7;}
-        .hist-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:clamp(10px,3vw,14px) clamp(10px,4vw,16px);padding-bottom:clamp(80px,20vw,100px);}
-        .hist-date-label{font-size:clamp(11px,3vw,13px);font-weight:700;color:#6B7280;padding:clamp(6px,2vw,10px) 0 clamp(4px,1.5vw,8px);letter-spacing:0.04em;}
-        .hist-card{background:white;border-radius:clamp(12px,3.5vw,16px);padding:clamp(10px,3vw,14px);margin-bottom:8px;box-shadow:0 1px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:clamp(8px,2.5vw,14px);}
-        .hist-emoji-circle{width:clamp(38px,11vw,48px);height:clamp(38px,11vw,48px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(18px,5.5vw,24px);flex-shrink:0;}
+        .hist-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;padding-bottom:calc(env(safe-area-inset-bottom,0px)+24px);}
+        .hist-date-label{font-size:12px;font-weight:700;color:#6B7280;padding:8px 0 6px;letter-spacing:0.04em;text-transform:uppercase;}
+        .hist-card{background:white;border-radius:16px;padding:13px 14px;margin-bottom:8px;box-shadow:0 1px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:12px;}
+        .hist-emoji-circle{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
         .hist-info{flex:1;min-width:0;}
-        .hist-info-label{font-size:clamp(12px,3.5vw,15px);font-weight:700;color:#111827;margin:0;}
-        .hist-info-detail{font-size:clamp(10px,2.8vw,12px);color:#9CA3AF;margin:2px 0 0;}
-        .hist-time{font-size:clamp(11px,3vw,13px);font-weight:600;color:#6B7280;flex-shrink:0;}
+        .hist-info-label{font-size:15px;font-weight:700;color:#111827;margin:0;}
+        .hist-info-detail{font-size:12px;color:#9CA3AF;margin:3px 0 0;}
+        .hist-time{font-size:13px;font-weight:600;color:#6B7280;flex-shrink:0;}
         .hist-actions{display:flex;gap:6px;flex-shrink:0;}
-        .hist-action-btn{background:none;border:1.5px solid #E5E7EB;border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;}
+        .hist-action-btn{background:none;border:1.5px solid #E5E7EB;border-radius:10px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;}
         .hist-action-btn:active{background:#F3F4F6;}
         .hist-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60%;gap:10px;color:#9CA3AF;}
-        .hist-empty-icon{font-size:clamp(40px,12vw,56px);}
-        .hist-empty-text{font-size:clamp(13px,3.5vw,16px);font-weight:500;}
+        .hist-empty-icon{font-size:52px;}
+        .hist-empty-text{font-size:16px;font-weight:500;}
       `}</style>
       <div className="hist-root" dir="rtl">
         <div className="hist-header">

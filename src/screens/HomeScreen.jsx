@@ -257,46 +257,49 @@ export default function HomeScreen({ showToast, setTab }) {
       <style>{`
         .hs-root{width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#F0F8FF;font-family:Heebo,sans-serif;}
         .hs-header{flex-shrink:0;position:relative;overflow:hidden;background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 35%,#C8EDFA 70%,#E4F6FC 100%);}
-        .hs-header-top{display:flex;flex-direction:column;align-items:center;padding:clamp(10px,3vw,16px) clamp(12px,4vw,20px) clamp(14px,4vw,20px);position:relative;z-index:2;}
-        .hs-profile-circle{width:clamp(52px,14vw,68px);height:clamp(52px,14vw,68px);border-radius:50%;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;font-size:clamp(26px,7vw,36px);cursor:pointer;border:3px solid rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.12);overflow:hidden;margin-bottom:clamp(4px,1.5vw,8px);}
+        .hs-header-top{display:flex;flex-direction:column;align-items:center;padding:16px 20px 20px;padding-top:max(env(safe-area-inset-top,16px),16px);position:relative;z-index:2;}
+        .hs-profile-circle{width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;border:3px solid rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.12);overflow:hidden;margin-bottom:8px;}
         .hs-profile-circle img{width:100%;height:100%;object-fit:cover;}
-        .hs-name{margin:0;font-size:clamp(26px,8vw,44px);font-weight:900;color:#0D2640;line-height:1.05;letter-spacing:-1px;}
-        .hs-age{font-size:clamp(11px,3vw,14px);font-weight:600;color:#1A5A8A;margin:clamp(2px,0.8vw,5px) 0 0;}
-        .hs-date{font-size:clamp(10px,2.8vw,13px);color:#3A7BA8;margin:2px 0 0;}
-        .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:clamp(80px,20vw,100px);}
-        .hs-inner{padding:clamp(10px,3vw,16px) clamp(10px,4vw,16px) 0;}
-        .hs-card{background:white;border-radius:clamp(14px,4vw,20px);padding:clamp(12px,3.5vw,16px);margin-bottom:clamp(8px,2.5vw,14px);box-shadow:0 2px 14px rgba(0,0,0,0.07);}
-        .hs-card-title{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:6px;margin-bottom:clamp(8px,2.5vw,14px);}
-        .hs-card-title span{font-size:clamp(13px,3.5vw,16px);font-weight:700;color:#111827;}
-        .hs-stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(5px,1.5vw,10px);}
-        .hs-stat-box{border-radius:clamp(10px,3vw,16px);padding:clamp(8px,2.5vw,14px) clamp(3px,1vw,6px);text-align:center;display:flex;flex-direction:column;align-items:center;}
-        .hs-stat-emoji{display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
-        .hs-stat-num{font-size:clamp(16px,5vw,24px);font-weight:800;color:#111827;margin:0;line-height:1;}
-        .hs-stat-lbl{font-size:clamp(8px,2.2vw,11px);color:#6B7280;margin:3px 0 0;font-weight:600;}
-        .hs-stat-time{font-size:clamp(7px,1.8vw,10px);color:#9CA3AF;margin:2px 0 0;line-height:1.2;}
-        .hs-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,2.5vw,14px);}
-        .hs-feat-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:clamp(4px,1.5vw,8px);-webkit-tap-highlight-color:transparent;}
-        .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:clamp(12px,3.5vw,20px);display:flex;align-items:center;justify-content:center;font-size:clamp(20px,6vw,30px);transition:transform 0.12s;}
-        .hs-feat-icon:active{transform:scale(0.89);}
-        .hs-feat-lbl{font-size:clamp(9px,2.5vw,12px);font-weight:600;color:#374151;text-align:center;line-height:1.25;}
-        .hs-timer-card{background:#FFF3E0;border-radius:clamp(14px,4vw,20px);padding:clamp(10px,3vw,14px);margin-bottom:clamp(8px,2.5vw,14px);box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+        .hs-name{margin:0;font-size:30px;font-weight:900;color:#0D2640;line-height:1.05;letter-spacing:-0.5px;}
+        .hs-age{font-size:14px;font-weight:600;color:#1A5A8A;margin:4px 0 0;}
+        .hs-date{font-size:12px;color:#3A7BA8;margin:2px 0 0;}
+        .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(68px + env(safe-area-inset-bottom,20px));}
+        .hs-inner{padding:14px 16px 0;}
+        .hs-card{background:white;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
+        .hs-card-title{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:7px;margin-bottom:14px;}
+        .hs-card-title span{font-size:16px;font-weight:700;color:#111827;}
+        .hs-stats-grid-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
+        .hs-stats-grid-bottom{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+        .hs-stat-box{border-radius:14px;padding:12px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;}
+        .hs-stat-emoji{display:flex;align-items:center;justify-content:center;margin-bottom:5px;}
+        .hs-stat-num{font-size:24px;font-weight:800;color:#111827;margin:0;line-height:1;}
+        .hs-stat-lbl{font-size:12px;color:#6B7280;margin:3px 0 0;font-weight:600;}
+        .hs-stat-time{font-size:10px;color:#9CA3AF;margin:3px 0 0;line-height:1.3;}
+        .hs-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+        .hs-feat-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;-webkit-tap-highlight-color:transparent;}
+        .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:26px;transition:transform 0.12s;}
+        .hs-feat-icon:active{transform:scale(0.88);}
+        .hs-feat-lbl{font-size:13px;font-weight:600;color:#374151;text-align:center;line-height:1.2;}
+        .hs-timer-card{background:#FFF3E0;border-radius:20px;padding:14px 16px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
         .hs-timer-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;gap:8px;}
-        .hs-timer-label{font-size:clamp(12px,3vw,15px);font-weight:700;color:#374151;}
-        .hs-timer-time{font-size:clamp(14px,4vw,18px);font-weight:800;color:#D97706;font-variant-numeric:tabular-nums;}
-        .hs-timer-end{background:#EF4444;color:white;border:none;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;min-height:44px;flex-shrink:0;}
-        .hs-recent-row{display:flex;align-items:center;gap:clamp(6px,2vw,12px);padding:clamp(8px,2.5vw,12px) 0;direction:rtl;}
+        .hs-timer-label{font-size:15px;font-weight:700;color:#374151;}
+        .hs-timer-time{font-size:18px;font-weight:800;color:#D97706;font-variant-numeric:tabular-nums;}
+        .hs-timer-end{background:#EF4444;color:white;border:none;border-radius:12px;padding:11px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;min-height:46px;flex-shrink:0;}
+        .hs-recent-row{display:flex;align-items:center;gap:12px;padding:12px 0;direction:rtl;}
         .hs-recent-row + .hs-recent-row{border-top:1px solid #F3F4F6;}
-        .hs-recent-time-val{font-size:clamp(12px,3.5vw,15px);font-weight:700;color:#111827;margin:0;line-height:1.25;}
-        .hs-recent-time-rel{font-size:clamp(9px,2.5vw,11px);color:#9CA3AF;margin:0;line-height:1.4;}
-        .hs-recent-circle{border-radius:50%;display:flex;align-items:center;justify-content:center;width:clamp(36px,10vw,46px);height:clamp(36px,10vw,46px);font-size:clamp(18px,5vw,24px);flex-shrink:0;}
-        .hs-recent-name{font-size:clamp(12px,3.5vw,15px);font-weight:700;color:#111827;margin:0;line-height:1.25;}
-        .hs-recent-detail{font-size:clamp(9px,2.5vw,12px);color:#9CA3AF;margin:0;line-height:1.4;}
-        .hs-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:white;border-top:1px solid #E5E7EB;display:flex;align-items:flex-end;justify-content:space-around;padding-bottom:max(env(safe-area-inset-bottom,0px),10px);padding-top:clamp(6px,1.5vw,10px);z-index:50;direction:ltr;}
-        .hs-nav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 clamp(4px,2vw,10px);-webkit-tap-highlight-color:transparent;}
-        .hs-nav-btn span{font-size:clamp(9px,2.5vw,11px);font-weight:500;}
-        .hs-nav-plus{width:clamp(50px,13vw,62px);height:clamp(50px,13vw,62px);border-radius:50%;background:linear-gradient(135deg,#48CAE4 0%,#0096C7 100%);border:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,150,199,0.45);margin-bottom:clamp(8px,2.5vw,14px);transition:transform 0.12s;-webkit-tap-highlight-color:transparent;}
+        .hs-recent-time-val{font-size:14px;font-weight:700;color:#111827;margin:0;line-height:1.25;}
+        .hs-recent-time-rel{font-size:11px;color:#9CA3AF;margin:0;line-height:1.4;}
+        .hs-recent-circle{border-radius:50%;display:flex;align-items:center;justify-content:center;width:46px;height:46px;font-size:22px;flex-shrink:0;}
+        .hs-recent-name{font-size:15px;font-weight:700;color:#111827;margin:0;line-height:1.25;}
+        .hs-recent-detail{font-size:12px;color:#9CA3AF;margin:0;line-height:1.4;}
+        .hs-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:white;border-top:1px solid #E5E7EB;z-index:50;direction:ltr;}
+        .hs-nav-inner{display:flex;align-items:center;justify-content:space-around;height:60px;padding:0 4px;}
+        .hs-nav-safe{height:env(safe-area-inset-bottom,0px);}
+        .hs-nav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 12px;height:60px;-webkit-tap-highlight-color:transparent;min-width:52px;}
+        .hs-nav-btn span{font-size:11px;font-weight:600;}
+        .hs-nav-plus{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#48CAE4 0%,#0096C7 100%);border:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,150,199,0.45);transition:transform 0.12s;-webkit-tap-highlight-color:transparent;}
         .hs-nav-plus:active{transform:scale(0.91);}
-        .hs-nav-plus svg{width:clamp(22px,6vw,28px);height:clamp(22px,6vw,28px);}
+        .hs-nav-plus svg{width:28px;height:28px;}
       `}</style>
 
       <div className="hs-root" dir="rtl">
@@ -342,33 +345,35 @@ export default function HomeScreen({ showToast, setTab }) {
               <div className="hs-card-title">
                 <span>סיכום היום</span>
               </div>
-              <div className="hs-stats-grid">
+              <div className="hs-stats-grid-top">
                 <div className="hs-stat-box" style={{background:'#E0D8FF'}}>
-                  <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:'clamp(20px,5.5vw,28px)',height:'clamp(20px,5.5vw,28px)',objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:26,height:26,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{sleepToday}</p>
                   <p className="hs-stat-lbl">שינה</p>
                   {lastSleep && <p className="hs-stat-time">{lastSleep}</p>}
                 </div>
                 <div className="hs-stat-box" style={{background:'#FFF3CC'}}>
-                  <div className="hs-stat-emoji"><img src="/bottle-icon.png" alt="האכלה" style={{width:'clamp(20px,5.5vw,28px)',height:'clamp(20px,5.5vw,28px)',objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/bottle-icon.png" alt="האכלה" style={{width:26,height:26,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{feedingToday}</p>
                   <p className="hs-stat-lbl">האכלה</p>
                   {lastFeeding && <p className="hs-stat-time">{lastFeeding}</p>}
                 </div>
                 <div className="hs-stat-box" style={{background:'#C8F0E0'}}>
-                  <div className="hs-stat-emoji"><img src="/diaper-icon.png" alt="חיתול" style={{width:'clamp(20px,5.5vw,28px)',height:'clamp(20px,5.5vw,28px)',objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/diaper-icon.png" alt="חיתול" style={{width:26,height:26,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{diaperToday}</p>
                   <p className="hs-stat-lbl">חיתול</p>
                   {lastDiaper && <p className="hs-stat-time">{lastDiaper}</p>}
                 </div>
+              </div>
+              <div className="hs-stats-grid-bottom">
                 <div className="hs-stat-box" style={{background:'#DBEAFE'}}>
-                  <div className="hs-stat-emoji"><img src="/pee-icon.png" alt="פיפי" style={{width:'clamp(20px,5.5vw,28px)',height:'clamp(20px,5.5vw,28px)',objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/pee-icon.png" alt="פיפי" style={{width:26,height:26,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{peeToday}</p>
                   <p className="hs-stat-lbl">פיפי</p>
                   {lastPee && <p className="hs-stat-time">{lastPee}</p>}
                 </div>
                 <div className="hs-stat-box" style={{background:'#FEF3C7'}}>
-                  <div className="hs-stat-emoji"><img src="/poop-icon.png" alt="קקי" style={{width:'clamp(20px,5.5vw,28px)',height:'clamp(20px,5.5vw,28px)',objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/poop-icon.png" alt="קקי" style={{width:26,height:26,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{poopToday}</p>
                   <p className="hs-stat-lbl">קקי</p>
                   {lastPoop && <p className="hs-stat-time">{lastPoop}</p>}
@@ -457,13 +462,16 @@ export default function HomeScreen({ showToast, setTab }) {
 
         {/* BOTTOM NAV */}
         <nav className="hs-nav">
-          <NavBtn icon={<PersonIcon/>} label="פרופיל" color="#9CA3AF" onClick={()=>setTab('profile')}/>
-          <NavBtn icon={<ChartIcon/>} label="גרפים" color="#9CA3AF" onClick={()=>setTab('stats')}/>
-          <button className="hs-nav-plus" onClick={()=>setManualOpen(true)}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round"><path d="M12 4v16M4 12h16"/></svg>
-          </button>
-          <NavBtn icon={<ClockIcon/>} label="היסטוריה" color="#9CA3AF" onClick={()=>setTab('history')}/>
-          <NavBtn icon={<HomeIconSvg/>} label="בית" color="#0096C7" onClick={()=>{}}/>
+          <div className="hs-nav-inner">
+            <NavBtn icon={<PersonIcon/>} label="פרופיל" color="#9CA3AF" onClick={()=>setTab('profile')}/>
+            <NavBtn icon={<ChartIcon/>} label="גרפים" color="#9CA3AF" onClick={()=>setTab('stats')}/>
+            <button className="hs-nav-plus" onClick={()=>setManualOpen(true)}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round"><path d="M12 4v16M4 12h16"/></svg>
+            </button>
+            <NavBtn icon={<ClockIcon/>} label="היסטוריה" color="#9CA3AF" onClick={()=>setTab('history')}/>
+            <NavBtn icon={<HomeIconSvg/>} label="בית" color="#0096C7" onClick={()=>{}}/>
+          </div>
+          <div className="hs-nav-safe"/>
         </nav>
 
         {/* Modals */}

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const PRESETS = ['אקמול', 'אדוויל', 'ויטמין D', 'אנטיביוטיקה']
+const PRESETS = ['אקמול', 'אדוויל', 'ויטמין D', 'אנטיביוטיקה', 'סטרימר', 'סימיקול']
 const UNITS = ['מ"ל', 'מ"ג', 'טיפות', 'כמוסה']
 const REMINDER_OPTIONS = [
   { label: 'ללא', hours: null },
