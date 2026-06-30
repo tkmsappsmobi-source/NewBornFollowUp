@@ -13,7 +13,7 @@ function intervalLabel(r) {
   return `כל ${parts.join(' ו')}`
 }
 
-export default function RemindersScreen({ showToast }) {
+export default function RemindersScreen({ showToast, setTab }) {
   const { state, dispatch } = useStore()
   const [formOpen, setFormOpen] = useState(false)
 
@@ -27,8 +27,9 @@ export default function RemindersScreen({ showToast }) {
     <>
       <style>{`
         .rem-root { display:flex; flex-direction:column; height:100%; background:#F0F8FF; font-family:Heebo,sans-serif; }
-        .rem-header { background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%); padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px); flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; }
+        .rem-header { background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%); padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px); padding-top:max(env(safe-area-inset-top,16px),16px); flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; }
         .rem-header-title { font-size:clamp(15px,4.5vw,19px); font-weight:800; color:#0D2640; }
+        .rem-back { position:absolute; left:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; padding:10px; color:#0D2640; }
         .rem-list { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding: clamp(10px,3vw,14px) clamp(10px,4vw,16px); display:flex; flex-direction:column; gap: clamp(8px,2vw,12px); }
         .rem-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:10px; color:#9CA3AF; }
         .rem-empty-icon { font-size: clamp(40px,12vw,56px); }
@@ -50,6 +51,11 @@ export default function RemindersScreen({ showToast }) {
       <div className="rem-root" dir="rtl">
         <div className="rem-header">
           <span className="rem-header-title">תזכורות</span>
+          {setTab && (
+            <button className="rem-back" onClick={() => setTab('profile')}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+          )}
         </div>
         <div className="rem-list">
           {state.reminders.length === 0 ? (

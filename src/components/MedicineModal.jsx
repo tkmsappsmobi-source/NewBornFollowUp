@@ -43,7 +43,7 @@ export default function MedicineModal({ onConfirm, onClose, notificationsEnabled
     <>
       <style>{`
         .med-backdrop { position:fixed; inset:0; z-index:60; display:flex; align-items:flex-end; background:rgba(0,0,0,0.35); }
-        .med-panel { width:100%; max-width:480px; margin:0 auto; background:white; border-radius:24px 24px 0 0; padding:20px 20px 0; box-shadow:0 -4px 30px rgba(0,0,0,0.15); padding-bottom:calc(env(safe-area-inset-bottom,0px) + 90px); }
+        .med-panel { width:100%; max-width:480px; margin:0 auto; background:white; border-radius:24px 24px 0 0; padding:20px 20px; box-shadow:0 -4px 30px rgba(0,0,0,0.15); padding-bottom:calc(env(safe-area-inset-bottom,0px) + 20px); overflow-y:auto; max-height:90dvh; }
         .med-handle { width:40px; height:4px; background:#E5E7EB; border-radius:4px; margin:0 auto 14px; }
         .med-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
         .med-title { font-size:clamp(15px,4.5vw,18px); font-weight:800; color:#111827; flex:1; text-align:center; font-family:Heebo,sans-serif; }

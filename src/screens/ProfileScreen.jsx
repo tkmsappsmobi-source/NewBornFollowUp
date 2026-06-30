@@ -194,6 +194,28 @@ export default function ProfileScreen({ showToast, setTab }) {
             </div>
           </div>
 
+          {/* Navigation shortcuts */}
+          <div className="prof-card" style={{padding:'8px 4px'}}>
+            {[
+              { label: 'תזכורות', icon: '🔔', tab: 'reminders', desc: 'ניהול תזכורות' },
+              { label: 'הגדרות', icon: '⚙️', tab: 'settings', desc: 'קטגוריות והתראות' },
+              { label: 'מעקב משקל', icon: '⚖️', tab: 'weight', desc: 'היסטוריית מדידות' },
+            ].map(item => (
+              <button
+                key={item.tab}
+                onClick={() => setTab(item.tab)}
+                style={{width:'100%',background:'none',border:'none',padding:'14px 16px',cursor:'pointer',display:'flex',alignItems:'center',gap:12,borderBottom:'1px solid #F3F4F6',fontFamily:'Heebo,sans-serif'}}
+              >
+                <span style={{fontSize:22,width:34,textAlign:'center',flexShrink:0}}>{item.icon}</span>
+                <div style={{flex:1,textAlign:'right'}}>
+                  <div style={{fontSize:15,fontWeight:700,color:'#111827'}}>{item.label}</div>
+                  <div style={{fontSize:12,color:'#9CA3AF',marginTop:1}}>{item.desc}</div>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="2.2" style={{flexShrink:0,transform:'rotate(180deg)'}}><path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+            ))}
+          </div>
+
           {/* Delete all */}
           <div className="prof-card">
             <div className="prof-card-title">מחיקת נתונים ⚠️</div>

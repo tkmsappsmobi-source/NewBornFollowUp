@@ -6,6 +6,9 @@ import HomeScreen from './screens/HomeScreen'
 import HistoryScreen from './screens/HistoryScreen'
 import StatsScreen from './screens/StatsScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import SettingsScreen from './screens/SettingsScreen'
+import RemindersScreen from './screens/RemindersScreen'
+import WeightScreen from './screens/WeightScreen'
 
 const THEMES = {
   blue:   { accent: '#0096C7', light: '#E0F4FB', grad: 'linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%)' },
@@ -57,6 +60,9 @@ export default function App() {
         {tab === 'history' && <HistoryScreen showToast={showToast} setTab={setTab} />}
         {tab === 'stats' && <StatsScreen setTab={setTab} />}
         {tab === 'profile' && <ProfileScreen showToast={showToast} setTab={setTab} />}
+        {tab === 'settings' && <SettingsScreen showToast={showToast} setTab={setTab} />}
+        {tab === 'reminders' && <RemindersScreen showToast={showToast} setTab={setTab} />}
+        {tab === 'weight' && <WeightScreen showToast={showToast} setTab={setTab} />}
       </main>
     </div>
   )

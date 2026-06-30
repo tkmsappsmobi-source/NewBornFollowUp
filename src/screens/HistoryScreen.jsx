@@ -130,7 +130,7 @@ export default function HistoryScreen({ showToast, setTab }) {
         .hist-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:16px 16px;padding-top:max(env(safe-area-inset-top,16px),16px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
         .hist-title{font-size:18px;font-weight:800;color:#0D2640;}
         .hist-back{position:absolute;left:12px;top:50%;transform:translateY(-50%);margin-top:max(calc(env(safe-area-inset-top,0px)/2),0px);background:none;border:none;cursor:pointer;padding:10px;color:#0D2640;}
-        .hist-filter-bar{padding:8px 10px;background:white;border-bottom:1px solid #E5E7EB;flex-shrink:0;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+        .hist-filter-bar{padding:8px 10px;background:white;border-bottom:1px solid #E5E7EB;flex-shrink:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
         .hist-pill{border:1.5px solid #E5E7EB;border-radius:14px;padding:7px 4px;font-size:12px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;background:white;min-height:40px;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:3px;text-align:center;}
         .hist-pill.active{background:#0096C7;color:white;border-color:#0096C7;}
         .hist-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;padding-bottom:calc(env(safe-area-inset-bottom,0px)+24px);}

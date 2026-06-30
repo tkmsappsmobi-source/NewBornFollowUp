@@ -3,7 +3,7 @@ import { useStore } from '../store/useStore'
 import CategoryManager from '../components/CategoryManager'
 import { requestPermission, isGranted } from '../lib/notifications'
 
-export default function SettingsScreen({ showToast }) {
+export default function SettingsScreen({ showToast, setTab }) {
   const { state, dispatch } = useStore()
   const [nameInput, setNameInput] = useState(state.babyName)
   const [confirmClear, setConfirmClear] = useState(false)
@@ -38,9 +38,9 @@ export default function SettingsScreen({ showToast }) {
     <>
       <style>{`
         .sett-root { height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#F0F8FF; font-family:Heebo,sans-serif; display:flex; flex-direction:column; }
-        .sett-header { background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%); padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px); flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; }
+        .sett-header { background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%); padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px); padding-top:max(env(safe-area-inset-top,16px),16px); flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; }
         .sett-header-title { font-size:clamp(15px,4.5vw,19px); font-weight:800; color:#0D2640; }
-        .sett-back { position:absolute; left:12px; background:none; border:none; cursor:pointer; padding:8px; color:#0D2640; }
+        .sett-back { position:absolute; left:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; padding:10px; color:#0D2640; }
         .sett-scroll { flex:1; overflow-y:auto; padding: clamp(10px,3vw,16px) clamp(10px,4vw,16px); padding-bottom: clamp(80px,20vw,100px); display:flex; flex-direction:column; gap: clamp(12px,3vw,18px); }
         .sett-card { background:white; border-radius: clamp(14px,4vw,20px); padding: clamp(14px,4vw,20px); box-shadow:0 2px 14px rgba(0,0,0,0.07); }
         .sett-title { font-size: clamp(11px,3vw,13px); font-weight:700; color:#6B7280; text-transform:uppercase; letter-spacing:0.06em; margin-bottom: clamp(10px,3vw,14px); }
@@ -61,6 +61,11 @@ export default function SettingsScreen({ showToast }) {
       <div className="sett-root" dir="rtl">
         <div className="sett-header">
           <span className="sett-header-title">הגדרות</span>
+          {setTab && (
+            <button className="sett-back" onClick={() => setTab('profile')}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+          )}
         </div>
         <div className="sett-scroll">
 

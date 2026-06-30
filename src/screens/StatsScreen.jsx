@@ -12,6 +12,7 @@ export default function StatsScreen({ setTab }) {
   const diaperLogs = state.logs.filter(l => l.categoryId === 'diaper')
   const bathLogs = state.logs.filter(l => l.categoryId === 'bath')
   const medicineLogs = state.logs.filter(l => l.categoryId === 'medicine')
+  const vaccinationLogs = state.logs.filter(l => l.categoryId === 'vaccination')
 
   // Summary stats for the period
   const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - nDays); cutoff.setHours(0,0,0,0)
@@ -22,6 +23,7 @@ export default function StatsScreen({ setTab }) {
   const diaperCount = diaperLogs.filter(inPeriod).length
   const bathCount = bathLogs.filter(inPeriod).length
   const medicineCount = medicineLogs.filter(inPeriod).length
+  const vaccinationCount = vaccinationLogs.filter(inPeriod).length
 
   const feedingByDay = useMemo(() => activityByDay(feedingLogs, nDays).map(d => ({
     ...d,
@@ -57,7 +59,7 @@ export default function StatsScreen({ setTab }) {
         .stats-toggle-btn{border:none;border-radius:18px;padding:9px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;transition:all 0.15s;background:transparent;color:#6B7280;}
         .stats-toggle-btn.active{background:#0096C7;color:white;}
         .stats-card{background:white;border-radius:20px;padding:16px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
-        .stats-summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+        .stats-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
         .stats-sum-box{border-radius:14px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;}
         .stats-sum-emoji{font-size:28px;line-height:1;}
         .stats-sum-val{font-size:20px;font-weight:800;color:#111827;margin:0;}
@@ -107,6 +109,11 @@ export default function StatsScreen({ setTab }) {
                 <img src="/medicine-icon.png" alt="תרופות" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{medicineCount}</p>
                 <p className="stats-sum-lbl">תרופות</p>
+              </div>
+              <div className="stats-sum-box" style={{background:'#E8E0FF'}}>
+                <img src="/vaccine-icon.png" alt="חיסונים" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
+                <p className="stats-sum-val">{vaccinationCount}</p>
+                <p className="stats-sum-lbl">חיסונים</p>
               </div>
             </div>
           </div>

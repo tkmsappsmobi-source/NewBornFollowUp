@@ -17,6 +17,7 @@ const ACTION_BUTTONS = [
   { id: 'growth',      label: 'משקל',    bg: '#C8F0E8', emoji: null, icon: '/growth-icon.png' },
   { id: 'vaccination', label: 'חיסון',   bg: '#E8E0FF', emoji: null, icon: '/vaccine-icon.png' },
   { id: 'medicine',    label: 'תרופה',   bg: '#FCE7F3', emoji: null, icon: '/medicine-icon.png' },
+  { id: 'milestone',   label: 'אבן דרך', bg: '#FFD6EC', emoji: '⭐', icon: null },
 ]
 
 const BG_MAP = {
