@@ -21,6 +21,16 @@ export default function App() {
 
   const theme = THEMES[state.colorTheme] || THEMES.blue
 
+  if (state.loading) {
+    return (
+      <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',height:'100dvh',background:'#F0F8FF',gap:16}}>
+        <img src="/icons/icon-192.png" alt="" style={{width:80,height:80,borderRadius:20,boxShadow:'0 4px 20px rgba(0,150,199,0.2)'}}/>
+        <div style={{width:40,height:40,border:'4px solid #E0F4FB',borderTopColor:'#0096C7',borderRadius:'50%',animation:'spin 0.8s linear infinite'}}/>
+        <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+      </div>
+    )
+  }
+
   return (
     <div
       className="flex flex-col h-dvh"
