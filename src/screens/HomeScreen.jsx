@@ -194,10 +194,10 @@ export default function HomeScreen({ showToast, setTab }) {
     showToast(`חיתול (${labels[subtype]}) נרשם`, 'success', icons[subtype])
   }
 
-  const handleGrowthConfirm = ({ weight, height, headCircumference, note }) => {
+  const handleGrowthConfirm = ({ weight, note, timestamp }) => {
     setGrowthOpen(false)
-    dispatch({ type: 'ADD_WEIGHT', weight, height, headCircumference, note })
-    showToast(`משקל ${weight} ק"ג נשמרה`, 'success', null)
+    dispatch({ type: 'ADD_WEIGHT', weight, note, timestamp })
+    showToast(`משקל ${weight} ק"ג נשמר`, 'success', null)
   }
 
   const handleMilestoneConfirm = ({ description, category }) => {
@@ -477,7 +477,7 @@ export default function HomeScreen({ showToast, setTab }) {
         {/* Modals */}
         {feedingOpen && <FeedingAmountSheet quickAmounts={state.feedingQuickAmounts} onConfirm={handleFeedingConfirm} onClose={()=>setFeedingOpen(false)} bottleTimerStart={state.bottleTimerStart} onStartBottle={handleStartBottle}/>}
         {diaperOpen && <DiaperModal onConfirm={handleDiaperConfirm} onClose={()=>setDiaperOpen(false)}/>}
-        {growthOpen && <GrowthModal onConfirm={handleGrowthConfirm} onClose={()=>setGrowthOpen(false)}/>}
+        {growthOpen && <GrowthModal onConfirm={handleGrowthConfirm} onClose={()=>setGrowthOpen(false)} lastWeight={state.weightLogs?.[0]?.weight ?? null}/>}
         {milestoneOpen && <MilestoneModal onConfirm={handleMilestoneConfirm} onClose={()=>setMilestoneOpen(false)}/>}
         {vaccinationOpen && <VaccinationModal onConfirm={handleVaccinationConfirm} onClose={()=>setVaccinationOpen(false)}/>}
         {medicineOpen && <MedicineModal onConfirm={handleMedicineConfirm} onClose={()=>setMedicineOpen(false)} notificationsEnabled={state.settings?.notificationsEnabled}/>}
