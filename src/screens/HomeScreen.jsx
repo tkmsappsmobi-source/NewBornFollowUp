@@ -16,7 +16,7 @@ const ACTION_BUTTONS = [
   { id: 'bath',        label: 'מקלחת',   bg: '#FFE4CC', emoji: null, icon: '/bath-icon.png' },
   { id: 'growth',      label: 'משקל',    bg: '#C8F0E8', emoji: null, icon: '/growth-icon.png' },
   { id: 'vaccination', label: 'חיסון',   bg: '#E8E0FF', emoji: null, icon: '/vaccine-icon.png' },
-  { id: 'medicine',    label: 'תרופה',   bg: '#FCE7F3', emoji: '💊' },
+  { id: 'medicine',    label: 'תרופה',   bg: '#FCE7F3', emoji: null, icon: '/medicine-icon.png' },
 ]
 
 const BG_MAP = {
@@ -127,7 +127,7 @@ export default function HomeScreen({ showToast, setTab }) {
     bath:        '/bath-icon.png',
     vaccination: '/vaccine-icon.png',
     diaper:      (log) => log.data?.subtype === 'pee' ? '/pee-icon.png' : log.data?.subtype === 'poop' ? '/poop-icon.png' : '/diaper-icon.png',
-    medicine:    null,
+    medicine:    '/medicine-icon.png',
   }
   const getCatInfo = (log) => {
     if (log._source === 'weight')    return { icon: '/growth-icon.png', label: 'משקל',    bg: '#C8F0E8' }
@@ -215,7 +215,7 @@ export default function HomeScreen({ showToast, setTab }) {
   const handleMedicineConfirm = ({ medicineName, dose, unit, reminderHours, nextDoseAt }) => {
     setMedicineOpen(false)
     dispatch({ type: 'ADD_LOG', categoryId: 'medicine', note: medicineName, data: { medicineName, dose, unit, reminderHours, nextDoseAt } })
-    showToast(`💊 ${medicineName}${dose ? ` ${dose} ${unit}` : ''} נרשם`, 'success', null)
+    showToast(`${medicineName}${dose ? ` ${dose} ${unit}` : ''} נרשם`, 'success', '/medicine-icon.png')
   }
 
   const handleManualSave = ({ categoryId, amount, note, timestamp }) => {

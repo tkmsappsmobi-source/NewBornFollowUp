@@ -12,7 +12,7 @@ const FILTER_OPTIONS = [
   { id: 'growth',     label: 'משקל',   icon: '/growth-icon.png' },
   { id: 'milestone',  label: 'אבן דרך', emoji: '⭐' },
   { id: 'vaccination',label: 'חיסון',   icon: '/vaccine-icon.png' },
-  { id: 'medicine',   label: 'תרופה',   emoji: '💊' },
+  { id: 'medicine',   label: 'תרופה',   icon: '/medicine-icon.png' },
 ]
 
 const CAT_INFO = {
@@ -23,7 +23,7 @@ const CAT_INFO = {
   growth:      { icon: '/growth-icon.png', label: 'משקל',    bg: '#C8F0E8' },
   milestone:   { emoji: '⭐', label: 'אבן דרך', bg: '#FFD6EC' },
   vaccination: { icon: '/vaccine-icon.png', label: 'חיסון',   bg: '#E8E0FF' },
-  medicine:    { emoji: '💊',              label: 'תרופה',   bg: '#FCE7F3' },
+  medicine:    { icon: '/medicine-icon.png', label: 'תרופה',   bg: '#FCE7F3' },
 }
 
 function CatIcon({ info, size = '58%' }) {

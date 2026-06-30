@@ -104,7 +104,7 @@ export default function StatsScreen({ setTab }) {
                 <p className="stats-sum-lbl">מקלחות</p>
               </div>
               <div className="stats-sum-box" style={{background:'#FCE7F3'}}>
-                <span style={{fontSize:'clamp(22px,6.5vw,30px)',lineHeight:1}}>💊</span>
+                <img src="/medicine-icon.png" alt="תרופות" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{medicineCount}</p>
                 <p className="stats-sum-lbl">תרופות</p>
               </div>
