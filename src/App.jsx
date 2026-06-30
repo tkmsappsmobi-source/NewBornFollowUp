@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRegisterSW } from 'virtual:pwa-register/react'
 import { useStore } from './store/useStore'
 import { useToast, ToastContainer } from './components/Toast'
 import HomeScreen from './screens/HomeScreen'
@@ -16,6 +17,7 @@ export default function App() {
   const [tab, setTab] = useState('home')
   const { state } = useStore()
   const { toasts, showToast, dismiss } = useToast()
+  const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW()
 
   const theme = THEMES[state.colorTheme] || THEMES.blue
 
@@ -32,6 +34,13 @@ export default function App() {
       dir="rtl"
     >
       <ToastContainer toasts={toasts} dismiss={dismiss} />
+
+      {needRefresh && (
+        <div style={{position:'fixed',bottom:90,left:'50%',transform:'translateX(-50%)',zIndex:999,background:'#0096C7',color:'white',borderRadius:16,padding:'12px 20px',display:'flex',alignItems:'center',gap:12,boxShadow:'0 4px 20px rgba(0,0,0,0.2)',fontFamily:'Heebo,sans-serif',whiteSpace:'nowrap'}}>
+          <span style={{fontSize:14,fontWeight:600}}>גרסה חדשה זמינה!</span>
+          <button onClick={() => updateServiceWorker(true)} style={{background:'white',color:'#0096C7',border:'none',borderRadius:10,padding:'6px 14px',fontWeight:700,fontSize:13,cursor:'pointer',fontFamily:'Heebo,sans-serif'}}>עדכן עכשיו</button>
+        </div>
+      )}
 
       <main className="flex-1 overflow-hidden flex flex-col">
         {tab === 'home' && <HomeScreen showToast={showToast} setTab={setTab} />}
