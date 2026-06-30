@@ -37,12 +37,12 @@ export default function FeedingAmountSheet({ quickAmounts, onConfirm, onClose, b
       onClick={onClose}
     >
       <div
-        style={{width:'100%',maxWidth:480,margin:'0 auto',background:'white',borderRadius:'24px 24px 0 0',paddingBottom:'calc(env(safe-area-inset-bottom,0px) + 90px)',overflow:'hidden',boxShadow:'0 -4px 30px rgba(0,0,0,0.15)'}}
+        style={{width:'100%',maxWidth:480,margin:'0 auto',background:'white',borderRadius:'24px 24px 0 0',boxShadow:'0 -4px 30px rgba(0,0,0,0.15)',display:'flex',flexDirection:'column',height:'85dvh',maxHeight:'85dvh'}}
         onClick={e=>e.stopPropagation()}
         dir="rtl"
       >
         <style>{`
-          .fas-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px;max-height:200px;overflow-y:auto;scrollbar-width:none;}
+          .fas-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px;overflow-y:auto;scrollbar-width:none;flex:1;align-content:start;}
           .fas-presets::-webkit-scrollbar{display:none;}
           input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
           input[type=number]{-moz-appearance:textfield;}
@@ -87,7 +87,7 @@ export default function FeedingAmountSheet({ quickAmounts, onConfirm, onClose, b
         </div>
 
         {/* Amount selector */}
-        <div style={{display:'grid',gridTemplateColumns:'64px 1fr 64px',alignItems:'center',padding:'16px 24px 8px',gap:12}}>
+        <div style={{display:'grid',gridTemplateColumns:'64px 1fr 64px',alignItems:'center',padding:'16px 24px 8px',gap:12,flexShrink:0}}>
           <button
             onClick={()=>adjust(-5)}
             style={{width:64,height:64,borderRadius:32,background:'#F0F8FF',border:'1.5px solid #E5E7EB',color:'#374151',fontSize:34,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:300}}
@@ -108,7 +108,7 @@ export default function FeedingAmountSheet({ quickAmounts, onConfirm, onClose, b
         </div>
 
         {/* Action buttons */}
-        <div style={{padding:'8px 16px 16px',display:'flex',flexDirection:'column',gap:10}}>
+        <div style={{padding:'8px 16px',paddingBottom:'calc(env(safe-area-inset-bottom,0px) + 16px)',display:'flex',flexDirection:'column',gap:10,flexShrink:0}}>
           <button
             onClick={handleConfirm}
             style={{width:'100%',background:'linear-gradient(135deg,#48CAE4,#0096C7)',color:'white',border:'none',borderRadius:16,padding:'15px',fontSize:17,fontWeight:800,cursor:'pointer',fontFamily:'Heebo,sans-serif',minHeight:52}}
