@@ -23,6 +23,7 @@
     "cross-env": "^7.0.3",
     "electron": "^42.4.1",
     "electron-builder": "^26.15.3",
+    "sharp": "^0.35.2",
     "tailwindcss": "^4.1.11",
     "vite": "^6.0.7",
     "vite-plugin-pwa": "^0.21.1",

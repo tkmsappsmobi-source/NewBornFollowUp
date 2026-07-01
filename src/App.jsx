@@ -138,10 +138,16 @@ export default function App() {
   const { state } = useStore()
   const { toasts, showToast, dismiss } = useToast()
   const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW()
+  const [splashDone, setSplashDone] = useState(false)
+
+  useEffect(() => {
+    const t = setTimeout(() => setSplashDone(true), 1800)
+    return () => clearTimeout(t)
+  }, [])
 
   const theme = THEMES[state.colorTheme] || THEMES.blue
 
-  if (state.loading) {
+  if (state.loading || !splashDone) {
     return <SplashScreen />
   }
 
