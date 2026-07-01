@@ -2,6 +2,17 @@ import { useState } from 'react'
 
 const EMOJI_SUGGESTIONS = ['😴', '🤒', '💊', '🏥', '🚶', '🎵', '🌡️', '🧴', '🪥', '🧸', '🌙', '⭐']
 
+const CATEGORY_ICON_MAP = {
+  feeding: '/bottle-icon.png',
+  diaper: '/diaper-icon.png',
+  sleep: '/sleep-icon.png',
+  bath: '/bath-icon.png',
+  growth: '/growth-icon.png',
+  milestone: '⭐',
+  vaccination: '/vaccine-icon.png',
+  medicine: '/medicine-icon.png',
+}
+
 export default function CategoryManager({ categories, onToggle, onAdd, onDelete }) {
   const [adding, setAdding] = useState(false)
   const [label, setLabel] = useState('')
@@ -17,9 +28,15 @@ export default function CategoryManager({ categories, onToggle, onAdd, onDelete 
 
   return (
     <div className="space-y-2">
-      {categories.map(c => (
+      {categories.map(c => {
+        const icon = CATEGORY_ICON_MAP[c.id]
+        return (
         <div key={c.id} className="flex items-center gap-3 bg-white rounded-xl px-4 py-3 border border-gray-100">
-          <span className="text-2xl">{c.emoji}</span>
+          {icon?.startsWith('/') ? (
+            <img src={icon} alt={c.label} style={{width: '28px', height: '28px', objectFit: 'contain'}} />
+          ) : (
+            <span className="text-2xl">{icon || c.emoji}</span>
+          )}
           <span className="flex-1 text-sm font-medium text-gray-700">{c.label}</span>
           <button
             onClick={() => onToggle(c.id)}
@@ -32,7 +49,8 @@ export default function CategoryManager({ categories, onToggle, onAdd, onDelete 
             <button onClick={() => onDelete(c.id)} className="text-gray-300 hover:text-red-400 text-xl ml-1">×</button>
           )}
         </div>
-      ))}
+        )
+      })}
 
       {adding ? (
         <div className="bg-white rounded-xl p-4 border border-[#B2E0F0] space-y-3">

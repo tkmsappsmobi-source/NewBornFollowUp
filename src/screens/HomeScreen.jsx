@@ -258,29 +258,29 @@ export default function HomeScreen({ showToast, setTab }) {
       <style>{`
         .hs-root{width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#F0F8FF;font-family:Heebo,sans-serif;}
         .hs-header{flex-shrink:0;position:relative;overflow:hidden;background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 35%,#C8EDFA 70%,#E4F6FC 100%);}
-        .hs-header-top{display:flex;flex-direction:column;align-items:center;padding:16px 20px 20px;padding-top:max(env(safe-area-inset-top,16px),16px);position:relative;z-index:2;}
-        .hs-profile-circle{width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;border:3px solid rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.12);overflow:hidden;margin-bottom:8px;}
+        .hs-header-top{display:flex;flex-direction:column;align-items:center;padding:12px 18px 14px;padding-top:max(env(safe-area-inset-top,14px),14px);position:relative;z-index:2;}
+        .hs-profile-circle{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;border:3px solid rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.12);overflow:hidden;margin-bottom:6px;}
         .hs-profile-circle img{width:100%;height:100%;object-fit:cover;}
-        .hs-name{margin:0;font-size:30px;font-weight:900;color:#0D2640;line-height:1.05;letter-spacing:-0.5px;}
-        .hs-age{font-size:14px;font-weight:600;color:#1A5A8A;margin:4px 0 0;}
-        .hs-date{font-size:12px;color:#3A7BA8;margin:2px 0 0;}
+        .hs-name{margin:0;font-size:26px;font-weight:900;color:#0D2640;line-height:1.05;letter-spacing:-0.5px;}
+        .hs-age{font-size:12px;font-weight:600;color:#1A5A8A;margin:2px 0 0;}
+        .hs-date{font-size:11px;color:#3A7BA8;margin:1px 0 0;}
         .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(68px + env(safe-area-inset-bottom,20px));}
-        .hs-inner{padding:14px 16px 0;}
-        .hs-card{background:white;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
-        .hs-card-title{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:7px;margin-bottom:14px;}
+        .hs-inner{padding:10px 14px 0;}
+        .hs-card{background:white;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
+        .hs-card-title{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:6px;margin-bottom:10px;}
         .hs-card-title span{font-size:16px;font-weight:700;color:#111827;}
-        .hs-stats-grid-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
-        .hs-stats-grid-bottom{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
-        .hs-stat-box{border-radius:14px;padding:12px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;}
-        .hs-stat-emoji{display:flex;align-items:center;justify-content:center;margin-bottom:5px;}
-        .hs-stat-num{font-size:24px;font-weight:800;color:#111827;margin:0;line-height:1;}
-        .hs-stat-lbl{font-size:12px;color:#6B7280;margin:3px 0 0;font-weight:600;}
-        .hs-stat-time{font-size:10px;color:#9CA3AF;margin:3px 0 0;line-height:1.3;}
-        .hs-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-        .hs-feat-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;-webkit-tap-highlight-color:transparent;}
-        .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:26px;transition:transform 0.12s;}
+        .hs-stats-grid-top{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px;}
+        .hs-stats-grid-bottom{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;}
+        .hs-stat-box{border-radius:12px;padding:8px 4px;text-align:center;display:flex;flex-direction:column;align-items:center;}
+        .hs-stat-emoji{display:flex;align-items:center;justify-content:center;margin-bottom:3px;}
+        .hs-stat-num{font-size:18px;font-weight:800;color:#111827;margin:0;line-height:1;}
+        .hs-stat-lbl{font-size:11px;color:#6B7280;margin:2px 0 0;font-weight:600;}
+        .hs-stat-time{font-size:9px;color:#9CA3AF;margin:2px 0 0;line-height:1.2;display:none;}
+        .hs-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+        .hs-feat-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;-webkit-tap-highlight-color:transparent;}
+        .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:28px;transition:transform 0.12s;}
         .hs-feat-icon:active{transform:scale(0.88);}
-        .hs-feat-lbl{font-size:13px;font-weight:600;color:#374151;text-align:center;line-height:1.2;}
+        .hs-feat-lbl{font-size:14px;font-weight:700;color:#374151;text-align:center;line-height:1.2;}
         .hs-timer-card{background:#FFF3E0;border-radius:20px;padding:14px 16px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
         .hs-timer-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;gap:8px;}
         .hs-timer-label{font-size:15px;font-weight:700;color:#374151;}
@@ -348,7 +348,7 @@ export default function HomeScreen({ showToast, setTab }) {
               </div>
               <div className="hs-stats-grid-top">
                 <div className="hs-stat-box" style={{background:'#E0D8FF'}}>
-                  <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:26,height:26,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:20,height:20,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{sleepToday}</p>
                   <p className="hs-stat-lbl">שינה</p>
                   {lastSleep && <p className="hs-stat-time">{lastSleep}</p>}
@@ -417,7 +417,7 @@ export default function HomeScreen({ showToast, setTab }) {
                   <button key={action.id} className="hs-feat-btn" onClick={()=>handleAction(action.id)}>
                     <div className="hs-feat-icon" style={{background: action.id==='sleep' && state.sleepTimerStart ? '#9C89E6' : action.bg}}>
                       {action.icon
-                        ? <img src={action.icon} alt={action.label} style={{width:'62%',height:'62%',objectFit:'contain',display:'block'}}/>
+                        ? <img src={action.icon} alt={action.label} style={{width:'70%',height:'70%',objectFit:'contain',display:'block'}}/>
                         : action.emoji}
                     </div>
                     <span className="hs-feat-lbl">{action.id==='sleep' && state.sleepTimerStart ? 'סיום שינה' : action.label}</span>
