@@ -43,8 +43,9 @@ function TimerSection({ sleepTimerStart, bottleTimerStart, onEndSleep, onEndBott
   }, [sleepTimerStart, bottleTimerStart])
 
   const active = !!(sleepTimerStart || bottleTimerStart)
+  if (!active) return null
   return (
-    <div className={`hs-timer-wrap${active ? ' active' : ''}`}>
+    <div className="hs-timer-wrap active">
       <div className="hs-timer-card">
         {sleepTimerStart && (
           <div className="hs-timer-row">
@@ -292,9 +293,7 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:28px;transition:transform 0.12s;}
         .hs-feat-icon:active{transform:scale(0.88);}
         .hs-feat-lbl{font-size:14px;font-weight:700;color:#374151;text-align:center;line-height:1.2;}
-        .hs-timer-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.25s ease, margin-bottom 0.25s ease;margin-bottom:0;}
-        .hs-timer-wrap.active{grid-template-rows:1fr;margin-bottom:12px;}
-        .hs-timer-wrap > .hs-timer-card{min-height:0;overflow:hidden;}
+        .hs-timer-wrap{margin-bottom:12px;}
         .hs-timer-card{background:#FFF3E0;border-radius:20px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
         .hs-timer-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;gap:8px;}
         .hs-timer-label{font-size:15px;font-weight:700;color:#374151;}
