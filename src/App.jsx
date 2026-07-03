@@ -73,62 +73,98 @@ function NewbornLogo({ size = 200 }) {
   )
 }
 
+function SleepyMoon({ size = 110 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 110 110" fill="none">
+      <path d="M78 20 C55 20 37 38 37 61 C37 84 55 102 78 102 C86 102 93 100 99 96 C88 100 76 98 67 90 C55 79 52 61 60 46 C66 35 77 28 88 27 C85 23 82 21 78 20 Z" fill="#FFD54F"/>
+      <path d="M56 58 Q59 55 62 58" stroke="#B8860B" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <path d="M68 58 Q71 55 74 58" stroke="#B8860B" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <path d="M58 68 Q65 74 72 68" stroke="#B8860B" strokeWidth="2" strokeLinecap="round" fill="none"/>
+      <ellipse cx="55" cy="64" rx="4" ry="2.5" fill="#F9A8A0" opacity="0.6"/>
+      <ellipse cx="77" cy="64" rx="4" ry="2.5" fill="#F9A8A0" opacity="0.6"/>
+    </svg>
+  )
+}
+
+function SleepySun({ size = 90 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 90 90" fill="none">
+      <circle cx="45" cy="45" r="38" fill="#FFD54F"/>
+      <circle cx="45" cy="45" r="34" fill="#FFCA28"/>
+      <path d="M32 42 Q36 38 40 42" stroke="#8B6500" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+      <path d="M50 42 Q54 38 58 42" stroke="#8B6500" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+      <path d="M35 55 Q45 63 55 55" stroke="#8B6500" strokeWidth="2.2" strokeLinecap="round" fill="none"/>
+      <ellipse cx="32" cy="50" rx="5" ry="3" fill="#F9A8A0" opacity="0.6"/>
+      <ellipse cx="58" cy="50" rx="5" ry="3" fill="#F9A8A0" opacity="0.6"/>
+    </svg>
+  )
+}
+
 function SplashScreen() {
   return (
-    <div dir="rtl" style={{
+    <div style={{
       display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
-      height:'100dvh', background:'linear-gradient(180deg,#E8F6FC 0%,#F0F8FF 50%,#E0F4FB 100%)',
-      fontFamily:'Heebo,sans-serif', gap:0, overflow:'hidden', position:'relative',
+      height:'100dvh', width:'100%',
+      background:'linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 22%,#DDF1FB 48%,#FFFFFF 75%,#FFFFFF 100%)',
+      fontFamily:'Heebo,sans-serif', overflow:'hidden', position:'relative',
     }}>
       <style>{`
         @keyframes splashFadeIn { from{opacity:0;transform:scale(0.88) translateY(16px)} to{opacity:1;transform:scale(1) translateY(0)} }
         @keyframes splashTextIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
         @keyframes heartbeat { 0%,100%{transform:scale(1)} 30%{transform:scale(1.08)} 60%{transform:scale(0.97)} }
         @keyframes pulseRing { 0%{transform:scale(0.92);opacity:0.5} 100%{transform:scale(1.12);opacity:0} }
-        @keyframes dotBounce { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+        @keyframes dotPulse { 0%,80%,100%{opacity:0.35;transform:scale(0.85)} 40%{opacity:1;transform:scale(1.15)} }
         .splash-logo { animation: splashFadeIn 0.7s cubic-bezier(0.34,1.56,0.64,1) both, heartbeat 2.2s ease-in-out 0.8s infinite; }
         .splash-ring { position:absolute; border-radius:50%; border:2.5px solid #80CBC4; animation: pulseRing 2s ease-out 0.5s infinite; }
         .splash-title { animation: splashTextIn 0.6s ease 0.4s both; }
         .splash-sub { animation: splashTextIn 0.6s ease 0.6s both; }
-        .splash-dots span { display:inline-block; width:9px; height:9px; border-radius:50%; background:#4DB6AC; margin:0 4px; animation: dotBounce 1.4s ease-in-out infinite; }
-        .splash-dots span:nth-child(2) { background:#80CBC4; animation-delay:0.2s; }
-        .splash-dots span:nth-child(3) { background:#B8DFF0; animation-delay:0.4s; }
+        .splash-dots span { display:inline-block; width:11px; height:11px; border-radius:50%; margin:0 5px; animation: dotPulse 1.4s ease-in-out infinite; }
+        .splash-dots span:nth-child(1) { background:#4C9AE8; }
+        .splash-dots span:nth-child(2) { background:#4DB6AC; animation-delay:0.2s; }
+        .splash-dots span:nth-child(3) { background:#F48BB0; animation-delay:0.4s; }
       `}</style>
 
-      {/* Decorative background stars */}
-      {[[12,8],[88,5],[5,55],[92,40],[20,80],[78,72],[50,6],[8,35]].map(([l,t],i)=>(
-        <span key={i} style={{position:'absolute',left:`${l}%`,top:`${t}%`,fontSize:Math.random()*6+7,color:'#80CBC4',opacity:0.35,lineHeight:1,pointerEvents:'none'}}>★</span>
+      {/* Clouds — bottom corners, tinted like the reference art */}
+      <div style={{position:'absolute',left:-60,bottom:-70,width:320,height:220,borderRadius:'50%',background:'#D8CFF2',opacity:0.7,pointerEvents:'none'}}/>
+      <div style={{position:'absolute',right:-60,bottom:-90,width:340,height:240,borderRadius:'50%',background:'#FDECB8',opacity:0.7,pointerEvents:'none'}}/>
+      <div style={{position:'absolute',left:'-8%',bottom:-40,width:'55%',height:160,borderRadius:'50%',background:'#FFFFFF',pointerEvents:'none'}}/>
+      <div style={{position:'absolute',right:'-8%',bottom:-55,width:'60%',height:180,borderRadius:'50%',background:'#FFFFFF',pointerEvents:'none'}}/>
+      <div style={{position:'absolute',left:0,right:0,bottom:-90,height:160,borderRadius:'50% 50% 0 0 / 100% 100% 0 0',background:'#FFFFFF',pointerEvents:'none'}}/>
+
+      {/* Sleepy moon (top-left) + sun (top-right) */}
+      <div style={{position:'absolute',top:'6%',left:'6%',pointerEvents:'none'}}><SleepyMoon size={100}/></div>
+      <div style={{position:'absolute',top:'8%',right:'8%',pointerEvents:'none'}}><SleepySun size={72}/></div>
+
+      {/* Decorative stars */}
+      {[[10,10],[86,6],[8,26],[92,20],[76,10],[18,20],[65,5],[8,42]].map(([l,t],i)=>(
+        <span key={i} style={{position:'absolute',left:`${l}%`,top:`${t}%`,fontSize:Math.random()*6+9,color:'#FFD700',opacity:0.85,lineHeight:1,pointerEvents:'none'}}>★</span>
       ))}
 
       {/* Pulse ring behind logo */}
-      <div style={{position:'relative', marginBottom:24}}>
+      <div style={{position:'relative', marginBottom:20, zIndex:1}}>
         <div className="splash-ring" style={{width:220,height:220,top:'50%',left:'50%',transform:'translate(-50%,-50%)',position:'absolute'}}/>
         <div className="splash-ring" style={{width:220,height:220,top:'50%',left:'50%',transform:'translate(-50%,-50%)',position:'absolute',animationDelay:'0.7s'}}/>
         <div className="splash-logo">
-          <NewbornLogo size={200}/>
+          <NewbornLogo size={210}/>
         </div>
       </div>
 
       {/* App name */}
-      <div className="splash-title" style={{textAlign:'center',marginBottom:6}}>
-        <span style={{fontSize:28,fontWeight:900,color:'#0D2640',letterSpacing:-0.5}}>מעקב </span>
-        <span style={{fontSize:28,fontWeight:900,color:'#4DB6AC',letterSpacing:-0.5}}>ניו בורן</span>
+      <div className="splash-title" style={{textAlign:'center',marginBottom:10,zIndex:1}}>
+        <span style={{fontSize:44,fontWeight:900,color:'#0D2640',letterSpacing:-1}}>Baby</span>
+        <span style={{fontSize:44,fontWeight:900,color:'#5BC2B3',letterSpacing:-1}}>Follow</span>
       </div>
 
-      {/* Tagline */}
-      <div className="splash-sub" style={{fontSize:13,color:'#7BA8C4',fontWeight:500,marginBottom:40,letterSpacing:0.2}}>
-        עוקבים יחד אחרי הרגעים הראשונים
+      {/* Divider + heart */}
+      <div className="splash-sub" style={{display:'flex',alignItems:'center',gap:10,marginBottom:36,zIndex:1}}>
+        <div style={{width:70,height:1.5,background:'linear-gradient(90deg,transparent,#B8DFF0)'}}/>
+        <span style={{fontSize:15,color:'#F48BB0'}}>♥</span>
+        <div style={{width:70,height:1.5,background:'linear-gradient(270deg,transparent,#B8DFF0)'}}/>
       </div>
 
       {/* Loading dots */}
-      <div className="splash-dots">
+      <div className="splash-dots" style={{zIndex:1}}>
         <span/><span/><span/>
-      </div>
-
-      {/* Bottom divider + heart */}
-      <div style={{position:'absolute',bottom:40,display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
-        <div style={{width:48,height:1.5,background:'linear-gradient(90deg,transparent,#B8DFF0,transparent)'}}/>
-        <span style={{fontSize:14,color:'#F48BB0'}}>♥</span>
       </div>
     </div>
   )
