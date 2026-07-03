@@ -30,16 +30,17 @@ export default function WeightScreen({ showToast, setTab }) {
   let diffText = null
   let diffColor = '#6B7280'
   if (current && previous) {
-    const diff = (current.weight - previous.weight).toFixed(2)
+    const diffNum = current.weight - previous.weight
+    const diff = diffNum.toFixed(2)
     const currentDate = formatDate(new Date(current.timestamp))
     const previousDate = formatDate(new Date(previous.timestamp))
-    if (Math.abs(diff) < 0.01) {
+    if (Math.abs(diffNum) < 0.01) {
       diffText = `אין שינוי בין ${previousDate} ל-${currentDate}`
-    } else if (diff > 0) {
+    } else if (diffNum > 0) {
       diffText = `בין ${previousDate} ל-${currentDate} עלה ${diff} ק"ג 📈`
       diffColor = '#059669'
     } else {
-      diffText = `בין ${previousDate} ל-${currentDate} ירד ${Math.abs(diff)} ק"ג 📉`
+      diffText = `בין ${previousDate} ל-${currentDate} ירד ${Math.abs(diffNum).toFixed(2)} ק"ג 📉`
       diffColor = '#DC2626'
     }
   }
@@ -82,8 +83,8 @@ export default function WeightScreen({ showToast, setTab }) {
         <div className="wt-header">
           <span className="wt-title">מעקב משקל</span>
           {setTab && (
-            <button className="wt-back" onClick={() => setTab('home')}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <button className="wt-back" onClick={() => setTab('profile')}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M15 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
           )}
         </div>

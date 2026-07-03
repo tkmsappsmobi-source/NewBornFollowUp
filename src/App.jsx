@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 import { useStore } from './store/useStore'
 import { useToast, ToastContainer } from './components/Toast'
+import { startReminderScheduler } from './lib/notifications'
 import HomeScreen from './screens/HomeScreen'
 import HistoryScreen from './screens/HistoryScreen'
 import StatsScreen from './screens/StatsScreen'
@@ -135,15 +136,21 @@ function SplashScreen() {
 
 export default function App() {
   const [tab, setTab] = useState('home')
-  const { state } = useStore()
+  const { state, dispatch } = useStore()
   const { toasts, showToast, dismiss } = useToast()
   const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW()
   const [splashDone, setSplashDone] = useState(false)
+  const stateRef = useRef(state)
+  stateRef.current = state
 
   useEffect(() => {
     const t = setTimeout(() => setSplashDone(true), 1800)
     return () => clearTimeout(t)
   }, [])
+
+  useEffect(() => {
+    return startReminderScheduler(() => stateRef.current, dispatch, showToast)
+  }, [dispatch, showToast])
 
   const theme = THEMES[state.colorTheme] || THEMES.blue
 

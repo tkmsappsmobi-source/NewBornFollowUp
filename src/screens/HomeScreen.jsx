@@ -33,6 +33,48 @@ function fmtTimer(ms) {
   return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
 }
 
+// Isolated so its 1s tick re-renders only this small subtree, not the whole HomeScreen.
+function TimerSection({ sleepTimerStart, bottleTimerStart, onEndSleep, onEndBottle, onCancelSleep, onCancelBottle }) {
+  const [now, setNow] = useState(Date.now())
+  useEffect(() => {
+    if (!sleepTimerStart && !bottleTimerStart) return
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [sleepTimerStart, bottleTimerStart])
+
+  const active = !!(sleepTimerStart || bottleTimerStart)
+  return (
+    <div className={`hs-timer-wrap${active ? ' active' : ''}`}>
+      <div className="hs-timer-card">
+        {sleepTimerStart && (
+          <div className="hs-timer-row">
+            <div>
+              <span className="hs-timer-label">שינה בעיצומה ⏱️ </span>
+              <span className="hs-timer-time">{fmtTimer(now - new Date(sleepTimerStart).getTime())}</span>
+            </div>
+            <div style={{display:'flex',gap:6}}>
+              <button className="hs-timer-cancel" onClick={onCancelSleep} title="בטל טיימר">✕</button>
+              <button className="hs-timer-end" onClick={onEndSleep}>סיום</button>
+            </div>
+          </div>
+        )}
+        {bottleTimerStart && (
+          <div className="hs-timer-row">
+            <div>
+              <span className="hs-timer-label">בקבוק בעיצומו ⏱️ </span>
+              <span className="hs-timer-time">{fmtTimer(now - new Date(bottleTimerStart).getTime())}</span>
+            </div>
+            <div style={{display:'flex',gap:6}}>
+              <button className="hs-timer-cancel" onClick={onCancelBottle} title="בטל טיימר">✕</button>
+              <button className="hs-timer-end" onClick={onEndBottle}>סיום</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function HomeScreen({ showToast, setTab }) {
   const { state, dispatch } = useStore()
   const [feedingOpen, setFeedingOpen] = useState(false)
@@ -42,14 +84,7 @@ export default function HomeScreen({ showToast, setTab }) {
   const [milestoneOpen, setMilestoneOpen] = useState(false)
   const [vaccinationOpen, setVaccinationOpen] = useState(false)
   const [medicineOpen, setMedicineOpen] = useState(false)
-  const [timerNow, setTimerNow] = useState(Date.now())
   const profileInputRef = useRef(null)
-
-  useEffect(() => {
-    if (!state.sleepTimerStart && !state.bottleTimerStart) return
-    const id = setInterval(() => setTimerNow(Date.now()), 1000)
-    return () => clearInterval(id)
-  }, [state.sleepTimerStart, state.bottleTimerStart])
 
   const babyName = state.babyName || 'התינוק שלי'
   const ageStr = calcAge(state.birthDate)
@@ -69,36 +104,13 @@ export default function HomeScreen({ showToast, setTab }) {
   }, [state.logs, state.weightLogs, state.milestoneLogs])
 
   const recentLogs = allLogs.slice(0, 4)
-  const catMap = Object.fromEntries(state.categories.map(c => [c.id, c]))
+  const catMap = useMemo(() => Object.fromEntries(state.categories.map(c => [c.id, c])), [state.categories])
 
   const sleepToday = todayLogs.filter(l => l.categoryId === 'sleep').length
   const feedingToday = todayLogs.filter(l => l.categoryId === 'feeding').length
   const peeToday = todayLogs.filter(l => l.categoryId === 'diaper' && (l.data?.subtype === 'pee' || l.data?.subtype === 'both')).length
   const poopToday = todayLogs.filter(l => l.categoryId === 'diaper' && (l.data?.subtype === 'poop' || l.data?.subtype === 'both')).length
   const diaperToday = todayLogs.filter(l => l.categoryId === 'diaper').length
-
-  const lastOf = (filterFn) => {
-    const log = state.logs.filter(filterFn).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp))[0]
-    if (!log) return null
-    return new Date(log.timestamp)
-  }
-  const fmtLast = (date) => {
-    if (!date) return null
-    const now = new Date()
-    const diff = now - date
-    const mins = Math.floor(diff / 60000)
-    if (mins < 1) return 'עכשיו'
-    if (mins < 60) return `לפני ${mins} דק'`
-    const hrs = Math.floor(mins / 60)
-    const rem = mins % 60
-    if (rem === 0) return `לפני ${hrs} שע'`
-    return `לפני ${hrs}:${String(rem).padStart(2,'0')} שע'`
-  }
-  const lastSleep   = fmtLast(lastOf(l => l.categoryId === 'sleep'))
-  const lastFeeding = fmtLast(lastOf(l => l.categoryId === 'feeding'))
-  const lastPee     = fmtLast(lastOf(l => l.categoryId === 'diaper' && (l.data?.subtype === 'pee' || l.data?.subtype === 'both')))
-  const lastPoop    = fmtLast(lastOf(l => l.categoryId === 'diaper' && (l.data?.subtype === 'poop' || l.data?.subtype === 'both')))
-  const lastDiaper  = fmtLast(lastOf(l => l.categoryId === 'diaper'))
 
   const getRelativeTime = (timestamp) => {
     const diff = Date.now() - new Date(timestamp).getTime()
@@ -275,17 +287,20 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-stat-emoji{display:flex;align-items:center;justify-content:center;margin-bottom:3px;}
         .hs-stat-num{font-size:18px;font-weight:800;color:#111827;margin:0;line-height:1;}
         .hs-stat-lbl{font-size:11px;color:#6B7280;margin:2px 0 0;font-weight:600;}
-        .hs-stat-time{font-size:9px;color:#9CA3AF;margin:2px 0 0;line-height:1.2;display:none;}
         .hs-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
         .hs-feat-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;-webkit-tap-highlight-color:transparent;}
         .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:28px;transition:transform 0.12s;}
         .hs-feat-icon:active{transform:scale(0.88);}
         .hs-feat-lbl{font-size:14px;font-weight:700;color:#374151;text-align:center;line-height:1.2;}
-        .hs-timer-card{background:#FFF3E0;border-radius:20px;padding:14px 16px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+        .hs-timer-wrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows 0.25s ease, margin-bottom 0.25s ease;margin-bottom:0;}
+        .hs-timer-wrap.active{grid-template-rows:1fr;margin-bottom:12px;}
+        .hs-timer-wrap > .hs-timer-card{min-height:0;overflow:hidden;}
+        .hs-timer-card{background:#FFF3E0;border-radius:20px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
         .hs-timer-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;gap:8px;}
         .hs-timer-label{font-size:15px;font-weight:700;color:#374151;}
         .hs-timer-time{font-size:18px;font-weight:800;color:#D97706;font-variant-numeric:tabular-nums;}
         .hs-timer-end{background:#EF4444;color:white;border:none;border-radius:12px;padding:11px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;min-height:46px;flex-shrink:0;}
+        .hs-timer-cancel{background:white;color:#9CA3AF;border:1.5px solid #E5E7EB;border-radius:12px;width:46px;height:46px;font-size:16px;cursor:pointer;flex-shrink:0;}
         .hs-recent-row{display:flex;align-items:center;gap:12px;padding:12px 0;direction:rtl;}
         .hs-recent-row + .hs-recent-row{border-top:1px solid #F3F4F6;}
         .hs-recent-time-val{font-size:14px;font-weight:700;color:#111827;margin:0;line-height:1.25;}
@@ -351,19 +366,16 @@ export default function HomeScreen({ showToast, setTab }) {
                   <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:20,height:20,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{sleepToday}</p>
                   <p className="hs-stat-lbl">שינה</p>
-                  {lastSleep && <p className="hs-stat-time">{lastSleep}</p>}
                 </div>
                 <div className="hs-stat-box" style={{background:'#FFF3CC'}}>
                   <div className="hs-stat-emoji"><img src="/bottle-icon.png" alt="האכלה" style={{width:26,height:26,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{feedingToday}</p>
                   <p className="hs-stat-lbl">האכלה</p>
-                  {lastFeeding && <p className="hs-stat-time">{lastFeeding}</p>}
                 </div>
                 <div className="hs-stat-box" style={{background:'#C8F0E0'}}>
                   <div className="hs-stat-emoji"><img src="/diaper-icon.png" alt="חיתול" style={{width:26,height:26,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{diaperToday}</p>
                   <p className="hs-stat-lbl">חיתול</p>
-                  {lastDiaper && <p className="hs-stat-time">{lastDiaper}</p>}
                 </div>
               </div>
               <div className="hs-stats-grid-bottom">
@@ -371,40 +383,24 @@ export default function HomeScreen({ showToast, setTab }) {
                   <div className="hs-stat-emoji"><img src="/pee-icon.png" alt="פיפי" style={{width:26,height:26,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{peeToday}</p>
                   <p className="hs-stat-lbl">פיפי</p>
-                  {lastPee && <p className="hs-stat-time">{lastPee}</p>}
                 </div>
                 <div className="hs-stat-box" style={{background:'#FEF3C7'}}>
                   <div className="hs-stat-emoji"><img src="/poop-icon.png" alt="קקי" style={{width:26,height:26,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{poopToday}</p>
                   <p className="hs-stat-lbl">קקי</p>
-                  {lastPoop && <p className="hs-stat-time">{lastPoop}</p>}
                 </div>
               </div>
             </div>
 
-            {/* Live Timers */}
-            {(state.sleepTimerStart || state.bottleTimerStart) && (
-              <div className="hs-timer-card">
-                {state.sleepTimerStart && (
-                  <div className="hs-timer-row">
-                    <div>
-                      <span className="hs-timer-label">שינה בעיצומה ⏱️ </span>
-                      <span className="hs-timer-time">{fmtTimer(timerNow - new Date(state.sleepTimerStart).getTime())}</span>
-                    </div>
-                    <button className="hs-timer-end" onClick={()=>handleAction('sleep')}>סיום</button>
-                  </div>
-                )}
-                {state.bottleTimerStart && (
-                  <div className="hs-timer-row">
-                    <div>
-                      <span className="hs-timer-label">בקבוק בעיצומה ⏱️ </span>
-                      <span className="hs-timer-time">{fmtTimer(timerNow - new Date(state.bottleTimerStart).getTime())}</span>
-                    </div>
-                    <button className="hs-timer-end" onClick={handleEndBottle}>סיום</button>
-                  </div>
-                )}
-              </div>
-            )}
+            {/* Live Timers — always mounted so start/stop animates height instead of jumping layout */}
+            <TimerSection
+              sleepTimerStart={state.sleepTimerStart}
+              bottleTimerStart={state.bottleTimerStart}
+              onEndSleep={()=>handleAction('sleep')}
+              onEndBottle={handleEndBottle}
+              onCancelSleep={()=>{ dispatch({ type: 'SET_SLEEP_TIMER', start: null }); showToast('טיימר שינה בוטל') }}
+              onCancelBottle={()=>{ dispatch({ type: 'SET_BOTTLE_TIMER', start: null }); showToast('טיימר בקבוק בוטל') }}
+            />
 
             {/* Quick Actions */}
             <div className="hs-card">

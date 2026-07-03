@@ -10,18 +10,6 @@ const REMINDER_OPTIONS = [
   { label: '12 שע\'', hours: 12 },
 ]
 
-function scheduleNotification(medicineName, dose, unit, hours) {
-  if (!hours) return
-  if (!('Notification' in window) || Notification.permission !== 'granted') return
-  const ms = hours * 60 * 60 * 1000
-  setTimeout(() => {
-    new Notification(`💊 מנה הבאה: ${medicineName}`, {
-      body: `${dose} ${unit}`,
-      icon: '/favicon.ico',
-    })
-  }, ms)
-}
-
 export default function MedicineModal({ onConfirm, onClose, notificationsEnabled }) {
   const [name, setName] = useState('')
   const [dose, setDose] = useState('')
@@ -35,7 +23,6 @@ export default function MedicineModal({ onConfirm, onClose, notificationsEnabled
     const nextDoseAt = reminderHours
       ? new Date(Date.now() + reminderHours * 3600000).toISOString()
       : null
-    if (notificationsEnabled) scheduleNotification(name, dose, unit, reminderHours)
     onConfirm({ medicineName: name.trim(), dose: dose || null, unit, reminderHours, nextDoseAt })
   }
 
