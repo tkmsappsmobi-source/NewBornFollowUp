@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useStore } from '../store/useStore'
+import BottomNav, { NAV_SPACER } from '../components/BottomNav'
 
 
 export default function ProfileScreen({ showToast, setTab }) {
@@ -100,7 +101,7 @@ export default function ProfileScreen({ showToast, setTab }) {
         .prof-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:16px 16px;padding-top:max(env(safe-area-inset-top,16px),16px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
         .prof-title{font-size:18px;font-weight:800;color:#0D2640;}
         .prof-back{position:absolute;left:12px;top:50%;transform:translateY(-50%);margin-top:max(calc(env(safe-area-inset-top,0px)/2),0px);background:none;border:none;cursor:pointer;padding:10px;color:#0D2640;}
-        .prof-scroll{flex:1;overflow-y:auto;padding:14px 16px;padding-bottom:calc(env(safe-area-inset-bottom,0px)+24px);display:flex;flex-direction:column;gap:14px;}
+        .prof-scroll{flex:1;overflow-y:auto;padding:14px 16px;padding-bottom:${NAV_SPACER};display:flex;flex-direction:column;gap:14px;}
         .prof-card{background:white;border-radius:20px;padding:18px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
         .prof-card-title{font-size:16px;font-weight:800;color:#111827;margin-bottom:16px;}
         .prof-profile-circle{width:84px;height:84px;border-radius:50%;background:#E0F4FB;display:flex;align-items:center;justify-content:center;font-size:38px;cursor:pointer;border:3px solid #0096C7;overflow:hidden;margin:0 auto 14px;box-shadow:0 2px 10px rgba(0,150,199,0.2);}
@@ -233,6 +234,8 @@ export default function ProfileScreen({ showToast, setTab }) {
           </div>
 
         </div>
+
+        <BottomNav tab="profile" setTab={setTab} onPlus={()=>setTab('home')}/>
       </div>
     </>
   )

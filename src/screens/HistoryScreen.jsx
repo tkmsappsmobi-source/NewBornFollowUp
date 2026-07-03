@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useStore } from '../store/useStore'
 import EditLogSheet from '../components/EditLogSheet'
+import BottomNav, { NAV_SPACER } from '../components/BottomNav'
 import { formatTime, formatDateLabel } from '../lib/time'
 
 const FILTER_OPTIONS = [
@@ -133,7 +134,7 @@ export default function HistoryScreen({ showToast, setTab }) {
         .hist-filter-bar{padding:8px 10px;background:white;border-bottom:1px solid #E5E7EB;flex-shrink:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
         .hist-pill{border:1.5px solid #E5E7EB;border-radius:14px;padding:7px 4px;font-size:12px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;background:white;min-height:40px;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:3px;text-align:center;}
         .hist-pill.active{background:#0096C7;color:white;border-color:#0096C7;}
-        .hist-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;padding-bottom:calc(env(safe-area-inset-bottom,0px)+24px);}
+        .hist-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;padding-bottom:${NAV_SPACER};}
         .hist-date-label{font-size:12px;font-weight:700;color:#6B7280;padding:8px 0 6px;letter-spacing:0.04em;text-transform:uppercase;}
         .hist-card{background:white;border-radius:16px;padding:13px 14px;margin-bottom:8px;box-shadow:0 1px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:12px;}
         .hist-emoji-circle{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
@@ -215,6 +216,8 @@ export default function HistoryScreen({ showToast, setTab }) {
             onClose={()=>setEditLog(null)}
           />
         )}
+
+        <BottomNav tab="history" setTab={setTab} onPlus={()=>setTab('home')}/>
       </div>
     </>
   )

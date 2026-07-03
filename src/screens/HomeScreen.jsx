@@ -7,6 +7,7 @@ import GrowthModal from '../components/GrowthModal'
 import MilestoneModal from '../components/MilestoneModal'
 import VaccinationModal from '../components/VaccinationModal'
 import MedicineModal from '../components/MedicineModal'
+import BottomNav, { NAV_SPACER } from '../components/BottomNav'
 import { formatTime, isToday, calcAge } from '../lib/time'
 
 const ACTION_BUTTONS = [
@@ -277,7 +278,7 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-name{margin:0;font-size:26px;font-weight:900;color:#0D2640;line-height:1.05;letter-spacing:-0.5px;}
         .hs-age{font-size:12px;font-weight:600;color:#1A5A8A;margin:2px 0 0;}
         .hs-date{font-size:11px;color:#3A7BA8;margin:1px 0 0;}
-        .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(68px + env(safe-area-inset-bottom,20px));}
+        .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:${NAV_SPACER};}
         .hs-inner{padding:10px 14px 0;}
         .hs-card{background:white;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
         .hs-card-title{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:6px;margin-bottom:10px;}
@@ -307,14 +308,6 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-recent-circle{border-radius:50%;display:flex;align-items:center;justify-content:center;width:46px;height:46px;font-size:22px;flex-shrink:0;}
         .hs-recent-name{font-size:15px;font-weight:700;color:#111827;margin:0;line-height:1.25;}
         .hs-recent-detail{font-size:12px;color:#9CA3AF;margin:0;line-height:1.4;}
-        .hs-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:white;border-top:1px solid #E5E7EB;z-index:50;direction:ltr;}
-        .hs-nav-inner{display:flex;align-items:center;justify-content:space-around;height:60px;padding:0 4px;}
-        .hs-nav-safe{height:env(safe-area-inset-bottom,0px);}
-        .hs-nav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 12px;height:60px;-webkit-tap-highlight-color:transparent;min-width:52px;}
-        .hs-nav-btn span{font-size:11px;font-weight:600;}
-        .hs-nav-plus{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#48CAE4 0%,#0096C7 100%);border:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,150,199,0.45);transition:transform 0.12s;-webkit-tap-highlight-color:transparent;}
-        .hs-nav-plus:active{transform:scale(0.91);}
-        .hs-nav-plus svg{width:28px;height:28px;}
       `}</style>
 
       <div className="hs-root" dir="rtl">
@@ -457,18 +450,7 @@ export default function HomeScreen({ showToast, setTab }) {
         </div>
 
         {/* BOTTOM NAV */}
-        <nav className="hs-nav">
-          <div className="hs-nav-inner">
-            <NavBtn icon={<PersonIcon/>} label="פרופיל" color="#9CA3AF" onClick={()=>setTab('profile')}/>
-            <NavBtn icon={<ChartIcon/>} label="גרפים" color="#9CA3AF" onClick={()=>setTab('stats')}/>
-            <button className="hs-nav-plus" onClick={()=>setManualOpen(true)}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round"><path d="M12 4v16M4 12h16"/></svg>
-            </button>
-            <NavBtn icon={<ClockIcon/>} label="היסטוריה" color="#9CA3AF" onClick={()=>setTab('history')}/>
-            <NavBtn icon={<HomeIconSvg/>} label="בית" color="#0096C7" onClick={()=>{}}/>
-          </div>
-          <div className="hs-nav-safe"/>
-        </nav>
+        <BottomNav tab="home" setTab={setTab} onPlus={()=>setManualOpen(true)}/>
 
         {/* Modals */}
         {feedingOpen && <FeedingAmountSheet quickAmounts={state.feedingQuickAmounts} onConfirm={handleFeedingConfirm} onClose={()=>setFeedingOpen(false)} bottleTimerStart={state.bottleTimerStart} onStartBottle={handleStartBottle}/>}
@@ -503,24 +485,3 @@ function BabyOnCloud() {
   )
 }
 
-function NavBtn({ icon, label, onClick, color }) {
-  return (
-    <button className="hs-nav-btn" onClick={onClick} style={{color}}>
-      {icon}
-      <span style={{color}}>{label}</span>
-    </button>
-  )
-}
-
-function PersonIcon() {
-  return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" strokeLinecap="round"/></svg>
-}
-function ChartIcon() {
-  return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg>
-}
-function ClockIcon() {
-  return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" strokeLinecap="round"/></svg>
-}
-function HomeIconSvg() {
-  return <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" strokeLinejoin="round"/></svg>
-}

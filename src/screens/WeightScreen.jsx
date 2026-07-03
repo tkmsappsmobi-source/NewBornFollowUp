@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useStore } from '../store/useStore'
 import BarChart from '../components/BarChart'
+import BottomNav, { NAV_SPACER } from '../components/BottomNav'
 import { formatDateTime, formatDate } from '../lib/time'
 
 export default function WeightScreen({ showToast, setTab }) {
@@ -57,7 +58,7 @@ export default function WeightScreen({ showToast, setTab }) {
         .wt-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
         .wt-title{font-size:clamp(15px,4.5vw,19px);font-weight:800;color:#0D2640;}
         .wt-back{position:absolute;left:12px;background:none;border:none;cursor:pointer;padding:8px;color:#0D2640;}
-        .wt-scroll{flex:1;overflow-y:auto;padding:clamp(10px,3vw,16px) clamp(10px,4vw,16px);padding-bottom:clamp(80px,20vw,100px);display:flex;flex-direction:column;gap:clamp(12px,3vw,16px);}
+        .wt-scroll{flex:1;overflow-y:auto;padding:clamp(10px,3vw,16px) clamp(10px,4vw,16px);padding-bottom:${NAV_SPACER};display:flex;flex-direction:column;gap:clamp(12px,3vw,16px);}
         .wt-card{background:white;border-radius:clamp(14px,4vw,20px);padding:clamp(14px,4vw,20px);box-shadow:0 2px 14px rgba(0,0,0,0.07);}
         .wt-card-title{font-size:clamp(11px,3vw,13px);font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:clamp(10px,3vw,14px);}
         .wt-input{width:100%;border:1.5px solid #E5E7EB;border-radius:12px;padding:12px 14px;font-size:15px;font-family:Heebo,sans-serif;outline:none;box-sizing:border-box;direction:rtl;}
@@ -157,6 +158,8 @@ export default function WeightScreen({ showToast, setTab }) {
           </div>
 
         </div>
+
+        <BottomNav tab="weight" setTab={setTab} onPlus={()=>setTab('home')}/>
       </div>
     </>
   )

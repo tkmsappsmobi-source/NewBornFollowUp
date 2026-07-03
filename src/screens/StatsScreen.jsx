@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useStore } from '../store/useStore'
 import BarChart from '../components/BarChart'
+import BottomNav, { NAV_SPACER } from '../components/BottomNav'
 import { activityByDay } from '../lib/time'
 
 export default function StatsScreen({ setTab }) {
@@ -54,7 +55,7 @@ export default function StatsScreen({ setTab }) {
         .stats-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:16px 16px;padding-top:max(env(safe-area-inset-top,16px),16px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
         .stats-title{font-size:18px;font-weight:800;color:#0D2640;}
         .stats-back{position:absolute;left:12px;top:50%;transform:translateY(-50%);margin-top:max(calc(env(safe-area-inset-top,0px)/2),0px);background:none;border:none;cursor:pointer;padding:10px;color:#0D2640;}
-        .stats-scroll{flex:1;overflow-y:auto;padding:14px 16px;padding-bottom:calc(env(safe-area-inset-bottom,0px)+24px);display:flex;flex-direction:column;gap:14px;}
+        .stats-scroll{flex:1;overflow-y:auto;padding:14px 16px;padding-bottom:${NAV_SPACER};display:flex;flex-direction:column;gap:14px;}
         .stats-toggle{display:flex;background:white;border-radius:22px;padding:4px;box-shadow:0 1px 6px rgba(0,0,0,0.08);width:fit-content;margin:0 auto;}
         .stats-toggle-btn{border:none;border-radius:18px;padding:9px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;transition:all 0.15s;background:transparent;color:#6B7280;}
         .stats-toggle-btn.active{background:#0096C7;color:white;}
@@ -148,6 +149,8 @@ export default function StatsScreen({ setTab }) {
             )}
           </div>
         </div>
+
+        <BottomNav tab="stats" setTab={setTab} onPlus={()=>setTab('home')}/>
       </div>
     </>
   )

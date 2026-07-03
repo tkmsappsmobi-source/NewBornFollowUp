@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useStore } from '../store/useStore'
 import ReminderForm from '../components/ReminderForm'
+import BottomNav, { NAV_SPACER } from '../components/BottomNav'
 import { formatDateTime } from '../lib/time'
 
 function intervalLabel(r) {
@@ -43,7 +44,7 @@ export default function RemindersScreen({ showToast, setTab }) {
         .rem-toggle-knob { position:absolute; top:2px; width: calc(50% - 2px); height: calc(100% - 4px); background:white; border-radius:50%; box-shadow:0 1px 4px rgba(0,0,0,0.2); transition:transform 0.2s; }
         .rem-delete { background:none; border:none; font-size: clamp(18px,5vw,22px); color:#D1D5DB; cursor:pointer; flex-shrink:0; line-height:1; padding:0 2px; transition:color 0.15s; }
         .rem-delete:active { color:#EF4444; }
-        .rem-footer { padding: clamp(10px,3vw,14px) clamp(10px,4vw,16px); padding-bottom: max(env(safe-area-inset-bottom,0px),10px); flex-shrink:0; display:flex; flex-direction:column; gap: clamp(8px,2vw,12px); }
+        .rem-footer { padding: clamp(10px,3vw,14px) clamp(10px,4vw,16px); padding-bottom: ${NAV_SPACER}; flex-shrink:0; display:flex; flex-direction:column; gap: clamp(8px,2vw,12px); }
         .rem-warning { font-size: clamp(10px,2.5vw,12px); color:#D97706; background:#FFFBEB; border-radius: clamp(8px,2.5vw,12px); padding: clamp(8px,2.5vw,12px) clamp(12px,3.5vw,16px); text-align:center; }
         .rem-add-btn { width:100%; background: linear-gradient(135deg,#48CAE4,#0096C7); color:white; border:none; border-radius: clamp(12px,3.5vw,18px); padding: clamp(13px,4vw,17px); font-size: clamp(14px,4vw,17px); font-weight:700; font-family:Heebo,sans-serif; cursor:pointer; transition:transform 0.12s; }
         .rem-add-btn:active { transform:scale(0.97); }
@@ -102,6 +103,8 @@ export default function RemindersScreen({ showToast, setTab }) {
         {formOpen && (
           <ReminderForm onSave={handleAdd} onClose={() => setFormOpen(false)} />
         )}
+
+        <BottomNav tab="reminders" setTab={setTab} onPlus={()=>setTab('home')}/>
       </div>
     </>
   )
