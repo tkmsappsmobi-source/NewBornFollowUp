@@ -26,7 +26,7 @@ export default function BottomNav({ tab, setTab, onPlus }) {
   return (
     <>
       <style>{`
-        .app-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:white;border-top:1px solid #E5E7EB;z-index:50;direction:ltr;}
+        .app-nav{flex-shrink:0;background:white;border-top:1px solid #E5E7EB;direction:ltr;}
         .app-nav-inner{display:flex;align-items:center;justify-content:space-around;height:60px;padding:0 4px;}
         .app-nav-safe{height:env(safe-area-inset-bottom,0px);}
         .app-nav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 12px;height:60px;-webkit-tap-highlight-color:transparent;min-width:52px;}
@@ -51,5 +51,7 @@ export default function BottomNav({ tab, setTab, onPlus }) {
   )
 }
 
-// Standard bottom padding every scrollable screen should reserve so content never sits under the fixed nav.
-export const NAV_SPACER = 'calc(68px + env(safe-area-inset-bottom, 20px))'
+// BottomNav now sits in normal document flow (not position:fixed), so screens
+// no longer need to reserve height for it — just a little breathing room
+// under the last scrollable card.
+export const NAV_SPACER = '16px'
