@@ -7,8 +7,8 @@ function ChartIcon() {
 function ClockIcon({ active }) {
   return <img src={active ? '/history-icon.png' : '/history-icon-inactive.png'} alt="" style={{width:24,height:24,objectFit:'contain'}}/>
 }
-function HomeIconSvg({ active }) {
-  return <img src={active ? '/home-icon.png' : '/home-icon-inactive.png'} alt="" style={{width:24,height:24,objectFit:'contain'}}/>
+function HomeBadgeIcon() {
+  return <img src="/home-badge-icon.png" alt="" style={{width:42,height:42,objectFit:'contain'}}/>
 }
 
 function NavBtn({ icon, label, onClick, active }) {
@@ -22,7 +22,7 @@ function NavBtn({ icon, label, onClick, active }) {
 }
 
 // Consistent bottom navigation used on every screen so proportions/height never vary between pages.
-export default function BottomNav({ tab, setTab, onPlus }) {
+export default function BottomNav({ tab, setTab }) {
   return (
     <>
       <style>{`
@@ -31,19 +31,13 @@ export default function BottomNav({ tab, setTab, onPlus }) {
         .app-nav-safe{height:env(safe-area-inset-bottom,0px);}
         .app-nav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 12px;height:60px;-webkit-tap-highlight-color:transparent;min-width:52px;}
         .app-nav-btn span{font-size:11px;font-weight:600;}
-        .app-nav-plus{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#48CAE4 0%,#0096C7 100%);border:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,150,199,0.45);transition:transform 0.12s;-webkit-tap-highlight-color:transparent;}
-        .app-nav-plus:active{transform:scale(0.91);}
-        .app-nav-plus svg{width:28px;height:28px;}
       `}</style>
       <nav className="app-nav">
         <div className="app-nav-inner">
           <NavBtn icon={<PersonIcon/>} label="פרופיל" active={tab==='profile'} onClick={()=>setTab('profile')}/>
           <NavBtn icon={<ChartIcon/>} label="גרפים" active={tab==='stats'} onClick={()=>setTab('stats')}/>
-          <button className="app-nav-plus" onClick={onPlus}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round"><path d="M12 4v16M4 12h16"/></svg>
-          </button>
+          <NavBtn icon={<HomeBadgeIcon/>} label="בית" active={tab==='home'} onClick={()=>setTab('home')}/>
           <NavBtn icon={<ClockIcon active={tab==='history'}/>} label="היסטוריה" active={tab==='history'} onClick={()=>setTab('history')}/>
-          <NavBtn icon={<HomeIconSvg active={tab==='home'}/>} label="בית" active={tab==='home'} onClick={()=>setTab('home')}/>
         </div>
         <div className="app-nav-safe"/>
       </nav>

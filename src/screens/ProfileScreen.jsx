@@ -238,7 +238,7 @@ export default function ProfileScreen({ showToast, setTab }) {
 
         </div>
 
-        <BottomNav tab="profile" setTab={setTab} onPlus={()=>setTab('home')}/>
+        <BottomNav tab="profile" setTab={setTab}/>
       </div>
     </>
   )

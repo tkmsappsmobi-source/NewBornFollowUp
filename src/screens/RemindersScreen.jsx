@@ -104,7 +104,7 @@ export default function RemindersScreen({ showToast, setTab }) {
           <ReminderForm onSave={handleAdd} onClose={() => setFormOpen(false)} />
         )}
 
-        <BottomNav tab="reminders" setTab={setTab} onPlus={()=>setTab('home')}/>
+        <BottomNav tab="reminders" setTab={setTab}/>
       </div>
     </>
   )

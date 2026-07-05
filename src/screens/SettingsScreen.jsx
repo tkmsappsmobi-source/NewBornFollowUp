@@ -121,7 +121,7 @@ export default function SettingsScreen({ showToast, setTab }) {
 
         </div>
 
-        <BottomNav tab="settings" setTab={setTab} onPlus={()=>setTab('home')}/>
+        <BottomNav tab="settings" setTab={setTab}/>
       </div>
     </>
   )

@@ -219,7 +219,7 @@ export default function HistoryScreen({ showToast, setTab }) {
           />
         )}
 
-        <BottomNav tab="history" setTab={setTab} onPlus={()=>setTab('home')}/>
+        <BottomNav tab="history" setTab={setTab}/>
       </div>
     </>
   )

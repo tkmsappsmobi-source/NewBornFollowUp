@@ -159,7 +159,7 @@ export default function WeightScreen({ showToast, setTab }) {
 
         </div>
 
-        <BottomNav tab="weight" setTab={setTab} onPlus={()=>setTab('home')}/>
+        <BottomNav tab="weight" setTab={setTab}/>
       </div>
     </>
   )

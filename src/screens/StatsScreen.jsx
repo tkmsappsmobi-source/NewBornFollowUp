@@ -150,7 +150,7 @@ export default function StatsScreen({ setTab }) {
           </div>
         </div>
 
-        <BottomNav tab="stats" setTab={setTab} onPlus={()=>setTab('home')}/>
+        <BottomNav tab="stats" setTab={setTab}/>
       </div>
     </>
   )

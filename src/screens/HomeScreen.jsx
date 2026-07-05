@@ -424,7 +424,7 @@ export default function HomeScreen({ showToast, setTab }) {
         </div>
 
         {/* BOTTOM NAV */}
-        <BottomNav tab="home" setTab={setTab} onPlus={()=>{}}/>
+        <BottomNav tab="home" setTab={setTab}/>
 
         {/* Modals */}
         {feedingOpen && <FeedingAmountSheet quickAmounts={state.feedingQuickAmounts} onConfirm={handleFeedingConfirm} onClose={()=>setFeedingOpen(false)} bottleTimerStart={state.bottleTimerStart} onStartBottle={handleStartBottle}/>}
