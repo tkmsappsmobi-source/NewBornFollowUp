@@ -8,6 +8,7 @@ import MilestoneModal from '../components/MilestoneModal'
 import VaccinationModal from '../components/VaccinationModal'
 import MedicineModal from '../components/MedicineModal'
 import BottomNav, { NAV_SPACER } from '../components/BottomNav'
+import { getMedicineIcon } from '../lib/medicineIcons'
 import { formatTime, isToday, calcAge } from '../lib/time'
 
 const ACTION_BUTTONS = [
@@ -142,7 +143,7 @@ export default function HomeScreen({ showToast, setTab }) {
     bath:        '/bath-icon.png',
     vaccination: '/vaccine-icon.png',
     diaper:      (log) => log.data?.subtype === 'pee' ? '/pee-icon.png' : log.data?.subtype === 'poop' ? '/poop-icon.png' : '/diaper-icon.png',
-    medicine:    '/medicine-icon.png',
+    medicine:    (log) => getMedicineIcon(log.data?.medicineName),
   }
   const getCatInfo = (log) => {
     if (log._source === 'weight')    return { icon: '/growth-icon.png', label: 'משקל',    bg: '#C8F0E8' }
@@ -230,7 +231,7 @@ export default function HomeScreen({ showToast, setTab }) {
   const handleMedicineConfirm = (medicineName) => {
     setMedicineOpen(false)
     dispatch({ type: 'ADD_LOG', categoryId: 'medicine', note: medicineName, data: { medicineName } })
-    showToast(`${medicineName} נרשם`, 'success', '/medicine-icon.png')
+    showToast(`${medicineName} נרשם`, 'success', getMedicineIcon(medicineName))
   }
 
   const handleManualSave = ({ categoryId, amount, note, timestamp }) => {
