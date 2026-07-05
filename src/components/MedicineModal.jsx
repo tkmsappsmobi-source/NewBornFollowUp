@@ -1,9 +1,9 @@
 const MEDICINES = [
-  { name: 'סימיקול', bg: '#FCE7F3', badgeBg: '#FBCFE8', badgeColor: '#9D174D' },
-  { name: 'נורופן',   bg: '#FFE4CC', badgeBg: '#FED7AA', badgeColor: '#9A3412' },
-  { name: 'ויטמין D', bg: '#E8E0FF', badgeBg: '#DDD6FE', badgeColor: '#5B21B6' },
-  { name: 'סטרימר',  bg: '#C8F0E8', badgeBg: '#99F6E4', badgeColor: '#115E59' },
-  { name: 'ברזל',    bg: '#FFF3CC', badgeBg: '#FDE68A', badgeColor: '#92400E' },
+  { name: 'סימיקול', bg: '#FCE7F3', badgeBg: '#FBCFE8', badgeColor: '#9D174D', icon: '/medicine-icon.png' },
+  { name: 'נורופן',   bg: '#FFE4CC', badgeBg: '#FED7AA', badgeColor: '#9A3412', icon: '/medicine-icon.png' },
+  { name: 'ויטמין D', bg: '#E8E0FF', badgeBg: '#DDD6FE', badgeColor: '#5B21B6', icon: '/vitaminD-icon.png' },
+  { name: 'סטרימר',  bg: '#C8F0E8', badgeBg: '#99F6E4', badgeColor: '#115E59', icon: '/medicine-icon.png' },
+  { name: 'ברזל',    bg: '#FFF3CC', badgeBg: '#FDE68A', badgeColor: '#92400E', icon: '/medicine-icon.png' },
 ]
 
 export default function MedicineModal({ onConfirm, onClose }) {
@@ -35,7 +35,7 @@ export default function MedicineModal({ onConfirm, onClose }) {
           <div className="med-grid">
             {MEDICINES.map(m => (
               <button key={m.name} className="med-card" style={{background: m.bg}} onClick={() => onConfirm(m.name)}>
-                <img src="/medicine-icon.png" alt={m.name} className="med-card-icon"/>
+                <img src={m.icon} alt={m.name} className="med-card-icon"/>
                 <span className="med-card-badge" style={{background: m.badgeBg, color: m.badgeColor}}>{m.name}</span>
               </button>
             ))}
