@@ -16,11 +16,11 @@ export default function MedicineModal({ onConfirm, onClose }) {
         .med-topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
         .med-title { font-size:clamp(16px,5vw,20px); font-weight:800; color:#111827; flex:1; text-align:center; font-family:Heebo,sans-serif; display:flex; align-items:center; justify-content:center; gap:8px; }
         .med-close { width:34px; height:34px; border-radius:50%; background:#F3F4F6; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#6B7280; font-size:16px; flex-shrink:0; }
-        .med-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-        .med-tile { background:none; border:none; padding:0; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; -webkit-tap-highlight-color:transparent; }
-        .med-tile-icon { width:100%; aspect-ratio:1; border-radius:20px; display:flex; align-items:center; justify-content:center; transition:transform 0.12s; }
-        .med-tile-icon:active { transform:scale(0.88); }
-        .med-tile-lbl { font-size:clamp(10px,2.8vw,12px); font-weight:700; padding:4px 12px; border-radius:20px; }
+        .med-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+        .med-card { border:none; cursor:pointer; border-radius:20px; padding:18px 8px 14px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:12px; transition:transform 0.12s; min-height:clamp(120px,32vw,150px); font-family:Heebo,sans-serif; }
+        .med-card:active { transform:scale(0.93); }
+        .med-card-icon { width:clamp(44px,13vw,56px); height:clamp(44px,13vw,56px); object-fit:contain; }
+        .med-card-badge { font-size:clamp(11px,3vw,13px); font-weight:700; padding:4px 12px; border-radius:20px; }
       `}</style>
 
       <div className="med-backdrop" onClick={onClose}>
@@ -34,11 +34,9 @@ export default function MedicineModal({ onConfirm, onClose }) {
 
           <div className="med-grid">
             {MEDICINES.map(m => (
-              <button key={m.name} className="med-tile" onClick={() => onConfirm(m.name)}>
-                <div className="med-tile-icon" style={{background: m.bg}}>
-                  <img src="/medicine-icon.png" alt={m.name} style={{width:'70%',height:'70%',objectFit:'contain',display:'block'}}/>
-                </div>
-                <span className="med-tile-lbl" style={{background: m.badgeBg, color: m.badgeColor}}>{m.name}</span>
+              <button key={m.name} className="med-card" style={{background: m.bg}} onClick={() => onConfirm(m.name)}>
+                <img src="/medicine-icon.png" alt={m.name} className="med-card-icon"/>
+                <span className="med-card-badge" style={{background: m.badgeBg, color: m.badgeColor}}>{m.name}</span>
               </button>
             ))}
           </div>
