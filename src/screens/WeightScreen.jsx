@@ -151,7 +151,7 @@ export default function WeightScreen({ showToast, setTab }) {
                     <p className="wt-log-date">{formatDateTime(new Date(w.timestamp))}</p>
                     {w.note && <p className="wt-log-note">{w.note}</p>}
                   </div>
-                  <button className="wt-del-btn" onClick={() => handleDelete(w.id)}>🗑️</button>
+                  <button className="wt-del-btn" onClick={() => handleDelete(w.id)}><img src="/delete-icon.png" alt="מחק" style={{width:20,height:20,objectFit:'contain'}}/></button>
                 </div>
               ))
             )}
