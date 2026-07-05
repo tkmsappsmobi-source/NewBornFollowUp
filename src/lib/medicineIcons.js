@@ -7,7 +7,7 @@ export const MEDICINES = [
   { name: 'נורופן',   bg: '#FFE4CC', badgeBg: '#FED7AA', badgeColor: '#9A3412', icon: '/medicine-icon.png' },
   { name: 'ויטמין D', bg: '#E8E0FF', badgeBg: '#DDD6FE', badgeColor: '#5B21B6', icon: '/vitaminD-icon.png' },
   { name: 'סטרימר',  bg: '#C8F0E8', badgeBg: '#99F6E4', badgeColor: '#115E59', icon: '/sterimar-icon.png' },
-  { name: 'ברזל',    bg: '#FFF3CC', badgeBg: '#FDE68A', badgeColor: '#92400E', icon: '/medicine-icon.png' },
+  { name: 'ברזל',    bg: '#FFF3CC', badgeBg: '#FDE68A', badgeColor: '#92400E', icon: '/iron-icon.png' },
 ]
 
 const BY_NAME = Object.fromEntries(MEDICINES.map(m => [m.name, m]))
