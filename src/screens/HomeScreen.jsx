@@ -368,9 +368,7 @@ export default function HomeScreen({ showToast, setTab }) {
             {recentLogs.length > 0 && (
               <div className="hs-card">
                 <div className="hs-card-title">
-                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="1.8">
-                    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" strokeLinecap="round"/>
-                  </svg>
+                  <img src="/history-icon.png" alt="" style={{width:20,height:20,objectFit:'contain'}}/>
                   <span>הפעולות האחרונות</span>
                 </div>
                 {recentLogs.map(log => {
