@@ -273,23 +273,24 @@ export default function HomeScreen({ showToast, setTab }) {
       <style>{`
         .hs-root{width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#F0F8FF;font-family:Heebo,sans-serif;}
         .hs-header{flex-shrink:0;position:relative;overflow:hidden;background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 35%,#C8EDFA 70%,#E4F6FC 100%);}
-        .hs-header-top{display:flex;flex-direction:column;align-items:center;padding:12px 18px 14px;padding-top:max(env(safe-area-inset-top,14px),14px);position:relative;z-index:2;}
-        .hs-profile-circle{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;border:3px solid rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.12);overflow:hidden;margin-bottom:6px;}
+        .hs-header-top{display:flex;flex-direction:row;align-items:center;gap:14px;padding:14px 18px 16px;padding-top:max(env(safe-area-inset-top,14px),14px);position:relative;z-index:2;}
+        .hs-profile-circle{width:clamp(76px,20vw,92px);height:clamp(76px,20vw,92px);flex-shrink:0;border-radius:50%;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;font-size:clamp(38px,10vw,46px);cursor:pointer;border:3px solid rgba(255,255,255,0.95);box-shadow:0 3px 14px rgba(0,0,0,0.14);overflow:hidden;}
         .hs-profile-circle img{width:100%;height:100%;object-fit:cover;}
-        .hs-name{margin:0;font-size:26px;font-weight:900;color:#0D2640;line-height:1.05;letter-spacing:-0.5px;}
-        .hs-age{font-size:12px;font-weight:600;color:#1A5A8A;margin:2px 0 0;}
-        .hs-date{font-size:11px;color:#3A7BA8;margin:1px 0 0;}
+        .hs-header-text{flex:1;min-width:0;text-align:right;}
+        .hs-name{margin:0;font-size:clamp(21px,6.2vw,26px);font-weight:900;color:#0D2640;line-height:1.15;letter-spacing:-0.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        .hs-meta{display:flex;align-items:center;gap:6px;margin:3px 0 0;font-size:12.5px;font-weight:600;color:#1A5A8A;}
+        .hs-meta-dot{color:#7BB8D9;font-size:10px;}
+        .hs-meta-date{color:#3A7BA8;font-weight:500;}
         .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:${NAV_SPACER};}
         .hs-inner{padding:10px 14px 0;}
         .hs-card{background:white;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
         .hs-card-title{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:6px;margin-bottom:10px;}
         .hs-card-title span{font-size:16px;font-weight:700;color:#111827;}
-        .hs-stats-grid-top{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px;}
-        .hs-stats-grid-bottom{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;}
-        .hs-stat-box{border-radius:12px;padding:8px 4px;text-align:center;display:flex;flex-direction:column;align-items:center;}
+        .hs-stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+        .hs-stat-box{border-radius:12px;padding:7px 2px;text-align:center;display:flex;flex-direction:column;align-items:center;}
         .hs-stat-emoji{display:flex;align-items:center;justify-content:center;margin-bottom:3px;}
-        .hs-stat-num{font-size:18px;font-weight:800;color:#111827;margin:0;line-height:1;}
-        .hs-stat-lbl{font-size:11px;color:#6B7280;margin:2px 0 0;font-weight:600;}
+        .hs-stat-num{font-size:16px;font-weight:800;color:#111827;margin:0;line-height:1;}
+        .hs-stat-lbl{font-size:9.5px;color:#6B7280;margin:2px 0 0;font-weight:600;}
         .hs-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
         .hs-feat-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;-webkit-tap-highlight-color:transparent;}
         .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:28px;transition:transform 0.12s;}
@@ -315,21 +316,14 @@ export default function HomeScreen({ showToast, setTab }) {
 
         {/* HEADER */}
         <div className="hs-header">
-          {[{top:22,left:32,size:17,op:1},{top:14,left:68,size:11,op:0.8},{top:52,left:22,size:9,op:0.6},{top:85,left:82,size:13,op:0.7},{top:28,right:140,size:10,op:0.7},{top:65,right:50,size:8,op:0.5}].map((s,i)=>(
+          {[{top:16,left:26,size:11,op:0.55},{top:48,left:60,size:8,op:0.4},{top:24,right:88,size:9,op:0.45}].map((s,i)=>(
             <span key={i} style={{position:'absolute',top:s.top,left:s.left,right:s.right,fontSize:s.size,color:'#FFD700',opacity:s.op,lineHeight:1,pointerEvents:'none'}}>★</span>
           ))}
-          <div style={{position:'absolute',top:-8,right:-12,pointerEvents:'none'}}>
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+          <div style={{position:'absolute',top:-18,right:-18,opacity:0.9,pointerEvents:'none'}}>
+            <svg width="56" height="56" viewBox="0 0 80 80" fill="none">
               <circle cx="50" cy="34" r="30" fill="#FFD54F"/><circle cx="50" cy="34" r="27" fill="#FFCA28"/>
               <ellipse cx="43" cy="30" rx="3" ry="3.5" fill="#8B6500"/><ellipse cx="57" cy="30" rx="3" ry="3.5" fill="#8B6500"/>
               <path d="M43 40 Q50 47 57 40" stroke="#8B6500" strokeWidth="2" fill="none" strokeLinecap="round"/>
-            </svg>
-          </div>
-          <div style={{position:'absolute',top:10,left:2,pointerEvents:'none'}}>
-            <svg width="58" height="58" viewBox="0 0 58 58" fill="none">
-              <defs><mask id="moonMaskHS"><rect width="58" height="58" fill="white"/><circle cx="38" cy="20" r="22" fill="black"/></mask></defs>
-              <circle cx="24" cy="30" r="24" fill="#FFF9C4" mask="url(#moonMaskHS)"/>
-              <circle cx="24" cy="30" r="22" fill="#FFF176" mask="url(#moonMaskHS)"/>
             </svg>
           </div>
 
@@ -338,9 +332,14 @@ export default function HomeScreen({ showToast, setTab }) {
             <div className="hs-profile-circle" onClick={()=>profileInputRef.current&&profileInputRef.current.click()}>
               {state.profileImage ? <img src={state.profileImage} alt="פרופיל"/> : <span>👶</span>}
             </div>
-            <h1 className="hs-name">{babyName}</h1>
-            <p className="hs-age">{ageStr || 'הגדר תאריך לידה'}</p>
-            {birthDateStr && <p className="hs-date">{birthDateStr}</p>}
+            <div className="hs-header-text">
+              <h1 className="hs-name">{babyName}</h1>
+              <div className="hs-meta">
+                <span>{ageStr || 'הגדר תאריך לידה'}</span>
+                {birthDateStr && <span className="hs-meta-dot">•</span>}
+                {birthDateStr && <span className="hs-meta-date">{birthDateStr}</span>}
+              </div>
+            </div>
           </div>
 
         </div>
@@ -354,31 +353,29 @@ export default function HomeScreen({ showToast, setTab }) {
               <div className="hs-card-title">
                 <span>סיכום היום</span>
               </div>
-              <div className="hs-stats-grid-top">
+              <div className="hs-stats-row">
                 <div className="hs-stat-box" style={{background:'#E0D8FF'}}>
-                  <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:20,height:20,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{sleepToday}</p>
                   <p className="hs-stat-lbl">שינה</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#FFF3CC'}}>
-                  <div className="hs-stat-emoji"><img src="/bottle-icon.png" alt="האכלה" style={{width:26,height:26,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/bottle-icon.png" alt="האכלה" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{feedingToday}</p>
                   <p className="hs-stat-lbl">האכלה</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#C8F0E0'}}>
-                  <div className="hs-stat-emoji"><img src="/diaper-icon.png" alt="חיתול" style={{width:26,height:26,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/diaper-icon.png" alt="חיתול" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{diaperToday}</p>
                   <p className="hs-stat-lbl">חיתול</p>
                 </div>
-              </div>
-              <div className="hs-stats-grid-bottom">
                 <div className="hs-stat-box" style={{background:'#DBEAFE'}}>
-                  <div className="hs-stat-emoji"><img src="/pee-icon.png" alt="פיפי" style={{width:26,height:26,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/pee-icon.png" alt="פיפי" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{peeToday}</p>
                   <p className="hs-stat-lbl">פיפי</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#FEF3C7'}}>
-                  <div className="hs-stat-emoji"><img src="/poop-icon.png" alt="קקי" style={{width:26,height:26,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/poop-icon.png" alt="קקי" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{poopToday}</p>
                   <p className="hs-stat-lbl">קקי</p>
                 </div>
