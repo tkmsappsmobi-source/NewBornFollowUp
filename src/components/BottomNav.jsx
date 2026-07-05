@@ -7,8 +7,8 @@ function ChartIcon() {
 function ClockIcon() {
   return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" strokeLinecap="round"/></svg>
 }
-function HomeIconSvg() {
-  return <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" strokeLinejoin="round"/></svg>
+function HomeIconSvg({ active }) {
+  return <img src="/home-icon.png" alt="" style={{width:24,height:24,objectFit:'contain',opacity:active?1:0.5}}/>
 }
 
 function NavBtn({ icon, label, onClick, active }) {
@@ -43,7 +43,7 @@ export default function BottomNav({ tab, setTab, onPlus }) {
             <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round"><path d="M12 4v16M4 12h16"/></svg>
           </button>
           <NavBtn icon={<ClockIcon/>} label="היסטוריה" active={tab==='history'} onClick={()=>setTab('history')}/>
-          <NavBtn icon={<HomeIconSvg/>} label="בית" active={tab==='home'} onClick={()=>setTab('home')}/>
+          <NavBtn icon={<HomeIconSvg active={tab==='home'}/>} label="בית" active={tab==='home'} onClick={()=>setTab('home')}/>
         </div>
         <div className="app-nav-safe"/>
       </nav>
