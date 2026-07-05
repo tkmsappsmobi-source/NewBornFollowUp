@@ -99,21 +99,21 @@ export default function HistoryScreen({ showToast, setTab }) {
   const handleDelete = (log) => {
     if (log._source === 'weight') {
       dispatch({ type: 'DELETE_WEIGHT', id: log.id })
-      showToast('🗑️ רשומת משקל נמחקה')
+      showToast('רשומת משקל נמחקה', 'success', '/delete-icon.png')
     } else if (log._source === 'milestone') {
       dispatch({ type: 'DELETE_MILESTONE', id: log.id })
-      showToast('🗑️ אבן דרך נמחקה')
+      showToast('אבן דרך נמחקה', 'success', '/delete-icon.png')
     } else {
       const cat = catMap[log.categoryId]
       dispatch({ type: 'DELETE_LOG', id: log.id })
-      showToast(`🗑️ ${cat?.label ?? 'רישום'} נמחק`)
+      showToast(`${cat?.label ?? 'רישום'} נמחק`, 'success', '/delete-icon.png')
     }
   }
 
   const handleEditConfirm = (patch) => {
     if (editLog._source === 'log') {
       dispatch({ type: 'EDIT_LOG', id: editLog.id, patch })
-      showToast('✏️ רישום עודכן')
+      showToast('רישום עודכן', 'success', '/edit-icon.png')
     }
     setEditLog(null)
   }

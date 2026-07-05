@@ -21,7 +21,7 @@ export default function WeightScreen({ showToast, setTab }) {
 
   const handleDelete = (id) => {
     dispatch({ type: 'DELETE_WEIGHT', id })
-    showToast('🗑️ משקל נמחק')
+    showToast('משקל נמחק', 'success', '/delete-icon.png')
   }
 
   const sorted = [...state.weightLogs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
