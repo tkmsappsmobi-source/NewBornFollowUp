@@ -225,7 +225,7 @@ export default function HomeScreen({ showToast, setTab }) {
   return (
     <>
       <style>{`
-        .hs-root{width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#F0F8FF;font-family:Heebo,sans-serif;}
+        .hs-root{width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#F0F8FF;font-family:Heebo,sans-serif;padding-bottom:${NAV_SPACER};box-sizing:border-box;}
         .hs-header{flex-shrink:0;position:relative;overflow:hidden;background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 35%,#C8EDFA 70%,#E4F6FC 100%);}
         .hs-header-top{display:flex;flex-direction:column;align-items:center;padding:12px 18px 14px;padding-top:max(env(safe-area-inset-top,14px),14px);position:relative;z-index:2;}
         .hs-profile-circle{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;font-size:32px;border:3px solid rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.12);overflow:hidden;margin-bottom:6px;}
@@ -233,7 +233,7 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-name{margin:0;font-size:26px;font-weight:900;color:#0D2640;line-height:1.05;letter-spacing:-0.5px;}
         .hs-age{font-size:12px;font-weight:600;color:#1A5A8A;margin:2px 0 0;}
         .hs-date{font-size:11px;color:#3A7BA8;margin:1px 0 0;}
-        .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:${NAV_SPACER};}
+        .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:16px;}
         .hs-inner{padding:10px 14px 0;}
         .hs-card{background:white;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
         .hs-card-title{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:6px;margin-bottom:10px;}
