@@ -18,7 +18,7 @@ function NavBtn({ icon, label, onClick, active }) {
   const color = active ? '#0096C7' : '#9CA3AF'
   return (
     <button className="app-nav-btn" onClick={onClick} style={{color}}>
-      {icon}
+      <span className={`app-nav-icon-circle${active ? ' active' : ''}`}>{icon}</span>
       <span style={{color}}>{label}</span>
     </button>
   )
@@ -34,6 +34,8 @@ export default function BottomNav({ tab, setTab }) {
         .app-nav-safe{height:env(safe-area-inset-bottom,0px);}
         .app-nav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 12px;height:60px;-webkit-tap-highlight-color:transparent;min-width:52px;}
         .app-nav-btn span{font-size:11px;font-weight:600;}
+        .app-nav-icon-circle{display:flex;align-items:center;justify-content:center;padding:6px;border-radius:50%;transition:background-color 0.15s;}
+        .app-nav-icon-circle.active{background:#EAF6FC;}
       `}</style>
       <nav className="app-nav">
         <div className="app-nav-inner">
