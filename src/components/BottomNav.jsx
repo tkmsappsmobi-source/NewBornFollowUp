@@ -10,6 +10,9 @@ function ClockIcon({ active }) {
 function HomeBadgeIcon() {
   return <img src="/home-badge-icon.png" alt="" style={{width:42,height:42,objectFit:'contain'}}/>
 }
+function BellIcon({ active }) {
+  return <img src={active ? '/reminders-icon.png' : '/reminders-icon-inactive.png'} alt="" style={{width:24,height:24,objectFit:'contain'}}/>
+}
 
 function NavBtn({ icon, label, onClick, active }) {
   const color = active ? '#0096C7' : '#9CA3AF'
@@ -38,6 +41,7 @@ export default function BottomNav({ tab, setTab }) {
           <NavBtn icon={<ChartIcon/>} label="גרפים" active={tab==='stats'} onClick={()=>setTab('stats')}/>
           <NavBtn icon={<HomeBadgeIcon/>} label="בית" active={tab==='home'} onClick={()=>setTab('home')}/>
           <NavBtn icon={<ClockIcon active={tab==='history'}/>} label="היסטוריה" active={tab==='history'} onClick={()=>setTab('history')}/>
+          <NavBtn icon={<BellIcon active={tab==='reminders'}/>} label="תזכורות" active={tab==='reminders'} onClick={()=>setTab('reminders')}/>
         </div>
         <div className="app-nav-safe"/>
       </nav>
