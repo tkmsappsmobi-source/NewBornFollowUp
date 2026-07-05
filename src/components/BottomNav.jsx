@@ -38,7 +38,7 @@ export default function BottomNav({ tab, setTab }) {
     <>
       <style>{`
         .app-nav{flex-shrink:0;position:relative;margin:0 14px max(env(safe-area-inset-bottom,10px),10px);height:64px;direction:ltr;overflow:visible;}
-        .app-nav-bg{position:absolute;inset:0;border-radius:30px;background:transparent;border:1.5px solid rgba(255,255,255,0.85);box-shadow:0 10px 30px rgba(15,45,70,0.16);overflow:hidden;pointer-events:none;}
+        .app-nav-bg{position:absolute;inset:0;border-radius:30px;background:transparent;border:1.5px solid rgba(90,140,180,0.55);box-shadow:0 10px 24px rgba(15,45,70,0.22);overflow:hidden;pointer-events:none;}
         .app-nav-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-around;height:64px;padding:0 6px;}
         .app-nav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 10px;height:64px;-webkit-tap-highlight-color:transparent;min-width:50px;}
         .app-nav-btn span{font-size:10.5px;font-weight:600;}
