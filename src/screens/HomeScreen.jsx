@@ -8,7 +8,7 @@ import MilestoneModal from '../components/MilestoneModal'
 import VaccinationModal from '../components/VaccinationModal'
 import MedicineModal from '../components/MedicineModal'
 import BottomNav, { NAV_SPACER } from '../components/BottomNav'
-import { getMedicineIcon } from '../lib/medicineIcons'
+import { getMedicineIcon, getMedicineBg } from '../lib/medicineIcons'
 import { formatTime, isToday, calcAge } from '../lib/time'
 
 const ACTION_BUTTONS = [
@@ -151,7 +151,8 @@ export default function HomeScreen({ showToast, setTab }) {
     const cat = catMap[log.categoryId]
     const iconVal = ICON_MAP[log.categoryId]
     const icon = typeof iconVal === 'function' ? iconVal(log) : iconVal || null
-    return { emoji: cat?.emoji || '📝', icon, label: cat?.label || 'פעולה', bg: BG_MAP[log.categoryId] || '#F3F4F6' }
+    const bg = log.categoryId === 'medicine' ? getMedicineBg(log.data?.medicineName) : (BG_MAP[log.categoryId] || '#F3F4F6')
+    return { emoji: cat?.emoji || '📝', icon, label: cat?.label || 'פעולה', bg }
   }
 
   const handleAction = (actionId) => {

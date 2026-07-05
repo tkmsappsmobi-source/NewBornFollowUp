@@ -15,3 +15,7 @@ const BY_NAME = Object.fromEntries(MEDICINES.map(m => [m.name, m]))
 export function getMedicineIcon(medicineName) {
   return BY_NAME[medicineName]?.icon || '/medicine-icon.png'
 }
+
+export function getMedicineBg(medicineName) {
+  return BY_NAME[medicineName]?.bg || '#FCE7F3'
+}

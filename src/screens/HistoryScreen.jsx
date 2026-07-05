@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useStore } from '../store/useStore'
 import EditLogSheet from '../components/EditLogSheet'
 import BottomNav, { NAV_SPACER } from '../components/BottomNav'
-import { getMedicineIcon } from '../lib/medicineIcons'
+import { getMedicineIcon, getMedicineBg } from '../lib/medicineIcons'
 import { formatTime, formatDateLabel } from '../lib/time'
 
 const FILTER_OPTIONS = [
@@ -119,7 +119,7 @@ export default function HistoryScreen({ showToast, setTab }) {
   }
 
   const getCatInfo = (log) => {
-    if (log.categoryId === 'medicine') return { ...CAT_INFO.medicine, icon: getMedicineIcon(log.data?.medicineName) }
+    if (log.categoryId === 'medicine') return { ...CAT_INFO.medicine, icon: getMedicineIcon(log.data?.medicineName), bg: getMedicineBg(log.data?.medicineName) }
     const info = CAT_INFO[log.categoryId]
     if (info) return info
     const cat = catMap[log.categoryId]
