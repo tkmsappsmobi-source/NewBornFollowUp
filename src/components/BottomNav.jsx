@@ -1,14 +1,14 @@
 function PersonIcon({ active }) {
-  return <img src={active ? '/profile-icon.png' : '/profile-icon-inactive.png'} alt="" style={{width:24,height:24,objectFit:'contain'}}/>
+  return <img src={active ? '/profile-icon.png' : '/profile-icon-inactive.png'} alt="" style={{width:30,height:30,objectFit:'contain'}}/>
 }
 function ChartIcon({ active }) {
-  return <img src={active ? '/stats-icon.png' : '/stats-icon-inactive.png'} alt="" style={{width:24,height:24,objectFit:'contain'}}/>
+  return <img src={active ? '/stats-icon.png' : '/stats-icon-inactive.png'} alt="" style={{width:30,height:30,objectFit:'contain'}}/>
 }
 function ClockIcon({ active }) {
-  return <img src={active ? '/history-icon.png' : '/history-icon-inactive.png'} alt="" style={{width:24,height:24,objectFit:'contain'}}/>
+  return <img src={active ? '/history-icon.png' : '/history-icon-inactive.png'} alt="" style={{width:30,height:30,objectFit:'contain'}}/>
 }
 function BellIcon({ active }) {
-  return <img src={active ? '/reminders-icon.png' : '/reminders-icon-inactive.png'} alt="" style={{width:24,height:24,objectFit:'contain'}}/>
+  return <img src={active ? '/reminders-icon.png' : '/reminders-icon-inactive.png'} alt="" style={{width:30,height:30,objectFit:'contain'}}/>
 }
 
 function NavBtn({ icon, label, onClick, active }) {
@@ -25,7 +25,7 @@ function HomeNavBtn({ active, onClick }) {
   return (
     <button className="app-nav-home-btn" onClick={onClick}>
       <span className="app-nav-home-circle">
-        <img src="/home-badge-icon.png" alt="" style={{width:58,height:58,objectFit:'contain'}}/>
+        <img src="/home-badge-icon.png" alt="" style={{width:66,height:66,objectFit:'contain'}}/>
       </span>
       <span style={{color: active ? '#0096C7' : '#9CA3AF'}}>בית</span>
     </button>

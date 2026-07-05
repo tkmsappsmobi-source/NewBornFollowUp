@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useStore } from '../store/useStore'
 import FeedingAmountSheet from '../components/FeedingAmountSheet'
 import DiaperModal from '../components/DiaperModal'
@@ -82,7 +82,6 @@ export default function HomeScreen({ showToast, setTab }) {
   const [growthOpen, setGrowthOpen] = useState(false)
   const [vaccinationOpen, setVaccinationOpen] = useState(false)
   const [medicineOpen, setMedicineOpen] = useState(false)
-  const profileInputRef = useRef(null)
 
   const babyName = state.babyName || 'התינוק שלי'
   const ageStr = calcAge(state.birthDate)
@@ -223,35 +222,13 @@ export default function HomeScreen({ showToast, setTab }) {
     setFeedingOpen(true)
   }
 
-  const handleProfileImageUpload = (e) => {
-    const file = e.target.files && e.target.files[0]
-    if (!file) return
-    const reader = new FileReader()
-    reader.onload = (ev) => {
-      const img = new Image()
-      img.onload = () => {
-        const canvas = document.createElement('canvas')
-        const maxSize = 200
-        const scale = Math.min(maxSize / img.width, maxSize / img.height, 1)
-        canvas.width = img.width * scale
-        canvas.height = img.height * scale
-        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
-        dispatch({ type: 'SET_PROFILE_IMAGE', image: dataUrl })
-        showToast('📸 תמונת פרופיל עודכנה')
-      }
-      img.src = ev.target.result
-    }
-    reader.readAsDataURL(file)
-  }
-
   return (
     <>
       <style>{`
         .hs-root{width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#F0F8FF;font-family:Heebo,sans-serif;}
         .hs-header{flex-shrink:0;position:relative;overflow:hidden;background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 35%,#C8EDFA 70%,#E4F6FC 100%);}
         .hs-header-top{display:flex;flex-direction:column;align-items:center;padding:12px 18px 14px;padding-top:max(env(safe-area-inset-top,14px),14px);position:relative;z-index:2;}
-        .hs-profile-circle{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;border:3px solid rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.12);overflow:hidden;margin-bottom:6px;}
+        .hs-profile-circle{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;font-size:32px;border:3px solid rgba(255,255,255,0.9);box-shadow:0 2px 10px rgba(0,0,0,0.12);overflow:hidden;margin-bottom:6px;}
         .hs-profile-circle img{width:100%;height:100%;object-fit:cover;}
         .hs-name{margin:0;font-size:26px;font-weight:900;color:#0D2640;line-height:1.05;letter-spacing:-0.5px;}
         .hs-age{font-size:12px;font-weight:600;color:#1A5A8A;margin:2px 0 0;}
@@ -310,8 +287,7 @@ export default function HomeScreen({ showToast, setTab }) {
           </div>
 
           <div className="hs-header-top">
-            <input ref={profileInputRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleProfileImageUpload}/>
-            <div className="hs-profile-circle" onClick={()=>profileInputRef.current&&profileInputRef.current.click()}>
+            <div className="hs-profile-circle">
               {state.profileImage ? <img src={state.profileImage} alt="פרופיל"/> : <span>👶</span>}
             </div>
             <h1 className="hs-name">{babyName}</h1>
