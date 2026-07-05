@@ -1,9 +1,9 @@
 const MEDICINES = [
-  { name: 'סימיקול', bg: '#FCE7F3' },
-  { name: 'נורופן',   bg: '#FFE4CC' },
-  { name: 'ויטמין D', bg: '#E8E0FF' },
-  { name: 'סטרימר',  bg: '#C8F0E8' },
-  { name: 'ברזל',    bg: '#FFF3CC' },
+  { name: 'סימיקול', bg: '#FCE7F3', badgeBg: '#FBCFE8', badgeColor: '#9D174D' },
+  { name: 'נורופן',   bg: '#FFE4CC', badgeBg: '#FED7AA', badgeColor: '#9A3412' },
+  { name: 'ויטמין D', bg: '#E8E0FF', badgeBg: '#DDD6FE', badgeColor: '#5B21B6' },
+  { name: 'סטרימר',  bg: '#C8F0E8', badgeBg: '#99F6E4', badgeColor: '#115E59' },
+  { name: 'ברזל',    bg: '#FFF3CC', badgeBg: '#FDE68A', badgeColor: '#92400E' },
 ]
 
 export default function MedicineModal({ onConfirm, onClose }) {
@@ -20,7 +20,7 @@ export default function MedicineModal({ onConfirm, onClose }) {
         .med-tile { background:none; border:none; padding:0; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:8px; -webkit-tap-highlight-color:transparent; }
         .med-tile-icon { width:100%; aspect-ratio:1; border-radius:20px; display:flex; align-items:center; justify-content:center; transition:transform 0.12s; }
         .med-tile-icon:active { transform:scale(0.88); }
-        .med-tile-lbl { font-size:14px; font-weight:700; color:#374151; text-align:center; line-height:1.2; }
+        .med-tile-lbl { font-size:clamp(10px,2.8vw,12px); font-weight:700; padding:4px 12px; border-radius:20px; }
       `}</style>
 
       <div className="med-backdrop" onClick={onClose}>
@@ -38,7 +38,7 @@ export default function MedicineModal({ onConfirm, onClose }) {
                 <div className="med-tile-icon" style={{background: m.bg}}>
                   <img src="/medicine-icon.png" alt={m.name} style={{width:'70%',height:'70%',objectFit:'contain',display:'block'}}/>
                 </div>
-                <span className="med-tile-lbl">{m.name}</span>
+                <span className="med-tile-lbl" style={{background: m.badgeBg, color: m.badgeColor}}>{m.name}</span>
               </button>
             ))}
           </div>
