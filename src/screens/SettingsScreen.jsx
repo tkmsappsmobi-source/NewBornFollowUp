@@ -38,11 +38,11 @@ export default function SettingsScreen({ showToast, setTab }) {
   return (
     <>
       <style>{`
-        .sett-root { height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#F0F8FF; font-family:Heebo,sans-serif; display:flex; flex-direction:column; padding-bottom:${NAV_SPACER}; box-sizing:border-box; }
+        .sett-root { height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#F0F8FF; font-family:Heebo,sans-serif; display:flex; flex-direction:column; }
         .sett-header { background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%); padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px); padding-top:max(env(safe-area-inset-top,16px),16px); flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; }
         .sett-header-title { font-size:clamp(15px,4.5vw,19px); font-weight:800; color:#0D2640; }
         .sett-back { position:absolute; left:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; padding:10px; color:#0D2640; }
-        .sett-scroll { flex:1; overflow-y:auto; padding: clamp(10px,3vw,16px) clamp(10px,4vw,16px); display:flex; flex-direction:column; gap: clamp(12px,3vw,18px); }
+        .sett-scroll { flex:1; overflow-y:auto; padding: clamp(10px,3vw,16px) clamp(10px,4vw,16px); padding-bottom: ${NAV_SPACER}; display:flex; flex-direction:column; gap: clamp(12px,3vw,18px); }
         .sett-card { background:white; border-radius: clamp(14px,4vw,20px); padding: clamp(14px,4vw,20px); box-shadow:0 2px 14px rgba(0,0,0,0.07); }
         .sett-title { font-size: clamp(11px,3vw,13px); font-weight:700; color:#6B7280; text-transform:uppercase; letter-spacing:0.06em; margin-bottom: clamp(10px,3vw,14px); }
         .sett-input { width:100%; border:1.5px solid #D1D5DB; border-radius: clamp(10px,3vw,14px); padding: clamp(10px,3vw,14px) clamp(12px,3.5vw,16px); font-size: clamp(13px,3.5vw,16px); font-family:Heebo,sans-serif; direction:rtl; outline:none; box-sizing:border-box; transition:border-color 0.15s; }

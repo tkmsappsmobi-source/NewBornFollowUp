@@ -27,7 +27,7 @@ export default function RemindersScreen({ showToast, setTab }) {
   return (
     <>
       <style>{`
-        .rem-root { display:flex; flex-direction:column; height:100%; background:#F0F8FF; font-family:Heebo,sans-serif; padding-bottom:${NAV_SPACER}; box-sizing:border-box; }
+        .rem-root { display:flex; flex-direction:column; height:100%; background:#F0F8FF; font-family:Heebo,sans-serif; }
         .rem-header { background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%); padding:clamp(12px,3.5vw,18px) clamp(12px,4vw,18px); padding-top:max(env(safe-area-inset-top,16px),16px); flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; }
         .rem-header-title { font-size:clamp(15px,4.5vw,19px); font-weight:800; color:#0D2640; }
         .rem-back { position:absolute; left:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; padding:10px; color:#0D2640; }
@@ -44,7 +44,7 @@ export default function RemindersScreen({ showToast, setTab }) {
         .rem-toggle-knob { position:absolute; top:2px; width: calc(50% - 2px); height: calc(100% - 4px); background:white; border-radius:50%; box-shadow:0 1px 4px rgba(0,0,0,0.2); transition:transform 0.2s; }
         .rem-delete { background:none; border:none; font-size: clamp(18px,5vw,22px); color:#D1D5DB; cursor:pointer; flex-shrink:0; line-height:1; padding:0 2px; transition:color 0.15s; }
         .rem-delete:active { color:#EF4444; }
-        .rem-footer { padding: clamp(10px,3vw,14px) clamp(10px,4vw,16px); flex-shrink:0; display:flex; flex-direction:column; gap: clamp(8px,2vw,12px); }
+        .rem-footer { padding: clamp(10px,3vw,14px) clamp(10px,4vw,16px); padding-bottom: ${NAV_SPACER}; flex-shrink:0; display:flex; flex-direction:column; gap: clamp(8px,2vw,12px); }
         .rem-warning { font-size: clamp(10px,2.5vw,12px); color:#D97706; background:#FFFBEB; border-radius: clamp(8px,2.5vw,12px); padding: clamp(8px,2.5vw,12px) clamp(12px,3.5vw,16px); text-align:center; }
         .rem-add-btn { width:100%; background: linear-gradient(135deg,#48CAE4,#0096C7); color:white; border:none; border-radius: clamp(12px,3.5vw,18px); padding: clamp(13px,4vw,17px); font-size: clamp(14px,4vw,17px); font-weight:700; font-family:Heebo,sans-serif; cursor:pointer; transition:transform 0.12s; }
         .rem-add-btn:active { transform:scale(0.97); }

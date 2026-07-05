@@ -122,7 +122,7 @@ export default function HistoryScreen({ showToast, setTab }) {
   return (
     <>
       <style>{`
-        .hist-root{display:flex;flex-direction:column;height:100%;background:#F0F8FF;font-family:Heebo,sans-serif;padding-bottom:${NAV_SPACER};box-sizing:border-box;}
+        .hist-root{display:flex;flex-direction:column;height:100%;background:#F0F8FF;font-family:Heebo,sans-serif;}
         .hist-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 35%,#C8EDFA 70%,#E4F6FC 100%);padding:16px 16px 20px;padding-top:max(env(safe-area-inset-top,16px),16px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
         .hist-title{font-size:22px;font-weight:900;color:#0D2640;letter-spacing:-0.5px;}
         .hist-back{position:absolute;left:12px;top:50%;transform:translateY(-50%);margin-top:max(calc(env(safe-area-inset-top,0px)/2),0px);background:none;border:none;cursor:pointer;padding:10px;color:#0D2640;}
@@ -133,7 +133,7 @@ export default function HistoryScreen({ showToast, setTab }) {
         .hist-filter-tile.active{border-color:#0096C7;}
         .hist-filter-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;}
         .hist-filter-lbl{font-size:12.5px;font-weight:700;color:#374151;}
-        .hist-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;}
+        .hist-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;padding-bottom:${NAV_SPACER};}
         .hist-date-label{font-size:12px;font-weight:700;color:#6B7280;padding:8px 0 6px;letter-spacing:0.04em;text-transform:uppercase;}
         .hist-card{background:white;border-radius:16px;padding:13px 14px;margin-bottom:8px;box-shadow:0 1px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:12px;}
         .hist-emoji-circle{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
