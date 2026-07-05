@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useStore } from '../store/useStore'
 import FeedingAmountSheet from '../components/FeedingAmountSheet'
-import ManualLogForm from '../components/ManualLogForm'
 import DiaperModal from '../components/DiaperModal'
 import GrowthModal from '../components/GrowthModal'
 import VaccinationModal from '../components/VaccinationModal'
@@ -79,7 +78,6 @@ function TimerSection({ sleepTimerStart, bottleTimerStart, onEndSleep, onEndBott
 export default function HomeScreen({ showToast, setTab }) {
   const { state, dispatch } = useStore()
   const [feedingOpen, setFeedingOpen] = useState(false)
-  const [manualOpen, setManualOpen] = useState(false)
   const [diaperOpen, setDiaperOpen] = useState(false)
   const [growthOpen, setGrowthOpen] = useState(false)
   const [vaccinationOpen, setVaccinationOpen] = useState(false)
@@ -173,7 +171,6 @@ export default function HomeScreen({ showToast, setTab }) {
     if (actionId === 'growth') { setGrowthOpen(true); return }
     if (actionId === 'vaccination') { setVaccinationOpen(true); return }
     if (actionId === 'medicine') { setMedicineOpen(true); return }
-    if (actionId === 'manual') { setManualOpen(true); return }
   }
 
   const handleFeedingConfirm = (ml, bottleStart) => {
@@ -220,14 +217,6 @@ export default function HomeScreen({ showToast, setTab }) {
     setMedicineOpen(false)
     dispatch({ type: 'ADD_LOG', categoryId: 'medicine', note: medicineName, data: { medicineName } })
     showToast(`${medicineName} נרשם`, 'success', getMedicineIcon(medicineName))
-  }
-
-  const handleManualSave = ({ categoryId, amount, note, timestamp }) => {
-    setManualOpen(false)
-    dispatch({ type: 'ADD_LOG', categoryId, amount, note, timestamp })
-    const cat = state.categories.find(c => c.id === categoryId)
-    const iconMap = { feeding: '/bottle-icon.png', diaper: '/diaper-icon.png', sleep: '/sleep-icon.png', bath: '/bath-icon.png', vaccination: '/vaccine-icon.png' }
-    showToast(`${cat?.label ?? ''} נרשם`, 'success', iconMap[categoryId] || null)
   }
 
   const handleEndBottle = () => {
@@ -435,7 +424,7 @@ export default function HomeScreen({ showToast, setTab }) {
         </div>
 
         {/* BOTTOM NAV */}
-        <BottomNav tab="home" setTab={setTab} onPlus={()=>setManualOpen(true)}/>
+        <BottomNav tab="home" setTab={setTab} onPlus={()=>{}}/>
 
         {/* Modals */}
         {feedingOpen && <FeedingAmountSheet quickAmounts={state.feedingQuickAmounts} onConfirm={handleFeedingConfirm} onClose={()=>setFeedingOpen(false)} bottleTimerStart={state.bottleTimerStart} onStartBottle={handleStartBottle}/>}
@@ -443,7 +432,6 @@ export default function HomeScreen({ showToast, setTab }) {
         {growthOpen && <GrowthModal onConfirm={handleGrowthConfirm} onClose={()=>setGrowthOpen(false)} lastWeight={state.weightLogs?.[0]?.weight ?? null}/>}
         {vaccinationOpen && <VaccinationModal onConfirm={handleVaccinationConfirm} onClose={()=>setVaccinationOpen(false)}/>}
         {medicineOpen && <MedicineModal onConfirm={handleMedicineConfirm} onClose={()=>setMedicineOpen(false)}/>}
-        {manualOpen && <ManualLogForm categories={state.categories} onSave={handleManualSave} onClose={()=>setManualOpen(false)}/>}
       </div>
     </>
   )
