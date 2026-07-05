@@ -8,7 +8,7 @@ function ClockIcon() {
   return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" strokeLinecap="round"/></svg>
 }
 function HomeIconSvg({ active }) {
-  return <img src="/home-icon.png" alt="" style={{width:24,height:24,objectFit:'contain',opacity:active?1:0.5}}/>
+  return <img src={active ? '/home-icon.png' : '/home-icon-inactive.png'} alt="" style={{width:24,height:24,objectFit:'contain'}}/>
 }
 
 function NavBtn({ icon, label, onClick, active }) {
