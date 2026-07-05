@@ -84,8 +84,7 @@ export function ToastContainer({ toasts, dismiss }) {
               className={`h-full rounded-full ${latest.type === 'error' ? 'bg-red-400' : 'bg-[#0096C7]'}`}
               style={{
                 width: latest.closing ? '0%' : '100%',
-                transition: latest.closing ? 'none' : `width ${DURATION - 350}ms linear`,
-                transitionDelay: '50ms',
+                transition: latest.closing ? 'none' : `width ${DURATION - 350}ms linear 50ms`,
               }}
             />
           </div>
