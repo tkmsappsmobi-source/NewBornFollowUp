@@ -7,8 +7,6 @@
 
 html {
   height: -webkit-fill-available;
-  background: #F0F8FF;
-  color-scheme: light;
 }
 
 body {
@@ -17,7 +15,6 @@ body {
   overscroll-behavior: none;
   -webkit-text-size-adjust: 100%;
   min-height: -webkit-fill-available;
-  background: #F0F8FF;
 }
 
 #root {
