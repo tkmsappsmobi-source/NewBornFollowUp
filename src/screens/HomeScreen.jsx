@@ -227,10 +227,10 @@ export default function HomeScreen({ showToast, setTab }) {
     showToast(`חיסון "${vaccineName}" נרשם`, 'success', '/vaccine-icon.png')
   }
 
-  const handleMedicineConfirm = ({ medicineName, dose, unit, reminderHours, nextDoseAt }) => {
+  const handleMedicineConfirm = (medicineName) => {
     setMedicineOpen(false)
-    dispatch({ type: 'ADD_LOG', categoryId: 'medicine', note: medicineName, data: { medicineName, dose, unit, reminderHours, nextDoseAt } })
-    showToast(`${medicineName}${dose ? ` ${dose} ${unit}` : ''} נרשם`, 'success', '/medicine-icon.png')
+    dispatch({ type: 'ADD_LOG', categoryId: 'medicine', note: medicineName, data: { medicineName } })
+    showToast(`${medicineName} נרשם`, 'success', '/medicine-icon.png')
   }
 
   const handleManualSave = ({ categoryId, amount, note, timestamp }) => {
@@ -458,7 +458,7 @@ export default function HomeScreen({ showToast, setTab }) {
         {growthOpen && <GrowthModal onConfirm={handleGrowthConfirm} onClose={()=>setGrowthOpen(false)} lastWeight={state.weightLogs?.[0]?.weight ?? null}/>}
         {milestoneOpen && <MilestoneModal onConfirm={handleMilestoneConfirm} onClose={()=>setMilestoneOpen(false)}/>}
         {vaccinationOpen && <VaccinationModal onConfirm={handleVaccinationConfirm} onClose={()=>setVaccinationOpen(false)}/>}
-        {medicineOpen && <MedicineModal onConfirm={handleMedicineConfirm} onClose={()=>setMedicineOpen(false)} notificationsEnabled={state.settings?.notificationsEnabled}/>}
+        {medicineOpen && <MedicineModal onConfirm={handleMedicineConfirm} onClose={()=>setMedicineOpen(false)}/>}
         {manualOpen && <ManualLogForm categories={state.categories} onSave={handleManualSave} onClose={()=>setManualOpen(false)}/>}
       </div>
     </>

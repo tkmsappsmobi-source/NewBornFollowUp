@@ -15,7 +15,7 @@ export function fireNotification(title, body) {
 
 export function startReminderScheduler(getState, dispatch, showToast) {
   const tick = () => {
-    const { reminders = [], logs = [] } = getState()
+    const { reminders = [] } = getState()
     const now = new Date()
 
     reminders.forEach(r => {
@@ -39,20 +39,6 @@ export function startReminderScheduler(getState, dispatch, showToast) {
         dispatch({ type: 'FIRE_REMINDER', id: r.id })
         showToast(`🔔 ${r.label}`)
         fireNotification('מעקב תינוק', r.label)
-      }
-    })
-
-    // Medicine dose reminders — checked here (not via setTimeout) so they
-    // survive tab reloads/closes instead of silently vanishing.
-    logs.forEach(log => {
-      if (log.categoryId !== 'medicine') return
-      const nextDoseAt = log.data?.nextDoseAt
-      if (!nextDoseAt || log.data?.notified) return
-      if (now >= new Date(nextDoseAt)) {
-        dispatch({ type: 'EDIT_LOG', id: log.id, patch: { 'data.notified': true } })
-        const label = log.data?.medicineName || 'תרופה'
-        showToast(`💊 הגיע זמן המנה הבאה: ${label}`)
-        fireNotification(`💊 מנה הבאה: ${label}`, log.data?.dose ? `${log.data.dose} ${log.data.unit || ''}` : '')
       }
     })
   }
