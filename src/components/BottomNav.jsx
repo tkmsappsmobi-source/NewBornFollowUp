@@ -37,8 +37,9 @@ export default function BottomNav({ tab, setTab }) {
   return (
     <>
       <style>{`
-        .app-nav{flex-shrink:0;margin:0 14px max(env(safe-area-inset-bottom,10px),10px);border-radius:30px;background:rgba(255,255,255,0.62);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,0.7);box-shadow:0 10px 30px rgba(15,45,70,0.16);direction:ltr;overflow:visible;}
-        .app-nav-inner{display:flex;align-items:center;justify-content:space-around;height:64px;padding:0 6px;}
+        .app-nav{flex-shrink:0;position:relative;margin:0 14px max(env(safe-area-inset-bottom,10px),10px);height:64px;direction:ltr;overflow:visible;}
+        .app-nav-bg{position:absolute;inset:0;border-radius:30px;background:rgba(255,255,255,0.62);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,0.7);box-shadow:0 10px 30px rgba(15,45,70,0.16);overflow:hidden;pointer-events:none;}
+        .app-nav-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-around;height:64px;padding:0 6px;}
         .app-nav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0 10px;height:64px;-webkit-tap-highlight-color:transparent;min-width:50px;}
         .app-nav-btn span{font-size:10.5px;font-weight:600;}
         .app-nav-icon-circle{display:flex;align-items:center;justify-content:center;padding:6px;border-radius:50%;transition:background-color 0.15s;}
@@ -49,6 +50,7 @@ export default function BottomNav({ tab, setTab }) {
         .app-nav-home-btn span:last-child{font-size:10.5px;font-weight:600;}
       `}</style>
       <nav className="app-nav">
+        <div className="app-nav-bg"/>
         <div className="app-nav-inner">
           <NavBtn icon={<PersonIcon active={tab==='profile'}/>} label="פרופיל" active={tab==='profile'} onClick={()=>setTab('profile')}/>
           <NavBtn icon={<ChartIcon active={tab==='stats'}/>} label="גרפים" active={tab==='stats'} onClick={()=>setTab('stats')}/>
