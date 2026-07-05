@@ -348,6 +348,7 @@ export default function HomeScreen({ showToast, setTab }) {
             {/* Quick Actions */}
             <div className="hs-card" style={{padding:'14px 8px'}}>
               <div className="hs-card-title" style={{padding:'0 6px'}}>
+                <img src="/lightning-icon.png" alt="" style={{width:20,height:20,objectFit:'contain'}}/>
                 <span>פעולות מהירות</span>
               </div>
               <div className="hs-features-grid">

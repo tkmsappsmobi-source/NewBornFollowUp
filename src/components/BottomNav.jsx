@@ -25,7 +25,7 @@ function HomeNavBtn({ active, onClick }) {
   return (
     <button className="app-nav-home-btn" onClick={onClick}>
       <span className="app-nav-home-circle">
-        <img src="/home-badge-icon.png" alt="" style={{width:70,height:70,objectFit:'contain'}}/>
+        <img src="/home-badge-icon.png" alt="" style={{width:64,height:64,objectFit:'contain'}}/>
       </span>
       <span style={{color: active ? '#0096C7' : '#9CA3AF'}}>בית</span>
     </button>
@@ -44,8 +44,8 @@ export default function BottomNav({ tab, setTab }) {
         .app-nav-btn span{font-size:10.5px;font-weight:600;}
         .app-nav-icon-circle{display:flex;align-items:center;justify-content:center;padding:6px;border-radius:50%;transition:background-color 0.15s;}
         .app-nav-icon-circle.active{background:rgba(0,150,199,0.14);}
-        .app-nav-home-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;-webkit-tap-highlight-color:transparent;min-width:62px;height:80px;position:relative;padding-bottom:8px;}
-        .app-nav-home-btn span:first-child{position:absolute;top:-26px;left:50%;transform:translateX(-50%);width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 0.12s;}
+        .app-nav-home-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;-webkit-tap-highlight-color:transparent;min-width:62px;height:80px;position:relative;padding-bottom:7px;}
+        .app-nav-home-btn span:first-child{position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 0.12s;}
         .app-nav-home-btn:active span:first-child{transform:translateX(-50%) scale(0.92);}
         .app-nav-home-btn span:last-child{font-size:10.5px;font-weight:600;}
       `}</style>
