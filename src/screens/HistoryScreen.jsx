@@ -127,7 +127,7 @@ export default function HistoryScreen({ showToast, setTab }) {
         .hist-title{font-size:18px;font-weight:800;color:#0D2640;}
         .hist-back{position:absolute;left:12px;top:50%;transform:translateY(-50%);margin-top:max(calc(env(safe-area-inset-top,0px)/2),0px);background:none;border:none;cursor:pointer;padding:10px;color:#0D2640;}
         .hist-filter-grid{padding:10px;background:white;border-bottom:1px solid #E5E7EB;flex-shrink:0;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-        .hist-filter-tile{border:2.5px solid transparent;border-radius:14px;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-family:Heebo,sans-serif;transition:transform 0.12s,border-color 0.15s;}
+        .hist-filter-tile{width:100%;aspect-ratio:1;box-sizing:border-box;border:2.5px solid transparent;border-radius:14px;padding:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;font-family:Heebo,sans-serif;transition:transform 0.12s,border-color 0.15s;}
         .hist-filter-tile:active{transform:scale(0.92);}
         .hist-filter-tile.active{border-color:#0096C7;}
         .hist-filter-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;}
