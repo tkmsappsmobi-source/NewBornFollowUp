@@ -198,7 +198,7 @@ export default function HistoryScreen({ showToast, setTab }) {
                       <span className="hist-time">{formatTime(log.timestamp)}</span>
                       <div className="hist-actions">
                         {log._source === 'log' && (
-                          <button className="hist-action-btn" onClick={()=>setEditLog(log)} title="ערוך">✏️</button>
+                          <button className="hist-action-btn" onClick={()=>setEditLog(log)} title="ערוך"><img src="/edit-icon.png" alt="ערוך" style={{width:22,height:22,objectFit:'contain'}}/></button>
                         )}
                         <button className="hist-action-btn" onClick={()=>handleDelete(log)} title="מחק"><img src="/delete-icon.png" alt="מחק" style={{width:22,height:22,objectFit:'contain'}}/></button>
                       </div>
