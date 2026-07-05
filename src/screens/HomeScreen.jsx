@@ -4,7 +4,6 @@ import FeedingAmountSheet from '../components/FeedingAmountSheet'
 import ManualLogForm from '../components/ManualLogForm'
 import DiaperModal from '../components/DiaperModal'
 import GrowthModal from '../components/GrowthModal'
-import MilestoneModal from '../components/MilestoneModal'
 import VaccinationModal from '../components/VaccinationModal'
 import MedicineModal from '../components/MedicineModal'
 import BottomNav, { NAV_SPACER } from '../components/BottomNav'
@@ -19,12 +18,11 @@ const ACTION_BUTTONS = [
   { id: 'growth',      label: 'משקל',    bg: '#C8F0E8', emoji: null, icon: '/growth-icon.png' },
   { id: 'vaccination', label: 'חיסון',   bg: '#E8E0FF', emoji: null, icon: '/vaccine-icon.png' },
   { id: 'medicine',    label: 'תרופה',   bg: '#FCE7F3', emoji: null, icon: '/medicine-icon.png' },
-  { id: 'milestone',   label: 'אבן דרך', bg: '#FFD6EC', emoji: null, icon: '/milestone-icon.png' },
 ]
 
 const BG_MAP = {
   diaper: '#C8F0E0', feeding: '#FFF3CC', sleep: '#E0D8FF', bath: '#FFE4CC',
-  growth: '#C8F0E8', milestone: '#FFD6EC', vaccination: '#E8E0FF',
+  growth: '#C8F0E8', vaccination: '#E8E0FF',
 }
 
 function fmtTimer(ms) {
@@ -84,7 +82,6 @@ export default function HomeScreen({ showToast, setTab }) {
   const [manualOpen, setManualOpen] = useState(false)
   const [diaperOpen, setDiaperOpen] = useState(false)
   const [growthOpen, setGrowthOpen] = useState(false)
-  const [milestoneOpen, setMilestoneOpen] = useState(false)
   const [vaccinationOpen, setVaccinationOpen] = useState(false)
   const [medicineOpen, setMedicineOpen] = useState(false)
   const profileInputRef = useRef(null)
@@ -101,10 +98,9 @@ export default function HomeScreen({ showToast, setTab }) {
     const combined = [
       ...state.logs.map(l => ({ ...l, _source: 'log' })),
       ...(state.weightLogs || []).map(l => ({ ...l, categoryId: 'growth', _source: 'weight' })),
-      ...(state.milestoneLogs || []).map(l => ({ ...l, categoryId: 'milestone', _source: 'milestone' })),
     ]
     return combined.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-  }, [state.logs, state.weightLogs, state.milestoneLogs])
+  }, [state.logs, state.weightLogs])
 
   const recentLogs = allLogs.slice(0, 4)
   const catMap = useMemo(() => Object.fromEntries(state.categories.map(c => [c.id, c])), [state.categories])
@@ -128,7 +124,6 @@ export default function HomeScreen({ showToast, setTab }) {
 
   const getLogDetail = (log) => {
     if (log._source === 'weight') return `${log.weight} ק"ג`
-    if (log._source === 'milestone') return log.description || ''
     if (log.amount) return `${log.amount} מ"ל`
     if (log.data && log.data.subtype) {
       const sub = { pee: 'פיפי', poop: 'קקי', both: 'שניהם' }
@@ -147,7 +142,6 @@ export default function HomeScreen({ showToast, setTab }) {
   }
   const getCatInfo = (log) => {
     if (log._source === 'weight')    return { icon: '/growth-icon.png', label: 'משקל',    bg: '#C8F0E8' }
-    if (log._source === 'milestone') return { icon: '/milestone-icon.png', label: 'אבן דרך', bg: '#FFD6EC' }
     const cat = catMap[log.categoryId]
     const iconVal = ICON_MAP[log.categoryId]
     const icon = typeof iconVal === 'function' ? iconVal(log) : iconVal || null
@@ -177,7 +171,6 @@ export default function HomeScreen({ showToast, setTab }) {
       return
     }
     if (actionId === 'growth') { setGrowthOpen(true); return }
-    if (actionId === 'milestone') { setMilestoneOpen(true); return }
     if (actionId === 'vaccination') { setVaccinationOpen(true); return }
     if (actionId === 'medicine') { setMedicineOpen(true); return }
     if (actionId === 'manual') { setManualOpen(true); return }
@@ -215,12 +208,6 @@ export default function HomeScreen({ showToast, setTab }) {
     setGrowthOpen(false)
     dispatch({ type: 'ADD_WEIGHT', weight, note, timestamp })
     showToast(`משקל ${weight} ק"ג נשמר`, 'success', null)
-  }
-
-  const handleMilestoneConfirm = ({ description, category }) => {
-    setMilestoneOpen(false)
-    dispatch({ type: 'ADD_MILESTONE', description, category })
-    showToast('אבן דרך נשמרה', 'success', null)
   }
 
   const handleVaccinationConfirm = ({ vaccineName, doctor, notes }) => {
@@ -396,7 +383,6 @@ export default function HomeScreen({ showToast, setTab }) {
             {/* Quick Actions */}
             <div className="hs-card" style={{padding:'14px 8px'}}>
               <div className="hs-card-title" style={{padding:'0 6px'}}>
-                <span style={{fontSize:'clamp(16px,5vw,22px)'}}>⚡</span>
                 <span>פעולות מהירות</span>
               </div>
               <div className="hs-features-grid">
@@ -455,7 +441,6 @@ export default function HomeScreen({ showToast, setTab }) {
         {feedingOpen && <FeedingAmountSheet quickAmounts={state.feedingQuickAmounts} onConfirm={handleFeedingConfirm} onClose={()=>setFeedingOpen(false)} bottleTimerStart={state.bottleTimerStart} onStartBottle={handleStartBottle}/>}
         {diaperOpen && <DiaperModal onConfirm={handleDiaperConfirm} onClose={()=>setDiaperOpen(false)}/>}
         {growthOpen && <GrowthModal onConfirm={handleGrowthConfirm} onClose={()=>setGrowthOpen(false)} lastWeight={state.weightLogs?.[0]?.weight ?? null}/>}
-        {milestoneOpen && <MilestoneModal onConfirm={handleMilestoneConfirm} onClose={()=>setMilestoneOpen(false)}/>}
         {vaccinationOpen && <VaccinationModal onConfirm={handleVaccinationConfirm} onClose={()=>setVaccinationOpen(false)}/>}
         {medicineOpen && <MedicineModal onConfirm={handleMedicineConfirm} onClose={()=>setMedicineOpen(false)}/>}
         {manualOpen && <ManualLogForm categories={state.categories} onSave={handleManualSave} onClose={()=>setManualOpen(false)}/>}

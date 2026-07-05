@@ -4,7 +4,6 @@ export const DEFAULT_CATEGORIES = [
   { id: 'sleep',       label: 'שינה',     emoji: '🌙', type: 'sleep',        enabled: true, builtin: true },
   { id: 'bath',        label: 'מקלחת',   emoji: '🛁', type: 'simple',       enabled: true, builtin: true },
   { id: 'growth',      label: 'גדילה',    emoji: '📏', type: 'growth',       enabled: true, builtin: true },
-  { id: 'milestone',   label: 'אבן דרך', emoji: '⭐', type: 'milestone',    enabled: true, builtin: true },
   { id: 'vaccination', label: 'חיסון',   emoji: '💉', type: 'vaccination',  enabled: true, builtin: true },
   { id: 'medicine',    label: 'תרופה',   emoji: '💊', type: 'medicine',     enabled: true, builtin: true },
 ]
@@ -20,7 +19,6 @@ export const DEFAULT_STATE = {
   categories: DEFAULT_CATEGORIES,
   logs: [],
   weightLogs: [],
-  milestoneLogs: [],
   reminders: [],
   sleepTimerStart: null,
   bottleTimerStart: null,

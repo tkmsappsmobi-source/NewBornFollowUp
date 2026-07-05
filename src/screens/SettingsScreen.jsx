@@ -90,7 +90,7 @@ export default function SettingsScreen({ showToast, setTab }) {
         <div className="sett-card">
           <p className="sett-title">ניהול קטגוריות</p>
           <CategoryManager
-            categories={state.categories}
+            categories={state.categories.filter(c => c.id !== 'milestone')}
             onToggle={(id) => dispatch({ type: 'TOGGLE_CATEGORY', id })}
             onAdd={(label, emoji) => dispatch({ type: 'ADD_CATEGORY', label, emoji })}
             onDelete={(id) => dispatch({ type: 'DELETE_CATEGORY', id })}

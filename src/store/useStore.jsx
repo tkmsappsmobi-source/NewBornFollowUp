@@ -71,20 +71,10 @@ export function StoreProvider({ children }) {
       }
     )
 
-    // milestoneLogs
-    const unsubMilestone = onSnapshot(
-      query(collection(db, 'milestoneLogs'), orderBy('timestamp', 'desc')),
-      (snap) => {
-        const milestoneLogs = snap.docs.map(d => ({ id: d.id, ...d.data() }))
-        setState(prev => ({ ...prev, milestoneLogs }))
-      }
-    )
-
     return () => {
       unsubSettings()
       unsubLogs()
       unsubWeight()
-      unsubMilestone()
     }
   }, [])
 
@@ -163,18 +153,6 @@ export function StoreProvider({ children }) {
         await deleteDoc(doc(db, 'weightLogs', action.id))
         break
 
-      case 'ADD_MILESTONE':
-        await addDoc(collection(db, 'milestoneLogs'), {
-          description: action.description,
-          category: action.category,
-          timestamp: new Date().toISOString(),
-        })
-        break
-
-      case 'DELETE_MILESTONE':
-        await deleteDoc(doc(db, 'milestoneLogs', action.id))
-        break
-
       case 'TOGGLE_CATEGORY': {
         const cats = stateRef.current.categories.map(c =>
           c.id === action.id ? { ...c, enabled: !c.enabled } : c
@@ -240,16 +218,14 @@ export function StoreProvider({ children }) {
       }
 
       case 'CLEAR_ALL': {
-        const [logsSnap, weightSnap, milestoneSnap] = await Promise.all([
+        const [logsSnap, weightSnap] = await Promise.all([
           getDocs(collection(db, 'logs')),
           getDocs(collection(db, 'weightLogs')),
-          getDocs(collection(db, 'milestoneLogs')),
         ])
         // Firestore batch max 500 ops
         const allDocs = [
           ...logsSnap.docs,
           ...weightSnap.docs,
-          ...milestoneSnap.docs,
         ]
         for (let i = 0; i < allDocs.length; i += 490) {
           const batch = writeBatch(db)
@@ -274,12 +250,11 @@ export function StoreProvider({ children }) {
 
       case 'LOAD_STATE': {
         const payload = action.payload
-        const [logsSnap, weightSnap, milestoneSnap] = await Promise.all([
+        const [logsSnap, weightSnap] = await Promise.all([
           getDocs(collection(db, 'logs')),
           getDocs(collection(db, 'weightLogs')),
-          getDocs(collection(db, 'milestoneLogs')),
         ])
-        const allOld = [...logsSnap.docs, ...weightSnap.docs, ...milestoneSnap.docs]
+        const allOld = [...logsSnap.docs, ...weightSnap.docs]
         for (let i = 0; i < allOld.length; i += 490) {
           const batch = writeBatch(db)
           allOld.slice(i, i + 490).forEach(d => batch.delete(d.ref))
@@ -288,7 +263,6 @@ export function StoreProvider({ children }) {
         const newDocs = [
           ...(payload.logs || []).map(l => ({ col: 'logs', data: l })),
           ...(payload.weightLogs || []).map(l => ({ col: 'weightLogs', data: l })),
-          ...(payload.milestoneLogs || []).map(l => ({ col: 'milestoneLogs', data: l })),
         ]
         for (let i = 0; i < newDocs.length; i += 490) {
           const batch = writeBatch(db)

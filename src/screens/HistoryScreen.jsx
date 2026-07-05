@@ -12,7 +12,6 @@ const FILTER_OPTIONS = [
   { id: 'sleep',      label: 'שינה',    icon: '/sleep-icon.png' },
   { id: 'bath',       label: 'מקלחת',  icon: '/bath-icon.png' },
   { id: 'growth',     label: 'משקל',   icon: '/growth-icon.png' },
-  { id: 'milestone',  label: 'אבן דרך', icon: '/milestone-icon.png' },
   { id: 'vaccination',label: 'חיסון',   icon: '/vaccine-icon.png' },
   { id: 'medicine',   label: 'תרופה',   icon: '/medicine-icon.png' },
 ]
@@ -23,7 +22,6 @@ const CAT_INFO = {
   sleep:       { icon: '/sleep-icon.png', label: 'שינה',     bg: '#E0D8FF' },
   bath:        { icon: '/bath-icon.png', label: 'מקלחת',   bg: '#FFE4CC' },
   growth:      { icon: '/growth-icon.png', label: 'משקל',    bg: '#C8F0E8' },
-  milestone:   { icon: '/milestone-icon.png', label: 'אבן דרך', bg: '#FFD6EC' },
   vaccination: { icon: '/vaccine-icon.png', label: 'חיסון',   bg: '#E8E0FF' },
   medicine:    { icon: '/medicine-icon.png', label: 'תרופה',   bg: '#FCE7F3' },
 }
@@ -41,7 +39,6 @@ const SUBTYPE_ICONS = {
 
 function getDetail(log) {
   if (log._source === 'weight') return `${log.weight} ק"ג${log.height ? ` • ${log.height} ס"מ` : ''}`
-  if (log._source === 'milestone') return log.description || ''
   if (log.amount) return `${log.amount} מ"ל`
   if (log.data && log.data.subtype) {
     const s = { pee: 'פיפי', poop: 'קקי', both: 'שניהם' }
@@ -71,10 +68,9 @@ export default function HistoryScreen({ showToast, setTab }) {
     const combined = [
       ...state.logs.map(l => ({ ...l, _source: 'log' })),
       ...(state.weightLogs || []).map(l => ({ ...l, categoryId: 'growth', _source: 'weight' })),
-      ...(state.milestoneLogs || []).map(l => ({ ...l, categoryId: 'milestone', _source: 'milestone' })),
     ]
     return combined.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-  }, [state.logs, state.weightLogs, state.milestoneLogs])
+  }, [state.logs, state.weightLogs])
 
   const filtered = filter ? allLogs.filter(l => l.categoryId === filter) : allLogs
 
@@ -100,9 +96,6 @@ export default function HistoryScreen({ showToast, setTab }) {
     if (log._source === 'weight') {
       dispatch({ type: 'DELETE_WEIGHT', id: log.id })
       showToast('רשומת משקל נמחקה', 'success', '/delete-icon.png')
-    } else if (log._source === 'milestone') {
-      dispatch({ type: 'DELETE_MILESTONE', id: log.id })
-      showToast('אבן דרך נמחקה', 'success', '/delete-icon.png')
     } else {
       const cat = catMap[log.categoryId]
       dispatch({ type: 'DELETE_LOG', id: log.id })

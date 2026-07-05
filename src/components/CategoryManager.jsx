@@ -8,7 +8,6 @@ const CATEGORY_ICON_MAP = {
   sleep: '/sleep-icon.png',
   bath: '/bath-icon.png',
   growth: '/growth-icon.png',
-  milestone: '/milestone-icon.png',
   vaccination: '/vaccine-icon.png',
   medicine: '/medicine-icon.png',
 }
