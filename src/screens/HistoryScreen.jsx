@@ -12,7 +12,7 @@ const FILTER_OPTIONS = [
   { id: 'sleep',      label: 'שינה',    icon: '/sleep-icon.png' },
   { id: 'bath',       label: 'מקלחת',  icon: '/bath-icon.png' },
   { id: 'growth',     label: 'משקל',   icon: '/growth-icon.png' },
-  { id: 'milestone',  label: 'אבן דרך', emoji: '⭐' },
+  { id: 'milestone',  label: 'אבן דרך', icon: '/milestone-icon.png' },
   { id: 'vaccination',label: 'חיסון',   icon: '/vaccine-icon.png' },
   { id: 'medicine',   label: 'תרופה',   icon: '/medicine-icon.png' },
 ]
@@ -23,7 +23,7 @@ const CAT_INFO = {
   sleep:       { icon: '/sleep-icon.png', label: 'שינה',     bg: '#E0D8FF' },
   bath:        { icon: '/bath-icon.png', label: 'מקלחת',   bg: '#FFE4CC' },
   growth:      { icon: '/growth-icon.png', label: 'משקל',    bg: '#C8F0E8' },
-  milestone:   { emoji: '⭐', label: 'אבן דרך', bg: '#FFD6EC' },
+  milestone:   { icon: '/milestone-icon.png', label: 'אבן דרך', bg: '#FFD6EC' },
   vaccination: { icon: '/vaccine-icon.png', label: 'חיסון',   bg: '#E8E0FF' },
   medicine:    { icon: '/medicine-icon.png', label: 'תרופה',   bg: '#FCE7F3' },
 }

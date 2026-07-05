@@ -19,7 +19,7 @@ const ACTION_BUTTONS = [
   { id: 'growth',      label: 'משקל',    bg: '#C8F0E8', emoji: null, icon: '/growth-icon.png' },
   { id: 'vaccination', label: 'חיסון',   bg: '#E8E0FF', emoji: null, icon: '/vaccine-icon.png' },
   { id: 'medicine',    label: 'תרופה',   bg: '#FCE7F3', emoji: null, icon: '/medicine-icon.png' },
-  { id: 'milestone',   label: 'אבן דרך', bg: '#FFD6EC', emoji: '⭐', icon: null },
+  { id: 'milestone',   label: 'אבן דרך', bg: '#FFD6EC', emoji: null, icon: '/milestone-icon.png' },
 ]
 
 const BG_MAP = {
@@ -147,7 +147,7 @@ export default function HomeScreen({ showToast, setTab }) {
   }
   const getCatInfo = (log) => {
     if (log._source === 'weight')    return { icon: '/growth-icon.png', label: 'משקל',    bg: '#C8F0E8' }
-    if (log._source === 'milestone') return { emoji: '⭐', label: 'אבן דרך', bg: '#FFD6EC' }
+    if (log._source === 'milestone') return { icon: '/milestone-icon.png', label: 'אבן דרך', bg: '#FFD6EC' }
     const cat = catMap[log.categoryId]
     const iconVal = ICON_MAP[log.categoryId]
     const icon = typeof iconVal === 'function' ? iconVal(log) : iconVal || null
