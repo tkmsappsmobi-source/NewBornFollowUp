@@ -6,14 +6,14 @@ import { getMedicineIcon, getMedicineBg } from '../lib/medicineIcons'
 import { formatTime, formatDateLabel } from '../lib/time'
 
 const FILTER_OPTIONS = [
-  { id: null,         label: 'הכל' },
-  { id: 'feeding',    label: 'האכלה',   icon: '/bottle-icon.png' },
-  { id: 'diaper',     label: 'חיתול',   icon: '/diaper-icon.png' },
-  { id: 'sleep',      label: 'שינה',    icon: '/sleep-icon.png' },
-  { id: 'bath',       label: 'מקלחת',  icon: '/bath-icon.png' },
-  { id: 'growth',     label: 'משקל',   icon: '/growth-icon.png' },
-  { id: 'vaccination',label: 'חיסון',   icon: '/vaccine-icon.png' },
-  { id: 'medicine',   label: 'תרופה',   icon: '/medicine-icon.png' },
+  { id: null,         label: 'הכל',    icon: null, bg: '#CFF3FF' },
+  { id: 'feeding',    label: 'האכלה',   icon: '/bottle-icon.png', bg: '#FFF3CC' },
+  { id: 'diaper',     label: 'חיתול',   icon: '/diaper-icon.png', bg: '#C8F0E0' },
+  { id: 'sleep',      label: 'שינה',    icon: '/sleep-icon.png', bg: '#E0D8FF' },
+  { id: 'bath',       label: 'מקלחת',  icon: '/bath-icon.png', bg: '#FFE4CC' },
+  { id: 'growth',     label: 'משקל',   icon: '/growth-icon.png', bg: '#C8F0E8' },
+  { id: 'vaccination',label: 'חיסון',   icon: '/vaccine-icon.png', bg: '#E8E0FF' },
+  { id: 'medicine',   label: 'תרופה',   icon: '/medicine-icon.png', bg: '#FCE7F3' },
 ]
 
 const CAT_INFO = {
@@ -126,9 +126,12 @@ export default function HistoryScreen({ showToast, setTab }) {
         .hist-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 100%);padding:16px 16px;padding-top:max(env(safe-area-inset-top,16px),16px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
         .hist-title{font-size:18px;font-weight:800;color:#0D2640;}
         .hist-back{position:absolute;left:12px;top:50%;transform:translateY(-50%);margin-top:max(calc(env(safe-area-inset-top,0px)/2),0px);background:none;border:none;cursor:pointer;padding:10px;color:#0D2640;}
-        .hist-filter-bar{padding:8px 10px;background:white;border-bottom:1px solid #E5E7EB;flex-shrink:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
-        .hist-pill{border:1.5px solid #E5E7EB;border-radius:14px;padding:7px 4px;font-size:12px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;background:white;min-height:40px;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:3px;text-align:center;}
-        .hist-pill.active{background:#0096C7;color:white;border-color:#0096C7;}
+        .hist-filter-grid{padding:10px;background:white;border-bottom:1px solid #E5E7EB;flex-shrink:0;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+        .hist-filter-tile{border:2.5px solid transparent;border-radius:14px;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-family:Heebo,sans-serif;transition:transform 0.12s,border-color 0.15s;}
+        .hist-filter-tile:active{transform:scale(0.92);}
+        .hist-filter-tile.active{border-color:#0096C7;}
+        .hist-filter-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;}
+        .hist-filter-lbl{font-size:11px;font-weight:700;color:#374151;}
         .hist-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;padding-bottom:${NAV_SPACER};}
         .hist-date-label{font-size:12px;font-weight:700;color:#6B7280;padding:8px 0 6px;letter-spacing:0.04em;text-transform:uppercase;}
         .hist-card{background:white;border-radius:16px;padding:13px 14px;margin-bottom:8px;box-shadow:0 1px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:12px;}
@@ -152,17 +155,18 @@ export default function HistoryScreen({ showToast, setTab }) {
           </button>
         </div>
 
-        <div className="hist-filter-bar">
+        <div className="hist-filter-grid">
           {FILTER_OPTIONS.map(f => (
             <button
               key={String(f.id)}
-              className={`hist-pill${filter === f.id ? ' active' : ''}`}
+              className={`hist-filter-tile${filter === f.id ? ' active' : ''}`}
               onClick={()=>setFilter(f.id)}
-              style={{display:'flex',alignItems:'center',gap:5}}
+              style={{background:f.bg}}
             >
-              {f.icon && <img src={f.icon} alt="" style={{width:13,height:13,objectFit:'contain',flexShrink:0}}/>}
-              {f.emoji && <span style={{fontSize:12,lineHeight:1}}>{f.emoji}</span>}
-              {f.label}
+              <div className="hist-filter-icon">
+                {f.icon ? <img src={f.icon} alt="" style={{width:'100%',height:'100%',objectFit:'contain'}}/> : '📋'}
+              </div>
+              <span className="hist-filter-lbl">{f.label}</span>
             </button>
           ))}
         </div>
