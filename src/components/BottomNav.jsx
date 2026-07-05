@@ -45,7 +45,7 @@ export default function BottomNav({ tab, setTab }) {
         .app-nav-icon-circle{display:flex;align-items:center;justify-content:center;padding:6px;border-radius:50%;transition:background-color 0.15s;}
         .app-nav-icon-circle.active{background:rgba(0,150,199,0.14);}
         .app-nav-home-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;-webkit-tap-highlight-color:transparent;min-width:62px;height:64px;position:relative;padding-bottom:6px;}
-        .app-nav-home-btn span:first-child{position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:white;box-shadow:0 8px 22px rgba(0,150,199,0.5),0 0 0 5px rgba(255,255,255,0.6);transition:transform 0.12s;}
+        .app-nav-home-btn span:first-child{position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 8px 16px rgba(0,150,199,0.5));transition:transform 0.12s;}
         .app-nav-home-btn:active span:first-child{transform:translateX(-50%) scale(0.92);}
         .app-nav-home-btn span:last-child{font-size:10.5px;font-weight:600;}
       `}</style>
