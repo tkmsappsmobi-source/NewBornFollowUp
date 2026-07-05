@@ -132,7 +132,7 @@ export default function ProfileScreen({ showToast, setTab }) {
 
           {/* Baby info */}
           <div className="prof-card">
-            <div className="prof-card-title">התינוק שלי 👶</div>
+            <div className="prof-card-title" style={{textAlign:'center'}}>התינוק שלי</div>
             <input ref={profileInputRef} type="file" accept="image/*" style={{display:'none'}} onChange={handleProfileImageUpload}/>
             <div className="prof-profile-circle" onClick={()=>profileInputRef.current&&profileInputRef.current.click()}>
               {state.profileImage ? <img src={state.profileImage} alt="פרופיל"/> : <span>👶</span>}
