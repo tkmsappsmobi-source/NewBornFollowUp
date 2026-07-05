@@ -4,8 +4,8 @@ function PersonIcon() {
 function ChartIcon() {
   return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg>
 }
-function ClockIcon() {
-  return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" strokeLinecap="round"/></svg>
+function ClockIcon({ active }) {
+  return <img src={active ? '/history-icon.png' : '/history-icon-inactive.png'} alt="" style={{width:24,height:24,objectFit:'contain'}}/>
 }
 function HomeIconSvg({ active }) {
   return <img src={active ? '/home-icon.png' : '/home-icon-inactive.png'} alt="" style={{width:24,height:24,objectFit:'contain'}}/>
@@ -42,7 +42,7 @@ export default function BottomNav({ tab, setTab, onPlus }) {
           <button className="app-nav-plus" onClick={onPlus}>
             <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round"><path d="M12 4v16M4 12h16"/></svg>
           </button>
-          <NavBtn icon={<ClockIcon/>} label="היסטוריה" active={tab==='history'} onClick={()=>setTab('history')}/>
+          <NavBtn icon={<ClockIcon active={tab==='history'}/>} label="היסטוריה" active={tab==='history'} onClick={()=>setTab('history')}/>
           <NavBtn icon={<HomeIconSvg active={tab==='home'}/>} label="בית" active={tab==='home'} onClick={()=>setTab('home')}/>
         </div>
         <div className="app-nav-safe"/>
