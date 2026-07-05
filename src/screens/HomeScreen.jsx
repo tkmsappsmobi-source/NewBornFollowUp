@@ -284,12 +284,11 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-card{background:white;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
         .hs-card-title{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:6px;margin-bottom:10px;}
         .hs-card-title span{font-size:16px;font-weight:700;color:#111827;}
-        .hs-stats-grid-top{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px;}
-        .hs-stats-grid-bottom{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;}
-        .hs-stat-box{border-radius:12px;padding:8px 4px;text-align:center;display:flex;flex-direction:column;align-items:center;}
+        .hs-stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+        .hs-stat-box{border-radius:12px;padding:7px 2px;text-align:center;display:flex;flex-direction:column;align-items:center;}
         .hs-stat-emoji{display:flex;align-items:center;justify-content:center;margin-bottom:3px;}
-        .hs-stat-num{font-size:18px;font-weight:800;color:#111827;margin:0;line-height:1;}
-        .hs-stat-lbl{font-size:11px;color:#6B7280;margin:2px 0 0;font-weight:600;}
+        .hs-stat-num{font-size:16px;font-weight:800;color:#111827;margin:0;line-height:1;}
+        .hs-stat-lbl{font-size:9.5px;color:#6B7280;margin:2px 0 0;font-weight:600;}
         .hs-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
         .hs-feat-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;-webkit-tap-highlight-color:transparent;}
         .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:28px;transition:transform 0.12s;}
@@ -354,31 +353,29 @@ export default function HomeScreen({ showToast, setTab }) {
               <div className="hs-card-title">
                 <span>סיכום היום</span>
               </div>
-              <div className="hs-stats-grid-top">
+              <div className="hs-stats-row">
                 <div className="hs-stat-box" style={{background:'#E0D8FF'}}>
-                  <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:20,height:20,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{sleepToday}</p>
                   <p className="hs-stat-lbl">שינה</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#FFF3CC'}}>
-                  <div className="hs-stat-emoji"><img src="/bottle-icon.png" alt="האכלה" style={{width:26,height:26,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/bottle-icon.png" alt="האכלה" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{feedingToday}</p>
                   <p className="hs-stat-lbl">האכלה</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#C8F0E0'}}>
-                  <div className="hs-stat-emoji"><img src="/diaper-icon.png" alt="חיתול" style={{width:26,height:26,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/diaper-icon.png" alt="חיתול" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{diaperToday}</p>
                   <p className="hs-stat-lbl">חיתול</p>
                 </div>
-              </div>
-              <div className="hs-stats-grid-bottom">
                 <div className="hs-stat-box" style={{background:'#DBEAFE'}}>
-                  <div className="hs-stat-emoji"><img src="/pee-icon.png" alt="פיפי" style={{width:26,height:26,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/pee-icon.png" alt="פיפי" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{peeToday}</p>
                   <p className="hs-stat-lbl">פיפי</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#FEF3C7'}}>
-                  <div className="hs-stat-emoji"><img src="/poop-icon.png" alt="קקי" style={{width:26,height:26,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="/poop-icon.png" alt="קקי" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{poopToday}</p>
                   <p className="hs-stat-lbl">קקי</p>
                 </div>
