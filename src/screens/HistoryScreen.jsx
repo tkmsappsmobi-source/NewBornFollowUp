@@ -126,8 +126,9 @@ export default function HistoryScreen({ showToast, setTab }) {
         .hist-header{background:linear-gradient(180deg,#6EC6E6 0%,#9DDAF4 35%,#C8EDFA 70%,#E4F6FC 100%);padding:16px 16px 20px;padding-top:max(env(safe-area-inset-top,16px),16px);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
         .hist-title{font-size:22px;font-weight:900;color:#0D2640;letter-spacing:-0.5px;}
         .hist-back{position:absolute;left:12px;top:50%;transform:translateY(-50%);margin-top:max(calc(env(safe-area-inset-top,0px)/2),0px);background:none;border:none;cursor:pointer;padding:10px;color:#0D2640;}
-        .hist-filter-grid{padding:10px;background:white;border-bottom:1px solid #E5E7EB;flex-shrink:0;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;justify-items:center;}
-        .hist-filter-tile{width:52px;aspect-ratio:1;box-sizing:border-box;border:2.5px solid transparent;border-radius:12px;padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;font-family:Heebo,sans-serif;transition:transform 0.12s,border-color 0.15s;}
+        .hist-filter-card{background:white;border-radius:18px;padding:14px;margin:12px 16px 4px;box-shadow:0 2px 14px rgba(0,0,0,0.07);flex-shrink:0;}
+        .hist-filter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+        .hist-filter-tile{width:100%;aspect-ratio:1;box-sizing:border-box;border:2.5px solid transparent;border-radius:12px;padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;font-family:Heebo,sans-serif;transition:transform 0.12s,border-color 0.15s;}
         .hist-filter-tile:active{transform:scale(0.92);}
         .hist-filter-tile.active{border-color:#0096C7;}
         .hist-filter-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;}
@@ -155,20 +156,22 @@ export default function HistoryScreen({ showToast, setTab }) {
           </button>
         </div>
 
-        <div className="hist-filter-grid">
-          {FILTER_OPTIONS.map(f => (
-            <button
-              key={String(f.id)}
-              className={`hist-filter-tile${filter === f.id ? ' active' : ''}`}
-              onClick={()=>setFilter(f.id)}
-              style={{background:f.bg}}
-            >
-              <div className="hist-filter-icon">
-                {f.icon ? <img src={f.icon} alt="" style={{width:'100%',height:'100%',objectFit:'contain'}}/> : '📋'}
-              </div>
-              <span className="hist-filter-lbl">{f.label}</span>
-            </button>
-          ))}
+        <div className="hist-filter-card">
+          <div className="hist-filter-grid">
+            {FILTER_OPTIONS.map(f => (
+              <button
+                key={String(f.id)}
+                className={`hist-filter-tile${filter === f.id ? ' active' : ''}`}
+                onClick={()=>setFilter(f.id)}
+                style={{background:f.bg}}
+              >
+                <div className="hist-filter-icon">
+                  {f.icon ? <img src={f.icon} alt="" style={{width:'100%',height:'100%',objectFit:'contain'}}/> : '📋'}
+                </div>
+                <span className="hist-filter-lbl">{f.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="hist-list">
