@@ -290,11 +290,11 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-stat-emoji{display:flex;align-items:center;justify-content:center;margin-bottom:3px;}
         .hs-stat-num{font-size:16px;font-weight:800;color:#111827;margin:0;line-height:1;}
         .hs-stat-lbl{font-size:9.5px;color:#6B7280;margin:2px 0 0;font-weight:600;}
-        .hs-features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-        .hs-feat-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent;}
-        .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:34px;transition:transform 0.12s;}
+        .hs-features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+        .hs-feat-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;-webkit-tap-highlight-color:transparent;}
+        .hs-feat-icon{width:100%;aspect-ratio:1;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:32px;transition:transform 0.12s;}
         .hs-feat-icon:active{transform:scale(0.88);}
-        .hs-feat-lbl{font-size:16px;font-weight:700;color:#374151;text-align:center;line-height:1.2;}
+        .hs-feat-lbl{font-size:13.5px;font-weight:700;color:#374151;text-align:center;line-height:1.2;}
         .hs-timer-wrap{margin-bottom:12px;}
         .hs-timer-card{background:#FFF3E0;border-radius:20px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,0.06);}
         .hs-timer-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;gap:8px;}
@@ -394,8 +394,8 @@ export default function HomeScreen({ showToast, setTab }) {
             />
 
             {/* Quick Actions */}
-            <div className="hs-card">
-              <div className="hs-card-title">
+            <div className="hs-card" style={{padding:'14px 8px'}}>
+              <div className="hs-card-title" style={{padding:'0 6px'}}>
                 <span style={{fontSize:'clamp(16px,5vw,22px)'}}>⚡</span>
                 <span>פעולות מהירות</span>
               </div>
@@ -404,7 +404,7 @@ export default function HomeScreen({ showToast, setTab }) {
                   <button key={action.id} className="hs-feat-btn" onClick={()=>handleAction(action.id)}>
                     <div className="hs-feat-icon" style={{background: action.id==='sleep' && state.sleepTimerStart ? '#9C89E6' : action.bg}}>
                       {action.icon
-                        ? <img src={action.icon} alt={action.label} style={{width:'70%',height:'70%',objectFit:'contain',display:'block'}}/>
+                        ? <img src={action.icon} alt={action.label} style={{width:'82%',height:'82%',objectFit:'contain',display:'block'}}/>
                         : action.emoji}
                     </div>
                     <span className="hs-feat-lbl">{action.id==='sleep' && state.sleepTimerStart ? 'סיום שינה' : action.label}</span>
