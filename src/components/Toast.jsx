@@ -72,11 +72,8 @@ export function ToastContainer({ toasts, dismiss }) {
           {/* Message */}
           <p className="text-[16px] font-bold text-[#1A0F3C] leading-snug">
             {latest.icon ? latest.message : stripEmoji(latest.message)}
+            {latest.type !== 'error' && ' · בהצלחה ✓'}
           </p>
-
-          {latest.type !== 'error' && (
-            <p className="text-[12px] text-[#9090B0]">נרשם בהצלחה ✓</p>
-          )}
 
           {/* Progress bar */}
           <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden mt-1">

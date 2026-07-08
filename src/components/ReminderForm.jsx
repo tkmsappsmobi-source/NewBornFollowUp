@@ -11,15 +11,26 @@ export default function ReminderForm({ onSave, onClose }) {
     return d.toISOString().slice(0, 16)
   })
 
+  const minDatetime = (() => {
+    const d = new Date()
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset())
+    return d.toISOString().slice(0, 16)
+  })()
+
+  // Number('') is 0, but Number('abc') is NaN — the `|| 0` catches both so a
+  // field the user left blank (e.g. cleared hours to set a minutes-only
+  // reminder) never silently turns the whole interval into NaN/null.
+  const hoursNum = Number(hours) || 0
+  const minutesNum = Number(minutes) || 0
+  const intervalMinutes = hoursNum * 60 + minutesNum
+  const isValid = label.trim() && (type === 'once' || intervalMinutes > 0)
+
   const handleSave = () => {
-    if (!label.trim()) return
-    const intervalMinutes = type === 'recurring'
-      ? parseInt(hours) * 60 + parseInt(minutes || 0)
-      : null
+    if (!isValid) return
     onSave({
       label: label.trim(),
       reminderType: type,
-      intervalMinutes: intervalMinutes || null,
+      intervalMinutes: type === 'recurring' ? intervalMinutes : null,
       datetime: type === 'once' ? new Date(datetime).toISOString() : null,
     })
   }
@@ -83,11 +94,11 @@ export default function ReminderForm({ onSave, onClose }) {
           ) : (
             <div className="rf-field">
               <div className="rf-label">תאריך ושעה</div>
-              <input className="rf-input" type="datetime-local" value={datetime} onChange={e => setDatetime(e.target.value)}/>
+              <input className="rf-input" type="datetime-local" value={datetime} min={minDatetime} onChange={e => setDatetime(e.target.value)}/>
             </div>
           )}
 
-          <button className="rf-btn-save" disabled={!label.trim()} onClick={handleSave}>שמור</button>
+          <button className="rf-btn-save" disabled={!isValid} onClick={handleSave}>שמור</button>
         </div>
       </div>
     </>
