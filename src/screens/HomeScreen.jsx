@@ -10,13 +10,13 @@ import { getMedicineIcon, getMedicineBg } from '../lib/medicineIcons'
 import { formatTime, isToday, calcAge } from '../lib/time'
 
 const ACTION_BUTTONS = [
-  { id: 'diaper',      label: 'חיתול',    bg: '#C8F0E0', emoji: null, icon: '/diaper-icon.png' },
-  { id: 'feeding',     label: 'האכלה',    bg: '#FFF3CC', emoji: null, icon: '/bottle-icon.png' },
-  { id: 'sleep',       label: 'שינה',     bg: '#E0D8FF', emoji: null, icon: '/sleep-icon.png' },
-  { id: 'bath',        label: 'מקלחת',   bg: '#FFE4CC', emoji: null, icon: '/bath-icon.png' },
-  { id: 'growth',      label: 'משקל',    bg: '#C8F0E8', emoji: null, icon: '/growth-icon.png' },
-  { id: 'vaccination', label: 'חיסון',   bg: '#E8E0FF', emoji: null, icon: '/vaccine-icon.png' },
-  { id: 'medicine',    label: 'תרופה',   bg: '#FCE7F3', emoji: null, icon: '/medicine-icon.png' },
+  { id: 'diaper',      label: 'חיתול',    bg: '#C8F0E0', emoji: null, icon: 'diaper-icon.png' },
+  { id: 'feeding',     label: 'האכלה',    bg: '#FFF3CC', emoji: null, icon: 'bottle-icon.png' },
+  { id: 'sleep',       label: 'שינה',     bg: '#E0D8FF', emoji: null, icon: 'sleep-icon.png' },
+  { id: 'bath',        label: 'מקלחת',   bg: '#FFE4CC', emoji: null, icon: 'bath-icon.png' },
+  { id: 'growth',      label: 'משקל',    bg: '#C8F0E8', emoji: null, icon: 'growth-icon.png' },
+  { id: 'vaccination', label: 'חיסון',   bg: '#E8E0FF', emoji: null, icon: 'vaccine-icon.png' },
+  { id: 'medicine',    label: 'תרופה',   bg: '#FCE7F3', emoji: null, icon: 'medicine-icon.png' },
 ]
 
 const BG_MAP = {
@@ -130,15 +130,15 @@ export default function HomeScreen({ showToast, setTab }) {
   }
 
   const ICON_MAP = {
-    feeding:     '/bottle-icon.png',
-    sleep:       '/sleep-icon.png',
-    bath:        '/bath-icon.png',
-    vaccination: '/vaccine-icon.png',
-    diaper:      (log) => log.data?.subtype === 'pee' ? '/pee-icon.png' : log.data?.subtype === 'poop' ? '/poop-icon.png' : '/diaper-icon.png',
+    feeding:     'bottle-icon.png',
+    sleep:       'sleep-icon.png',
+    bath:        'bath-icon.png',
+    vaccination: 'vaccine-icon.png',
+    diaper:      (log) => log.data?.subtype === 'pee' ? 'pee-icon.png' : log.data?.subtype === 'poop' ? 'poop-icon.png' : 'diaper-icon.png',
     medicine:    (log) => getMedicineIcon(log.data?.medicineName),
   }
   const getCatInfo = (log) => {
-    if (log._source === 'weight')    return { icon: '/growth-icon.png', label: 'משקל',    bg: '#C8F0E8' }
+    if (log._source === 'weight')    return { icon: 'growth-icon.png', label: 'משקל',    bg: '#C8F0E8' }
     const cat = catMap[log.categoryId]
     const iconVal = ICON_MAP[log.categoryId]
     const icon = typeof iconVal === 'function' ? iconVal(log) : iconVal || null
@@ -155,16 +155,16 @@ export default function HomeScreen({ showToast, setTab }) {
         const durationMinutes = Math.round(durationMs / 60000)
         dispatch({ type: 'ADD_LOG', categoryId: 'sleep', data: { start: state.sleepTimerStart, durationMinutes } })
         dispatch({ type: 'SET_SLEEP_TIMER', start: null })
-        showToast(`שינה נרשמה — ${durationMinutes} דקות`, 'success', '/sleep-icon.png')
+        showToast(`שינה נרשמה — ${durationMinutes} דקות`, 'success', 'sleep-icon.png')
       } else {
         dispatch({ type: 'SET_SLEEP_TIMER', start: new Date().toISOString() })
-        showToast('טיימר שינה התחיל', 'success', '/sleep-icon.png')
+        showToast('טיימר שינה התחיל', 'success', 'sleep-icon.png')
       }
       return
     }
     if (actionId === 'bath') {
       dispatch({ type: 'ADD_LOG', categoryId: 'bath' })
-      showToast('מקלחת נרשמה', 'success', '/bath-icon.png')
+      showToast('מקלחת נרשמה', 'success', 'bath-icon.png')
       return
     }
     if (actionId === 'growth') { setGrowthOpen(true); return }
@@ -183,19 +183,19 @@ export default function HomeScreen({ showToast, setTab }) {
     } else {
       dispatch({ type: 'ADD_LOG', categoryId: 'feeding', amount: ml })
     }
-    showToast(`האכלה ${ml} מ"ל נרשמה`, 'success', '/bottle-icon.png')
+    showToast(`האכלה ${ml} מ"ל נרשמה`, 'success', 'bottle-icon.png')
   }
 
   const handleStartBottle = () => {
     setFeedingOpen(false)
     dispatch({ type: 'SET_BOTTLE_TIMER', start: new Date().toISOString() })
-    showToast('טיימר בקבוק התחיל', 'success', '/bottle-icon.png')
+    showToast('טיימר בקבוק התחיל', 'success', 'bottle-icon.png')
   }
 
   const handleDiaperConfirm = (subtype) => {
     setDiaperOpen(false)
     const labels = { pee: 'פיפי', poop: 'קקי', both: 'שניהם' }
-    const icons  = { pee: '/pee-icon.png', poop: '/poop-icon.png', both: '/diaper-icon.png' }
+    const icons  = { pee: 'pee-icon.png', poop: 'poop-icon.png', both: 'diaper-icon.png' }
     dispatch({ type: 'ADD_LOG', categoryId: 'diaper', data: { subtype } })
     showToast(`חיתול (${labels[subtype]}) נרשם`, 'success', icons[subtype])
   }
@@ -209,7 +209,7 @@ export default function HomeScreen({ showToast, setTab }) {
   const handleVaccinationConfirm = ({ vaccineName, doctor, notes }) => {
     setVaccinationOpen(false)
     dispatch({ type: 'ADD_LOG', categoryId: 'vaccination', note: vaccineName, data: { vaccineName, doctor, notes } })
-    showToast(`חיסון "${vaccineName}" נרשם`, 'success', '/vaccine-icon.png')
+    showToast(`חיסון "${vaccineName}" נרשם`, 'success', 'vaccine-icon.png')
   }
 
   const handleMedicineConfirm = (medicineName) => {
@@ -308,27 +308,27 @@ export default function HomeScreen({ showToast, setTab }) {
               </div>
               <div className="hs-stats-row">
                 <div className="hs-stat-box" style={{background:'#E0D8FF'}}>
-                  <div className="hs-stat-emoji"><img src="/sleep-icon.png" alt="שינה" style={{width:18,height:18,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="sleep-icon.png" alt="שינה" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{sleepToday}</p>
                   <p className="hs-stat-lbl">שינה</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#FFF3CC'}}>
-                  <div className="hs-stat-emoji"><img src="/bottle-icon.png" alt="האכלה" style={{width:18,height:18,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="bottle-icon.png" alt="האכלה" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{feedingToday}</p>
                   <p className="hs-stat-lbl">האכלה</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#C8F0E0'}}>
-                  <div className="hs-stat-emoji"><img src="/diaper-icon.png" alt="חיתול" style={{width:18,height:18,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="diaper-icon.png" alt="חיתול" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{diaperToday}</p>
                   <p className="hs-stat-lbl">חיתול</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#DBEAFE'}}>
-                  <div className="hs-stat-emoji"><img src="/pee-icon.png" alt="פיפי" style={{width:18,height:18,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="pee-icon.png" alt="פיפי" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{peeToday}</p>
                   <p className="hs-stat-lbl">פיפי</p>
                 </div>
                 <div className="hs-stat-box" style={{background:'#FEF3C7'}}>
-                  <div className="hs-stat-emoji"><img src="/poop-icon.png" alt="קקי" style={{width:18,height:18,objectFit:'contain'}}/></div>
+                  <div className="hs-stat-emoji"><img src="poop-icon.png" alt="קקי" style={{width:18,height:18,objectFit:'contain'}}/></div>
                   <p className="hs-stat-num">{poopToday}</p>
                   <p className="hs-stat-lbl">קקי</p>
                 </div>
@@ -348,7 +348,7 @@ export default function HomeScreen({ showToast, setTab }) {
             {/* Quick Actions */}
             <div className="hs-card" style={{padding:'14px 8px'}}>
               <div className="hs-card-title" style={{padding:'0 6px'}}>
-                <img src="/lightning-icon.png" alt="" style={{width:20,height:20,objectFit:'contain'}}/>
+                <img src="lightning-icon.png" alt="" style={{width:20,height:20,objectFit:'contain'}}/>
                 <span>פעולות מהירות</span>
               </div>
               <div className="hs-features-grid">
@@ -369,7 +369,7 @@ export default function HomeScreen({ showToast, setTab }) {
             {recentLogs.length > 0 && (
               <div className="hs-card">
                 <div className="hs-card-title">
-                  <img src="/history-icon.png" alt="" style={{width:20,height:20,objectFit:'contain'}}/>
+                  <img src="history-icon.png" alt="" style={{width:20,height:20,objectFit:'contain'}}/>
                   <span>הפעולות האחרונות</span>
                 </div>
                 {recentLogs.map(log => {

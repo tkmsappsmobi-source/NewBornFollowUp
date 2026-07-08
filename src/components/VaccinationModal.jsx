@@ -33,7 +33,7 @@ export default function VaccinationModal({ onConfirm, onClose }) {
           <div className="vm-handle" />
           <div className="vm-topbar">
             <div style={{width:34}}/>
-            <div className="vm-title">חיסון <img src="/vaccine-icon.png" alt="חיסון" style={{width:26,height:26,objectFit:'contain',verticalAlign:'middle'}}/></div>
+            <div className="vm-title">חיסון <img src="vaccine-icon.png" alt="חיסון" style={{width:26,height:26,objectFit:'contain',verticalAlign:'middle'}}/></div>
             <button className="vm-close" onClick={onClose}>✕</button>
           </div>
           <div className="vm-field">

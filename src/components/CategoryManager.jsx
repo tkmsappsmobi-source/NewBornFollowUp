@@ -3,13 +3,13 @@ import { useState } from 'react'
 const EMOJI_SUGGESTIONS = ['😴', '🤒', '💊', '🏥', '🚶', '🎵', '🌡️', '🧴', '🪥', '🧸', '🌙', '⭐']
 
 const CATEGORY_ICON_MAP = {
-  feeding: '/bottle-icon.png',
-  diaper: '/diaper-icon.png',
-  sleep: '/sleep-icon.png',
-  bath: '/bath-icon.png',
-  growth: '/growth-icon.png',
-  vaccination: '/vaccine-icon.png',
-  medicine: '/medicine-icon.png',
+  feeding: 'bottle-icon.png',
+  diaper: 'diaper-icon.png',
+  sleep: 'sleep-icon.png',
+  bath: 'bath-icon.png',
+  growth: 'growth-icon.png',
+  vaccination: 'vaccine-icon.png',
+  medicine: 'medicine-icon.png',
 }
 
 export default function CategoryManager({ categories, onToggle, onAdd, onDelete }) {

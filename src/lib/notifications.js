@@ -10,7 +10,7 @@ export function isGranted() {
 
 export function fireNotification(title, body) {
   if (!isGranted()) return
-  new Notification(title, { body, icon: '/NewBornFollowUp/icons/icon-192.png' })
+  new Notification(title, { body, icon: 'icons/icon-192.png' })
 }
 
 export function startReminderScheduler(getState, dispatch, showToast) {

@@ -24,7 +24,7 @@ export default function DiaperModal({ onConfirm, onClose }) {
           <div className="diaper-topbar">
             <div style={{width:34}}/>
             <div className="diaper-title">
-              <img src="/diaper-icon.png" alt="חיתול" style={{width:26,height:26,objectFit:'contain'}}/>
+              <img src="diaper-icon.png" alt="חיתול" style={{width:26,height:26,objectFit:'contain'}}/>
               סוג חיתול?
             </div>
             <button className="diaper-close" onClick={onClose}>✕</button>
@@ -32,21 +32,21 @@ export default function DiaperModal({ onConfirm, onClose }) {
           <div className="diaper-grid">
 
             <button className="diaper-card" style={{background:'#DBEAFE'}} onClick={() => onConfirm('pee')}>
-              <img src="/pee-icon.png" alt="פיפי" className="diaper-card-icon"/>
+              <img src="pee-icon.png" alt="פיפי" className="diaper-card-icon"/>
               <span className="diaper-card-title">פיפי</span>
               <span className="diaper-card-badge" style={{background:'#BFDBFE',color:'#1D4ED8'}}>שתן</span>
             </button>
 
             <button className="diaper-card" style={{background:'#FEF3C7'}} onClick={() => onConfirm('poop')}>
-              <img src="/poop-icon.png" alt="קקי" className="diaper-card-icon"/>
+              <img src="poop-icon.png" alt="קקי" className="diaper-card-icon"/>
               <span className="diaper-card-title">קקי</span>
               <span className="diaper-card-badge" style={{background:'#FDE68A',color:'#92400E'}}>צואה</span>
             </button>
 
             <button className="diaper-card" style={{background:'#D1FAE5'}} onClick={() => onConfirm('both')}>
               <div className="diaper-card-icon-both">
-                <img src="/pee-icon.png" alt=""/>
-                <img src="/poop-icon.png" alt=""/>
+                <img src="pee-icon.png" alt=""/>
+                <img src="poop-icon.png" alt=""/>
               </div>
               <span className="diaper-card-title">שניהם</span>
               <span className="diaper-card-badge" style={{background:'#A7F3D0',color:'#065F46'}}>שתן וצואה</span>

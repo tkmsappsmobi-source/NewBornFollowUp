@@ -87,32 +87,32 @@ export default function StatsScreen({ setTab }) {
             <p className="stats-section-title">סיכום {nDays} ימים</p>
             <div className="stats-summary-grid">
               <div className="stats-sum-box" style={{background:'#E0D8FF'}}>
-                <img src="/sleep-icon.png" alt="שינה" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
+                <img src="sleep-icon.png" alt="שינה" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{fmtH(sleepMinutes)}</p>
                 <p className="stats-sum-lbl">שינה סה"כ</p>
               </div>
               <div className="stats-sum-box" style={{background:'#FFF3CC'}}>
-                <img src="/bottle-icon.png" alt="האכלה" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
+                <img src="bottle-icon.png" alt="האכלה" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{feedingMl} מ"ל</p>
                 <p className="stats-sum-lbl">האכלה סה"כ</p>
               </div>
               <div className="stats-sum-box" style={{background:'#C8F0E0'}}>
-                <img src="/diaper-icon.png" alt="חיתול" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
+                <img src="diaper-icon.png" alt="חיתול" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{diaperCount}</p>
                 <p className="stats-sum-lbl">חיתולים</p>
               </div>
               <div className="stats-sum-box" style={{background:'#FFE4CC'}}>
-                <img src="/bath-icon.png" alt="מקלחת" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
+                <img src="bath-icon.png" alt="מקלחת" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{bathCount}</p>
                 <p className="stats-sum-lbl">מקלחות</p>
               </div>
               <div className="stats-sum-box" style={{background:'#FCE7F3'}}>
-                <img src="/medicine-icon.png" alt="תרופות" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
+                <img src="medicine-icon.png" alt="תרופות" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{medicineCount}</p>
                 <p className="stats-sum-lbl">תרופות</p>
               </div>
               <div className="stats-sum-box" style={{background:'#E8E0FF'}}>
-                <img src="/vaccine-icon.png" alt="חיסונים" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
+                <img src="vaccine-icon.png" alt="חיסונים" style={{width:'clamp(22px,6.5vw,30px)',height:'clamp(22px,6.5vw,30px)',objectFit:'contain'}}/>
                 <p className="stats-sum-val">{vaccinationCount}</p>
                 <p className="stats-sum-lbl">חיסונים</p>
               </div>

@@ -115,7 +115,7 @@ export default function SettingsScreen({ showToast, setTab }) {
               <button onClick={() => setConfirmClear(false)} className="sett-btn-cancel">ביטול</button>
             </>
           ) : (
-            <button onClick={handleClearAll} className="sett-btn-outline-red" style={{display:'flex',alignItems:'center',justifyContent:'center',gap:8}}><img src="/delete-icon.png" alt="" style={{width:18,height:18,objectFit:'contain'}}/> מחק את כל הנתונים</button>
+            <button onClick={handleClearAll} className="sett-btn-outline-red" style={{display:'flex',alignItems:'center',justifyContent:'center',gap:8}}><img src="delete-icon.png" alt="" style={{width:18,height:18,objectFit:'contain'}}/> מחק את כל הנתונים</button>
           )}
         </div>
 

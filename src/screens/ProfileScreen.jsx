@@ -87,7 +87,7 @@ export default function ProfileScreen({ showToast, setTab }) {
     if (!confirmDelete) { setConfirmDelete(true); return }
     dispatch({ type: 'CLEAR_ALL' })
     setConfirmDelete(false)
-    showToast('כל הנתונים נמחקו', 'success', '/delete-icon.png')
+    showToast('כל הנתונים נמחקו', 'success', 'delete-icon.png')
   }
 
   // Simple bar chart for last 5 weights
@@ -227,7 +227,7 @@ export default function ProfileScreen({ showToast, setTab }) {
             >
               {confirmDelete
                 ? <>⚠️ לחץ שוב לאישור מחיקה</>
-                : <><img src="/delete-icon.png" alt="" style={{width:20,height:20,objectFit:'contain'}}/> מחק הכל</>}
+                : <><img src="delete-icon.png" alt="" style={{width:20,height:20,objectFit:'contain'}}/> מחק הכל</>}
             </button>
             {confirmDelete && (
               <button style={{width:'100%',background:'none',border:'none',color:'#9CA3AF',fontSize:13,padding:'8px',cursor:'pointer',marginTop:6,fontFamily:'Heebo,sans-serif'}} onClick={()=>setConfirmDelete(false)}>

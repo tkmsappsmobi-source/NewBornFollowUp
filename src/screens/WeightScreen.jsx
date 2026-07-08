@@ -21,7 +21,7 @@ export default function WeightScreen({ showToast, setTab }) {
 
   const handleDelete = (id) => {
     dispatch({ type: 'DELETE_WEIGHT', id })
-    showToast('משקל נמחק', 'success', '/delete-icon.png')
+    showToast('משקל נמחק', 'success', 'delete-icon.png')
   }
 
   const sorted = [...state.weightLogs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
@@ -151,7 +151,7 @@ export default function WeightScreen({ showToast, setTab }) {
                     <p className="wt-log-date">{formatDateTime(new Date(w.timestamp))}</p>
                     {w.note && <p className="wt-log-note">{w.note}</p>}
                   </div>
-                  <button className="wt-del-btn" onClick={() => handleDelete(w.id)}><img src="/delete-icon.png" alt="מחק" style={{width:20,height:20,objectFit:'contain'}}/></button>
+                  <button className="wt-del-btn" onClick={() => handleDelete(w.id)}><img src="delete-icon.png" alt="מחק" style={{width:20,height:20,objectFit:'contain'}}/></button>
                 </div>
               ))
             )}

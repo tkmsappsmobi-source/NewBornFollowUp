@@ -22,7 +22,7 @@ export default function MedicineModal({ onConfirm, onClose }) {
           <div className="med-handle" />
           <div className="med-topbar">
             <div style={{width:34}}/>
-            <div className="med-title"><img src="/medicine-icon.png" alt="" style={{width:22,height:22,objectFit:'contain'}}/> תרופה</div>
+            <div className="med-title"><img src="medicine-icon.png" alt="" style={{width:22,height:22,objectFit:'contain'}}/> תרופה</div>
             <button className="med-close" onClick={onClose}>✕</button>
           </div>
 

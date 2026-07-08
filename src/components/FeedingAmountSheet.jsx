@@ -61,7 +61,7 @@ export default function FeedingAmountSheet({ quickAmounts, onConfirm, onClose, b
         {/* Title */}
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'4px 16px 10px'}}>
           <p style={{margin:0,fontSize:18,fontWeight:800,color:'#111827',fontFamily:'Heebo,sans-serif',display:'flex',alignItems:'center',gap:8}}>
-            <img src="/bottle-icon.png" alt="" style={{width:22,height:22,objectFit:'contain'}}/>
+            <img src="bottle-icon.png" alt="" style={{width:22,height:22,objectFit:'contain'}}/>
             כמה אכל?
           </p>
           {bottleTimerStart && (
@@ -120,7 +120,7 @@ export default function FeedingAmountSheet({ quickAmounts, onConfirm, onClose, b
               onClick={onStartBottle}
               style={{width:'100%',background:'#F0F8FF',color:'#0096C7',border:'1.5px solid #0096C7',borderRadius:16,padding:'13px',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:'Heebo,sans-serif',minHeight:48,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}
             >
-              <img src="/bottle-icon.png" alt="" style={{width:20,height:20,objectFit:'contain'}}/>
+              <img src="bottle-icon.png" alt="" style={{width:20,height:20,objectFit:'contain'}}/>
               <span>התחל בקבוק (מדוד זמן)</span>
             </button>
           )}
