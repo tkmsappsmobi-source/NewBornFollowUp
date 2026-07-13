@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useRef } from 'react'
 import { db } from '../firebase'
 import {
   collection, doc, addDoc, setDoc, updateDoc, deleteDoc,
-  onSnapshot, writeBatch, getDocs, query, orderBy
+  onSnapshot, writeBatch, getDocs, getDocFromServer, query, orderBy
 } from 'firebase/firestore'
 import { DEFAULT_STATE, DEFAULT_CATEGORIES } from './defaults'
 
@@ -16,6 +16,32 @@ export function StoreProvider({ children }) {
   stateRef.current = state
 
   useEffect(() => {
+    // Seed defaults only once we have a server-confirmed answer that the doc
+    // is really missing. onSnapshot's first callback can fire from an empty
+    // local cache (no persistence is enabled) before the server responds —
+    // treating that as "first run" would overwrite real data with blanks
+    // the moment connectivity returns. If the server check fails (offline),
+    // skip seeding and let the realtime listener pick up data once online.
+    getDocFromServer(SETTINGS_REF())
+      .then((snap) => {
+        if (!snap.exists()) {
+          return setDoc(SETTINGS_REF(), {
+            babyName: '',
+            birthDate: '',
+            birthWeight: null,
+            profileImage: null,
+            colorTheme: 'blue',
+            sleepTimerStart: null,
+            bottleTimerStart: null,
+            feedingQuickAmounts: DEFAULT_STATE.feedingQuickAmounts,
+            categories: DEFAULT_CATEGORIES,
+            reminders: [],
+            settings: { notificationsEnabled: false },
+          })
+        }
+      })
+      .catch(() => {})
+
     // Settings (babyName, birthDate, birthWeight, profileImage, timers, categories, reminders, etc.)
     const unsubSettings = onSnapshot(SETTINGS_REF(), (snap) => {
       if (snap.exists()) {
@@ -34,21 +60,6 @@ export function StoreProvider({ children }) {
           reminders: d.reminders ?? prev.reminders ?? [],
           settings: d.settings ?? prev.settings,
         }))
-      } else {
-        // First time — write defaults
-        setDoc(SETTINGS_REF(), {
-          babyName: '',
-          birthDate: '',
-          birthWeight: null,
-          profileImage: null,
-          colorTheme: 'blue',
-          sleepTimerStart: null,
-          bottleTimerStart: null,
-          feedingQuickAmounts: DEFAULT_STATE.feedingQuickAmounts,
-          categories: DEFAULT_CATEGORIES,
-          reminders: [],
-          settings: { notificationsEnabled: false },
-        })
       }
     })
 
