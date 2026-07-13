@@ -7,7 +7,7 @@ import VaccinationModal from '../components/VaccinationModal'
 import MedicineModal from '../components/MedicineModal'
 import BottomNav, { NAV_SPACER } from '../components/BottomNav'
 import { getMedicineIcon, getMedicineBg } from '../lib/medicineIcons'
-import { formatTime, isToday, calcAge } from '../lib/time'
+import { formatTime, isToday, calcAge, getRelativeTime } from '../lib/time'
 
 const ACTION_BUTTONS = [
   { id: 'diaper',      label: 'חיתול',    bg: '#C8F0E0', emoji: null, icon: 'diaper-icon.png' },
@@ -32,8 +32,35 @@ function fmtTimer(ms) {
   return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
 }
 
+// Isolated so its 1min tick re-renders only this small subtree, not the whole HomeScreen.
+function LastFeedingCard({ log }) {
+  const [, setTick] = useState(0)
+  useEffect(() => {
+    if (!log) return
+    const id = setInterval(() => setTick(t => t + 1), 60000)
+    return () => clearInterval(id)
+  }, [log])
+
+  if (!log) return null
+  return (
+    <div className="hs-lastfeed-card">
+      <div className="hs-lastfeed-icon">
+        <img src="bottle-icon.png" alt="" style={{width:'58%',height:'58%',objectFit:'contain'}}/>
+      </div>
+      <div style={{flex:1}}>
+        <p className="hs-lastfeed-label">האכלה אחרונה</p>
+        <p className="hs-lastfeed-detail">{log.amount ? `${log.amount} מ"ל` : ''}</p>
+      </div>
+      <div style={{minWidth:'clamp(44px,12vw,58px)',flexShrink:0,textAlign:'left'}}>
+        <p className="hs-lastfeed-time">{formatTime(log.timestamp)}</p>
+        <p className="hs-lastfeed-rel">{getRelativeTime(log.timestamp)}</p>
+      </div>
+    </div>
+  )
+}
+
 // Isolated so its 1s tick re-renders only this small subtree, not the whole HomeScreen.
-function TimerSection({ sleepTimerStart, bottleTimerStart, onEndSleep, onEndBottle, onCancelSleep, onCancelBottle }) {
+function TimerSection({ sleepTimerStart, bottleTimerStart, onEndSleep, onEndBottle }) {
   const [now, setNow] = useState(Date.now())
   useEffect(() => {
     if (!sleepTimerStart && !bottleTimerStart) return
@@ -52,10 +79,7 @@ function TimerSection({ sleepTimerStart, bottleTimerStart, onEndSleep, onEndBott
               <span className="hs-timer-label">שינה בעיצומה ⏱️ </span>
               <span className="hs-timer-time">{fmtTimer(now - new Date(sleepTimerStart).getTime())}</span>
             </div>
-            <div style={{display:'flex',gap:6}}>
-              <button className="hs-timer-cancel" onClick={onCancelSleep} title="בטל טיימר">✕</button>
-              <button className="hs-timer-end" onClick={onEndSleep}>סיום</button>
-            </div>
+            <button className="hs-timer-end" onClick={onEndSleep}>סיום</button>
           </div>
         )}
         {bottleTimerStart && (
@@ -64,10 +88,7 @@ function TimerSection({ sleepTimerStart, bottleTimerStart, onEndSleep, onEndBott
               <span className="hs-timer-label">בקבוק בעיצומו ⏱️ </span>
               <span className="hs-timer-time">{fmtTimer(now - new Date(bottleTimerStart).getTime())}</span>
             </div>
-            <div style={{display:'flex',gap:6}}>
-              <button className="hs-timer-cancel" onClick={onCancelBottle} title="בטל טיימר">✕</button>
-              <button className="hs-timer-end" onClick={onEndBottle}>סיום</button>
-            </div>
+            <button className="hs-timer-end" onClick={onEndBottle}>סיום</button>
           </div>
         )}
       </div>
@@ -88,6 +109,7 @@ export default function HomeScreen({ showToast, setTab }) {
   const birthDateStr = state.birthDate
     ? new Date(state.birthDate).toLocaleDateString('he-IL', { day: '2-digit', month: '2-digit', year: 'numeric' })
     : null
+  const lastWeight = state.weightLogs?.[0]?.weight ?? null
 
   const todayLogs = state.logs.filter(l => isToday(new Date(l.timestamp)))
 
@@ -100,6 +122,7 @@ export default function HomeScreen({ showToast, setTab }) {
   }, [state.logs, state.weightLogs])
 
   const recentLogs = allLogs.slice(0, 4)
+  const lastFeeding = allLogs.find(l => l.categoryId === 'feeding') || null
   const catMap = useMemo(() => Object.fromEntries(state.categories.map(c => [c.id, c])), [state.categories])
 
   const sleepToday = todayLogs.filter(l => l.categoryId === 'sleep').length
@@ -107,17 +130,6 @@ export default function HomeScreen({ showToast, setTab }) {
   const peeToday = todayLogs.filter(l => l.categoryId === 'diaper' && (l.data?.subtype === 'pee' || l.data?.subtype === 'both')).length
   const poopToday = todayLogs.filter(l => l.categoryId === 'diaper' && (l.data?.subtype === 'poop' || l.data?.subtype === 'both')).length
   const diaperToday = todayLogs.filter(l => l.categoryId === 'diaper').length
-
-  const getRelativeTime = (timestamp) => {
-    const diff = Date.now() - new Date(timestamp).getTime()
-    const minutes = Math.floor(diff / 60000)
-    if (minutes < 1) return 'עכשיו'
-    if (minutes < 60) return `לפני ${minutes} דק'`
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    if (mins === 0) return `לפני ${hours} שע'`
-    return `לפני ${hours}:${String(mins).padStart(2,'0')} שע'`
-  }
 
   const getLogDetail = (log) => {
     if (log._source === 'weight') return `${log.weight} ק"ג`
@@ -233,7 +245,9 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-name{margin:0;font-size:26px;font-weight:900;color:#0D2640;line-height:1.05;letter-spacing:-0.5px;}
         .hs-age{font-size:12px;font-weight:600;color:#1A5A8A;margin:2px 0 0;}
         .hs-date{font-size:11px;color:#3A7BA8;margin:1px 0 0;}
-        .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:${NAV_SPACER};}
+        .hs-weight{font-size:11px;color:#3A7BA8;margin:1px 0 0;}
+        .hs-scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:${NAV_SPACER};scrollbar-width:none;-ms-overflow-style:none;}
+        .hs-scroll::-webkit-scrollbar{display:none;width:0;height:0;}
         .hs-inner{padding:10px 14px 0;}
         .hs-card{background:white;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 2px 14px rgba(0,0,0,0.07);}
         .hs-card-title{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:6px;margin-bottom:10px;}
@@ -254,7 +268,6 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-timer-label{font-size:15px;font-weight:700;color:#374151;}
         .hs-timer-time{font-size:18px;font-weight:800;color:#D97706;font-variant-numeric:tabular-nums;}
         .hs-timer-end{background:#EF4444;color:white;border:none;border-radius:12px;padding:11px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:Heebo,sans-serif;min-height:46px;flex-shrink:0;}
-        .hs-timer-cancel{background:white;color:#9CA3AF;border:1.5px solid #E5E7EB;border-radius:12px;width:46px;height:46px;font-size:16px;cursor:pointer;flex-shrink:0;}
         .hs-recent-row{display:flex;align-items:center;gap:12px;padding:12px 0;direction:rtl;}
         .hs-recent-row + .hs-recent-row{border-top:1px solid #F3F4F6;}
         .hs-recent-time-val{font-size:14px;font-weight:700;color:#111827;margin:0;line-height:1.25;}
@@ -262,6 +275,13 @@ export default function HomeScreen({ showToast, setTab }) {
         .hs-recent-circle{border-radius:50%;display:flex;align-items:center;justify-content:center;width:46px;height:46px;font-size:22px;flex-shrink:0;}
         .hs-recent-name{font-size:15px;font-weight:700;color:#111827;margin:0;line-height:1.25;}
         .hs-recent-detail{font-size:12px;color:#9CA3AF;margin:0;line-height:1.4;}
+        .hs-lastfeed-wrap{flex-shrink:0;padding:10px 14px 0;}
+        .hs-lastfeed-card{display:flex;flex-direction:row;align-items:center;gap:10px;background:white;border-radius:18px 18px 0 0;padding:14px 14px 12px;box-shadow:0 2px 14px rgba(0,0,0,0.07);border-bottom:1px solid #F3F4F6;}
+        .hs-lastfeed-icon{border-radius:50%;background:#FFF3CC;display:flex;align-items:center;justify-content:center;width:36px;height:36px;flex-shrink:0;}
+        .hs-lastfeed-label{font-size:13px;font-weight:700;color:#111827;margin:0;line-height:1.3;}
+        .hs-lastfeed-detail{font-size:11.5px;color:#9CA3AF;margin:0;line-height:1.35;}
+        .hs-lastfeed-time{font-size:13px;font-weight:700;color:#111827;margin:0;line-height:1.25;}
+        .hs-lastfeed-rel{font-size:10.5px;color:#9CA3AF;margin:0;line-height:1.35;}
       `}</style>
 
       <div className="hs-root" dir="rtl">
@@ -293,16 +313,24 @@ export default function HomeScreen({ showToast, setTab }) {
             <h1 className="hs-name">{babyName}</h1>
             <p className="hs-age">{ageStr || 'הגדר תאריך לידה'}</p>
             {birthDateStr && <p className="hs-date">{birthDateStr}</p>}
+            {lastWeight != null && <p className="hs-weight">משקל אחרון: {lastWeight} ק"ג</p>}
           </div>
 
         </div>
+
+        {/* Last feeding — pinned as the (visual) top of the daily-summary card; stays in place while the rest scrolls beneath it */}
+        {lastFeeding && (
+          <div className="hs-lastfeed-wrap">
+            <LastFeedingCard log={lastFeeding} />
+          </div>
+        )}
 
         {/* SCROLL */}
         <div className="hs-scroll">
           <div className="hs-inner">
 
             {/* Daily summary */}
-            <div className="hs-card">
+            <div className="hs-card" style={lastFeeding ? {borderRadius:'0 0 18px 18px', marginTop:-10} : undefined}>
               <div className="hs-card-title">
                 <span>סיכום היום</span>
               </div>
@@ -341,8 +369,6 @@ export default function HomeScreen({ showToast, setTab }) {
               bottleTimerStart={state.bottleTimerStart}
               onEndSleep={()=>handleAction('sleep')}
               onEndBottle={handleEndBottle}
-              onCancelSleep={()=>{ dispatch({ type: 'SET_SLEEP_TIMER', start: null }); showToast('טיימר שינה בוטל') }}
-              onCancelBottle={()=>{ dispatch({ type: 'SET_BOTTLE_TIMER', start: null }); showToast('טיימר בקבוק בוטל') }}
             />
 
             {/* Quick Actions */}

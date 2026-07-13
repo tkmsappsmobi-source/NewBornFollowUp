@@ -83,6 +83,17 @@ export function calcAge(birthDateStr) {
   return m ? `${years} שנ' ו-${m} חודשים` : `${years} שנים`
 }
 
+export function getRelativeTime(timestamp) {
+  const diff = Date.now() - new Date(timestamp).getTime()
+  const minutes = Math.floor(diff / 60000)
+  if (minutes < 1) return 'עכשיו'
+  if (minutes < 60) return `לפני ${minutes} דק'`
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  if (mins === 0) return `לפני ${hours} שע'`
+  return `לפני ${hours}:${String(mins).padStart(2,'0')} שע'`
+}
+
 export function formatDuration(minutes) {
   if (!minutes) return "0 דק'"
   const h = Math.floor(minutes / 60); const m = minutes % 60
