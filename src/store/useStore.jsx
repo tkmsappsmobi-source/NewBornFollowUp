@@ -87,7 +87,7 @@ export function StoreProvider({ children }) {
     // screen forever — fall through to the app with whatever data we have.
     const loadingTimeout = setTimeout(() => {
       setState(prev => prev.loading ? { ...prev, loading: false } : prev)
-    }, 8000)
+    }, 5000)
 
     return () => {
       unsubSettings()
