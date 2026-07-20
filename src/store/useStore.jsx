@@ -82,10 +82,18 @@ export function StoreProvider({ children }) {
       }
     )
 
+    // Safety net: if the logs listener never calls back (stuck connection,
+    // stale service worker, etc.) don't leave the user staring at the splash
+    // screen forever — fall through to the app with whatever data we have.
+    const loadingTimeout = setTimeout(() => {
+      setState(prev => prev.loading ? { ...prev, loading: false } : prev)
+    }, 8000)
+
     return () => {
       unsubSettings()
       unsubLogs()
       unsubWeight()
+      clearTimeout(loadingTimeout)
     }
   }, [])
 
